@@ -1,0 +1,62 @@
+---
+const beneficios = [
+  {
+    num: "01",
+    title: "MÁS RENTABILIDAD",
+    body: "No \"más facturación\". Más margen. Identificamos dónde se te va la plata, automatizamos lo que se puede automatizar y cobrás mejor por el tiempo que liberás.",
+  },
+  {
+    num: "02",
+    title: "MENOS INCERTIDUMBRE",
+    body: "Tu negocio deja de depender de que una persona esté presente, atenta y sin equivocarse. Los procesos automatizados no se distraen ni se enferman.",
+  },
+  {
+    num: "03",
+    title: "ESCALABILIDAD REAL",
+    body: "Crecés sin que los costos operativos crezcan al mismo ritmo. Sumás clientes sin sumar caos.",
+  },
+];
+---
+
+<section class="py-24 md:py-32 bg-[#FFFFFF]">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="reveal mb-16 max-w-2xl">
+      <p class="eyebrow mb-4">04 — POR QUÉ INSOLVA</p>
+      <h2 class="heading-section text-[#0A0A0A]">
+        Tres resultados concretos<br />que dejamos en cada cliente.
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+      {beneficios.map((b, i) => (
+        <div class={`reveal reveal-delay-${i + 1} relative`}>
+
+          <!-- Número decorativo grande detrás -->
+          <span
+            class="absolute -top-4 -left-2 font-['Barlow_Condensed'] font-900 text-[8rem] leading-none text-[#C2C1C1]/20 select-none pointer-events-none"
+            aria-hidden="true"
+          >
+            {b.num}
+          </span>
+
+          <!-- Contenido -->
+          <div class="relative pt-12">
+            <!-- Línea verde -->
+            <div class="h-px bg-[#98C665] w-8 mb-6"></div>
+
+            <h3 class="font-['Barlow_Condensed'] font-800 uppercase tracking-wider text-xl text-[#0A0A0A] mb-4">
+              {b.title}
+            </h3>
+
+            <p class="text-sm text-[#4A4A4A] font-['Barlow'] leading-relaxed">
+              {b.body}
+            </p>
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

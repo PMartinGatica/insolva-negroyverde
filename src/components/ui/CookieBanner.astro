@@ -1,0 +1,145 @@
+---
+---
+
+<div
+  id="cookie-banner"
+  class="cookie-banner"
+  role="dialog"
+  aria-label="Aviso de cookies"
+  aria-modal="false"
+>
+  <div class="cookie-inner">
+    <div class="cookie-text">
+      <p>
+        Usamos cookies propias para mejorar la experiencia de navegación. Al continuar, aceptás su uso.
+        <a href="/politica-de-privacidad" class="cookie-link">Más información</a>
+      </p>
+    </div>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="cookie-btn-secondary" aria-label="Rechazar cookies no esenciales">
+        Rechazar
+      </button>
+      <button id="cookie-accept" class="cookie-btn-primary" aria-label="Aceptar todas las cookies">
+        Aceptar
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+.cookie-banner {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: calc(100% - 3rem);
+  max-width: 720px;
+  background: #0A0A0A;
+  border: 1px solid rgba(152, 198, 101, 0.25);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.cookie-banner.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+  pointer-events: none;
+}
+
+.cookie-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cookie-text p {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #C2C1C1;
+  margin: 0;
+}
+
+.cookie-link {
+  color: #98C665;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+.cookie-link:hover { color: #6AA03A; }
+
+.cookie-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.cookie-btn-primary {
+  padding: 0.5rem 1.25rem;
+  background: #98C665;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cookie-btn-primary:hover { background: #6AA03A; }
+
+.cookie-btn-secondary {
+  padding: 0.5rem 1.25rem;
+  background: transparent;
+  color: #C2C1C1;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 2px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.cookie-btn-secondary:hover { border-color: #98C665; color: #98C665; }
+
+@media (max-width: 540px) {
+  .cookie-inner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<script>
+const COOKIE_KEY = 'insolva_cookies';
+const banner = document.getElementById('cookie-banner');
+
+function hideBanner() {
+  banner?.classList.add('hidden');
+  setTimeout(() => {
+    banner?.remove();
+  }, 420);
+}
+
+// Si ya eligió, no mostrar
+if (localStorage.getItem(COOKIE_KEY)) {
+  banner?.classList.add('hidden');
+  setTimeout(() => banner?.remove(), 0);
+}
+
+document.getElementById('cookie-accept')?.addEventListener('click', () => {
+  localStorage.setItem(COOKIE_KEY, 'accepted');
+  hideBanner();
+});
+
+document.getElementById('cookie-reject')?.addEventListener('click', () => {
+  localStorage.setItem(COOKIE_KEY, 'rejected');
+  hideBanner();
+});
+</script>

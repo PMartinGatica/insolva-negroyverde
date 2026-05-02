@@ -1,0 +1,273 @@
+---
+import { whatsappLink } from '../../lib/whatsapp';
+const waHref = whatsappLink({ source: 'hero' });
+---
+
+<section
+  id="hero"
+  class="relative min-h-[95vh] flex items-center overflow-hidden bg-[#050505]"
+>
+
+  <!-- ── Isotipo rotando 360° — igual que esland con video ── -->
+  <div class="hero-logo-wrap" aria-hidden="true">
+    <!-- blur detrás -->
+    <div class="hero-logo-blur">
+      <img src="/isotipo-verde.svg" alt="" width="888" height="1075" />
+    </div>
+    <!-- imagen rotando -->
+    <div class="hero-logo-spin">
+      <img src="/isotipo-verde.svg" alt="" width="888" height="1075" />
+    </div>
+  </div>
+
+  <!-- Grid blueprint -->
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <!-- Vignette lateral izquierda para que el texto sea legible -->
+  <div class="hero-vignette" aria-hidden="true"></div>
+
+  <!-- Línea inferior -->
+  <div class="hero-line" aria-hidden="true"></div>
+
+  <!-- ── Contenido ── -->
+  <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 w-full">
+    <div class="max-w-2xl">
+
+      <p class="hero-eyebrow animate-fade-up">
+        AGENCIA DE INGENIERÍA — USHUAIA
+      </p>
+
+      <h1 class="hero-h1 animate-fade-up anim-d1">
+        Optimizamos<br />
+        negocios con<br />
+        <span>ingeniería<br />+ tecnología.</span>
+      </h1>
+
+      <p class="hero-sub animate-fade-up anim-d2">
+        Reducimos riesgo, ahorramos tiempo y construimos
+        sistemas que escalan. Para que tu negocio sea el
+        más competitivo de su sector.
+      </p>
+
+      <div class="hero-ctas animate-fade-up anim-d3">
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary"
+          aria-label="Hablar por WhatsApp con INSOLVA"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Hablar por WhatsApp
+        </a>
+
+        <a href="#pilares" class="btn-secondary">
+          Ver lo que hacemos ↓
+        </a>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="hero-scroll animate-fade-up anim-d4" aria-hidden="true">
+        <div class="hero-scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<style>
+/* ── Rotación 360° del isotipo ── */
+@keyframes spin360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes fadeInHero {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-logo-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-logo-blur {
+  position: absolute;
+  right: -8%;
+  width: 62vw;
+  max-width: 680px;
+  aspect-ratio: 888 / 1075;
+  filter: blur(60px);
+  opacity: 0.12;
+}
+.hero-logo-blur img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hero-logo-spin {
+  position: absolute;
+  right: -4%;
+  width: 52vw;
+  max-width: 560px;
+  aspect-ratio: 888 / 1075;
+  animation: spin360 18s linear infinite;
+  transform-origin: center center;
+  opacity: 0.55;
+}
+.hero-logo-spin img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Vignette: oculta el logo detrás del texto */
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    #050505 30%,
+    rgba(5,5,5,0.7) 55%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(152,198,101,1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(152,198,101,1) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.hero-line {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #98C665 50%, transparent);
+}
+
+/* ── Tipografía del hero ── */
+.hero-eyebrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #98C665;
+  margin-bottom: 1.5rem;
+}
+
+.hero-h1 {
+  font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  font-size: clamp(3rem, 7.5vw, 6.5rem);
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+.hero-h1 span { color: #98C665; }
+
+.hero-sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  line-height: 1.65;
+  color: #9ca3af;
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+}
+
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  background: #98C665;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: #6AA03A; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { border-color: #98C665; color: #98C665; }
+
+.hero-scroll {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0.35;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 2rem;
+  background: #98C665;
+}
+.hero-scroll span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #C2C1C1;
+}
+
+/* ── Animaciones de entrada ── */
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeInHero 0.8s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.anim-d1 { animation-delay: 0.1s; }
+.anim-d2 { animation-delay: 0.22s; }
+.anim-d3 { animation-delay: 0.36s; }
+.anim-d4 { animation-delay: 0.5s; }
+
+@media (max-width: 768px) {
+  .hero-logo-spin {
+    right: -20%;
+    width: 90vw;
+    opacity: 0.25;
+  }
+  .hero-logo-blur { opacity: 0.06; }
+}
+</style>

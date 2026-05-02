@@ -1,0 +1,120 @@
+---
+import '../styles/global.css';
+import { BRAND } from '../lib/constants';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${BRAND.name} — Agencia de Ingeniería con base tecnológica`,
+  description = BRAND.description,
+} = Astro.props;
+
+const ogImage = '/og-image.png';
+const canonicalUrl = 'https://insolvagroup.com';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": BRAND.name,
+  "url": canonicalUrl,
+  "logo": `${canonicalUrl}/logo.png`,
+  "description": description,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Ushuaia",
+    "addressRegion": "Tierra del Fuego",
+    "addressCountry": "AR"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": `+${BRAND.whatsapp}`,
+    "contactType": "customer service",
+    "availableLanguage": "Spanish"
+  },
+  "sameAs": [BRAND.instagramUrl]
+};
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${canonicalUrl}${ogImage}`} />
+    <meta property="og:locale" content="es_AR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${canonicalUrl}${ogImage}`} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Schema.org -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <slot />
+
+    <script>
+      // Intersection Observer para animaciones reveal
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+      // Nav scroll effect + logo color swap
+      const nav = document.getElementById('main-nav');
+      const navLogo = document.getElementById('nav-logo');
+      function updateNav() {
+        if (window.scrollY > 40) {
+          nav?.classList.add('nav-scrolled');
+          navLogo?.classList.remove('brightness-0', 'invert');
+        } else {
+          nav?.classList.remove('nav-scrolled');
+          navLogo?.classList.add('brightness-0', 'invert');
+        }
+      }
+      updateNav();
+      window.addEventListener('scroll', updateNav, { passive: true });
+
+      // WhatsApp float: aparece tras 200px de scroll
+      const waFloat = document.getElementById('wa-float');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) {
+          waFloat?.classList.remove('opacity-0', 'pointer-events-none');
+          waFloat?.classList.add('opacity-100');
+        } else {
+          waFloat?.classList.add('opacity-0', 'pointer-events-none');
+          waFloat?.classList.remove('opacity-100');
+        }
+      }, { passive: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Hero from '../components/sections/Hero.astro';
+import QuienesSomos from '../components/sections/QuienesSomos.astro';
+import Pilares from '../components/sections/Pilares.astro';
+import ParaQuien from '../components/sections/ParaQuien.astro';
+import Beneficios from '../components/sections/Beneficios.astro';
+import Contacto from '../components/sections/Contacto.astro';
+import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
+---
+
+<Layout>
+  <Header />
+  <main>
+    <Hero />
+    <QuienesSomos />
+    <Pilares />
+    <ParaQuien />
+    <Beneficios />
+    <Contacto />
+  </main>
+  <Footer />
+  <WhatsAppFloat />
+  <CookieBanner />
+</Layout>
