@@ -15,7 +15,6 @@ const MESSAGES: Record<string, string> = {
 
 export function whatsappLink({ message, source = "general" }: WhatsAppLinkOptions = {}) {
   const finalMsg = message ?? MESSAGES[source] ?? MESSAGES.general;
-  const utm = `\n\n[ref: ${source}]`;
-  const text = encodeURIComponent(finalMsg + utm);
+  const text = encodeURIComponent(finalMsg + "\n");
   return `https://wa.me/${BRAND.whatsapp}?text=${text}`;
 }
