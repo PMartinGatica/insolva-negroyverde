@@ -8,7 +8,7 @@ interface Props {
 }
 
 const {
-  title = `${BRAND.name} — Agencia de Ingeniería con base tecnológica`,
+  title = `${BRAND.name} — Ingeniería + Seguridad Electrónica en Ushuaia`,
   description = BRAND.description,
 } = Astro.props;
 
@@ -17,22 +17,52 @@ const canonicalUrl = 'https://insolvagroup.com';
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "ProfessionalService",
   "name": BRAND.name,
   "url": canonicalUrl,
   "logo": `${canonicalUrl}/logo.png`,
+  "image": `${canonicalUrl}${ogImage}`,
   "description": description,
+  "telephone": `+${BRAND.whatsapp}`,
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Ushuaia",
     "addressRegion": "Tierra del Fuego",
     "addressCountry": "AR"
   },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -54.80191,
+    "longitude": -68.30295
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Ushuaia" },
+    { "@type": "AdministrativeArea", "name": "Tierra del Fuego" },
+    { "@type": "Country", "name": "Argentina" }
+  ],
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    "opens": "09:00",
+    "closes": "18:00"
+  },
+  "priceRange": "$$",
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": `+${BRAND.whatsapp}`,
     "contactType": "customer service",
     "availableLanguage": "Spanish"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ingeniería" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Videovigilancia" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Redes Wi-Fi profesionales" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Automatización del hogar" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Alarmas" } }
+    ]
   },
   "sameAs": [BRAND.instagramUrl]
 };

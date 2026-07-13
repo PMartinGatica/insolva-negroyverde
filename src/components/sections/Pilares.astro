@@ -1,5 +1,5 @@
 ---
-import { PILARES } from '../../lib/constants';
+import { PILARES, SERVICIOS_SEGURIDAD } from '../../lib/constants';
 import { whatsappLink } from '../../lib/whatsapp';
 ---
 
@@ -10,12 +10,12 @@ import { whatsappLink } from '../../lib/whatsapp';
     <div class="reveal mb-16 max-w-2xl">
       <p class="eyebrow mb-4">02 — SERVICIOS</p>
       <h2 class="heading-section text-[#0A0A0A]">
-        Tres pilares.<br />Un solo objetivo.
+        Ingeniería + Seguridad.<br />Una especialidad.
       </h2>
     </div>
 
     <!-- Grid de pilares -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {PILARES.map((pilar, index) => {
         const ctaHref = pilar.ctaExternal
           ? pilar.ctaUrl
@@ -90,6 +90,63 @@ import { whatsappLink } from '../../lib/whatsapp';
           </article>
         );
       })}
+    </div>
+
+    <!-- Detalle de seguridad electrónica -->
+    <div class="reveal mt-24 mb-12 max-w-2xl">
+      <p class="eyebrow mb-4 text-[#98C665]">SEGURIDAD ELECTRÓNICA</p>
+      <h3 class="heading-section text-[#0A0A0A]">
+        Todo lo que necesitás,<br />en un solo lugar.
+      </h3>
+      <p class="body-text mt-4">
+        Desde la planificación en obra hasta la instalación en tu casa terminada.
+        No vendemos paquetes genéricos: planificamos desde el plano el sistema que
+        realmente necesitás.
+      </p>
+    </div>
+
+    <!-- Grid de categorías de seguridad -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {SERVICIOS_SEGURIDAD.map((serv, index) => (
+        <article
+          class={`
+            reveal reveal-delay-${(index % 2) + 1}
+            group relative flex flex-col
+            border border-[#0A0A0A]/10 rounded-sm
+            bg-[#F7F7F5] overflow-hidden
+            hover:border-[#98C665]/60 transition-all duration-300
+          `}
+        >
+          <div class="p-8 flex flex-col flex-1">
+            <!-- Título + número -->
+            <div class="flex items-start justify-between mb-4">
+              <h4 class="heading-card text-[#0A0A0A]">{serv.title}</h4>
+              <span
+                class="font-['Barlow_Condensed'] font-900 text-4xl leading-none text-[#C2C1C1]/40 select-none"
+                aria-hidden="true"
+              >
+                {serv.number}
+              </span>
+            </div>
+
+            <!-- Resumen -->
+            <p class="body-text mb-6">{serv.resumen}</p>
+
+            <!-- Separador verde -->
+            <div class="h-px bg-[#98C665] w-12 mb-6"></div>
+
+            <!-- Items -->
+            <ul class="space-y-2 flex-1">
+              {serv.items.map((item) => (
+                <li class="flex items-start gap-2 body-text">
+                  <span class="text-[#98C665] mt-0.5 flex-shrink-0" aria-hidden="true">▸</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))}
     </div>
 
   </div>
