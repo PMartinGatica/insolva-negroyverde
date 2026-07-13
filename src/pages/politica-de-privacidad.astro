@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { BRAND } from '../lib/constants';
+
+const updated = '10 de julio de 2026';
+---
+
+<Layout
+  title={`Política de Privacidad — ${BRAND.name}`}
+  description="Política de privacidad y uso de cookies de INSOLVA Group. Cómo tratamos tus datos de contacto y qué cookies usamos."
+>
+  <main class="bg-[#FFFFFF] min-h-screen">
+    <div class="max-w-3xl mx-auto px-6 py-24 md:py-32">
+
+      <a href="/" class="eyebrow inline-block mb-8 hover:text-[#6AA03A] transition-colors">← Volver al inicio</a>
+
+      <p class="eyebrow mb-4">LEGAL</p>
+      <h1 class="heading-section text-[#0A0A0A] mb-4">Política de Privacidad</h1>
+      <p class="body-text mb-12 text-[#4A4A4A]">Última actualización: {updated}</p>
+
+      <div class="space-y-10">
+
+        <section>
+          <h2 class="heading-card text-[#0A0A0A] mb-3">1. Quiénes somos</h2>
+          <p class="body-text">
+            {BRAND.name} es una empresa de ingeniería y seguridad electrónica con base en
+            {BRAND.location}. Podés contactarnos por WhatsApp o por correo a
+            <a href={`mailto:${BRAND.email}`} class="text-[#6AA03A] underline underline-offset-2">{BRAND.email}</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="heading-card text-[#0A0A0A] mb-3">2. Qué datos recogemos</h2>
+          <p class="body-text">
+            Este sitio es una página informativa. No tiene formularios que almacenen datos en
+            nuestros servidores. Cuando nos escribís por WhatsApp o email, recibimos únicamente
+            los datos que vos nos compartís (nombre, teléfono, correo y el mensaje de tu consulta),
+            y los usamos solo para responderte y coordinar tu proyecto.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="heading-card text-[#0A0A0A] mb-3">3. Cookies</h2>
+          <p class="body-text">
+            Usamos una cookie técnica propia (almacenada en tu navegador mediante <em>localStorage</em>)
+            para recordar tu preferencia sobre el aviso de cookies y no volver a mostrártelo. No
+            utilizamos cookies de seguimiento publicitario. Podés borrar esta preferencia limpiando
+            los datos de tu navegador en cualquier momento.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="heading-card text-[#0A0A0A] mb-3">4. Servicios de terceros</h2>
+          <p class="body-text">
+            Los botones de contacto abren WhatsApp e Instagram, que se rigen por sus propias
+            políticas de privacidad. Al usarlos, salís de este sitio y quedás sujeto a los términos
+            de esas plataformas.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="heading-card text-[#0A0A0A] mb-3">5. Tus derechos</h2>
+          <p class="body-text">
+            Podés solicitar el acceso, la rectificación o la eliminación de los datos de contacto
+            que nos hayas compartido escribiéndonos a
+            <a href={`mailto:${BRAND.email}`} class="text-[#6AA03A] underline underline-offset-2">{BRAND.email}</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="heading-card text-[#0A0A0A] mb-3">6. Cambios en esta política</h2>
+          <p class="body-text">
+            Podemos actualizar esta política para reflejar cambios en nuestros servicios o en la
+            normativa aplicable. Publicaremos siempre la versión vigente en esta misma página.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+</Layout>

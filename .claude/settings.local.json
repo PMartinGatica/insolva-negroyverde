@@ -1,7 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(New-Item -ItemType Directory -Force \"d:\\\\insolva\\\\Desarrollo\\\\insolvaweb\\\\.github\\\\workflows\")"
+      "PowerShell(New-Item -ItemType Directory -Force \"d:\\\\insolva\\\\Desarrollo\\\\insolvaweb\\\\.github\\\\workflows\")",
+      "Bash(node -e \"require.resolve\\('sharp'\\); console.log\\('sharp OK'\\)\")",
+      "Bash(node \"C:/Users/ga77i/AppData/Local/Temp/claude/d--insolva-Desarrollo-insolvaweb/8a180eaa-1609-4172-b90b-a57c977b78a9/scratchpad/gen-images.mjs\")",
+      "Bash(cp \"C:/Users/ga77i/AppData/Local/Temp/claude/d--insolva-Desarrollo-insolvaweb/8a180eaa-1609-4172-b90b-a57c977b78a9/scratchpad/gen-images.mjs\" ./_gen-images.mjs)",
+      "Bash(node ./_gen-images.mjs)",
+      "Bash(rm -f ./_gen-images.mjs)",
+      "Bash(node ./_gen-og.mjs)",
+      "Bash(rm -f ./_gen-og.mjs)",
+      "WebFetch(domain:insolvagroup.com)",
+      "WebSearch",
+      "Bash(curl -s \"https://nominatim.openstreetmap.org/search?q=Ushuaia,+Tierra+del+Fuego,+Argentina&format=json&limit=1\" -H \"User-Agent: seo-maps-audit/1.0\")",
+      "Bash(curl -s -G \"https://overpass-api.de/api/interpreter\" --data-urlencode 'data=[out:json][timeout:25];area[\"name\"=\"Ushuaia\"]->.a;\\(node[\"shop\"=\"security\"]\\(area.a\\);node[\"craft\"=\"electronics_repair\"]\\(area.a\\);node[\"shop\"=\"electronics\"]\\(area.a\\);node[\"office\"=\"security\"]\\(area.a\\);\\);out center 30;')",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); els=d.get\\('elements',[]\\); print\\('total:',len\\(els\\)\\); [print\\('-',e.get\\('tags',{}\\).get\\('name','\\(sin nombre\\)'\\),'|',e.get\\('tags',{}\\).get\\('shop'\\) or e.get\\('tags',{}\\).get\\('craft'\\) or e.get\\('tags',{}\\).get\\('office'\\)\\) for e in els[:20]]\")",
+      "WebFetch(domain:www.bing.com)"
     ]
   }
 }

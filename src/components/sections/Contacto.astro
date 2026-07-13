@@ -24,9 +24,9 @@ const waHref = whatsappLink({ source: 'contacto' });
     <div class="reveal">
       <p class="eyebrow mb-4 text-[#98C665]">05 — HABLEMOS</p>
       <h2 class="heading-section text-white mb-6">
-        ¿Listo para que tu negocio<br />
-        sea el más competitivo<br />
-        de su sector?
+        ¿Listo para planificar<br />
+        la seguridad de tu<br />
+        hogar o tu negocio?
       </h2>
     </div>
 
@@ -55,7 +55,18 @@ const waHref = whatsappLink({ source: 'contacto' });
     </div>
 
     <!-- Info secundaria -->
-    <div class="reveal reveal-delay-2 mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto border-t border-white/10 pt-12">
+    <div class="reveal reveal-delay-2 mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-3xl mx-auto border-t border-white/10 pt-12">
+      <a
+        href={`tel:+${BRAND.whatsapp}`}
+        class="flex flex-col items-center gap-2 text-[#C2C1C1] hover:text-[#98C665] transition-colors duration-200 group"
+        aria-label="Llamar por teléfono a INSOLVA"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#98C665]" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        <span class="font-['Barlow'] text-sm">Llamar</span>
+      </a>
+
       <a
         href={`mailto:${BRAND.email}`}
         class="flex flex-col items-center gap-2 text-[#C2C1C1] hover:text-[#98C665] transition-colors duration-200 group"
