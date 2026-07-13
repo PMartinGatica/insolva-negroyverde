@@ -51,7 +51,7 @@ const faqSchema = {
       {faqs.map((faq, i) => (
         <details class={`reveal reveal-delay-${(i % 3) + 1} group border border-[#0A0A0A]/10 rounded-sm bg-[#FFFFFF] overflow-hidden`}>
           <summary class="flex items-center justify-between gap-4 cursor-pointer p-6 list-none">
-            <h3 class="heading-card text-[#0A0A0A] text-base md:text-lg">{faq.q}</h3>
+            <h3 class="text-[#0A0A0A] text-base md:text-lg font-medium" style="font-family:'Space Grotesk',sans-serif;">{faq.q}</h3>
             <span class="text-[#98C665] flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             </span>
