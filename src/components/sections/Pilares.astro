@@ -1,6 +1,5 @@
 ---
-import { PILARES, SERVICIOS_SEGURIDAD } from '../../lib/constants';
-import { whatsappLink } from '../../lib/whatsapp';
+import { SERVICIOS_SEGURIDAD } from '../../lib/constants';
 ---
 
 <section id="pilares" class="py-24 md:py-32 bg-[#FFFFFF]">
@@ -8,100 +7,13 @@ import { whatsappLink } from '../../lib/whatsapp';
 
     <!-- Header sección -->
     <div class="reveal mb-16 max-w-2xl">
-      <p class="eyebrow mb-4">02 — SERVICIOS</p>
+      <p class="eyebrow mb-4">SERVICIOS</p>
       <h2 class="heading-section text-[#0A0A0A]">
-        Ingeniería + Seguridad.<br />Una especialidad.
+        Seguridad completa<br />para tu casa o negocio.
       </h2>
-    </div>
-
-    <!-- Grid de pilares -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {PILARES.map((pilar, index) => {
-        const ctaHref = pilar.ctaExternal
-          ? pilar.ctaUrl
-          : whatsappLink({ source: pilar.whatsappSource as any });
-
-        return (
-          <article
-            class={`
-              reveal reveal-delay-${index + 1}
-              group relative flex flex-col
-              border border-[#0A0A0A]/10 rounded-sm
-              bg-[#FFFFFF] overflow-hidden
-              hover:border-[#98C665]/60 transition-all duration-300
-              hover:-translate-y-1 hover:shadow-xl hover:shadow-[#98C665]/5
-            `}
-          >
-            <!-- Accent top line -->
-            <div class="h-px bg-gradient-to-r from-[#98C665] to-[#98C665]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-            <div class="p-8 flex flex-col flex-1">
-              <!-- Eyebrow + número -->
-              <div class="flex items-start justify-between mb-6">
-                <p class="eyebrow">{pilar.eyebrow}</p>
-                <span
-                  class="font-['Barlow_Condensed'] font-900 text-5xl leading-none text-[#C2C1C1]/40 select-none"
-                  aria-hidden="true"
-                >
-                  {pilar.number}
-                </span>
-              </div>
-
-              <!-- Título -->
-              <h3 class="heading-card text-[#0A0A0A] mb-3">{pilar.title}</h3>
-
-              <!-- Subtítulo -->
-              <p class="body-text mb-6">
-                {pilar.subtitle}
-              </p>
-
-              <!-- Separador verde -->
-              <div class="h-px bg-[#98C665] w-12 mb-6"></div>
-
-              <!-- Items -->
-              <ul class="space-y-2 flex-1 mb-8">
-                {pilar.items.map((item) => (
-                  <li class="flex items-start gap-2 body-text">
-                    <span class="text-[#98C665] mt-0.5 flex-shrink-0" aria-hidden="true">▸</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <!-- CTA -->
-              <a
-                href={ctaHref}
-                target={pilar.ctaExternal ? '_blank' : undefined}
-                rel={pilar.ctaExternal ? 'noopener noreferrer' : undefined}
-                class="
-                  inline-flex items-center gap-2
-                  font-['Barlow_Condensed'] font-700 uppercase tracking-wider text-sm
-                  text-[#98C665] hover:text-[#6AA03A] transition-colors duration-200
-                  group/link
-                "
-                aria-label={pilar.ctaExternal ? `${pilar.cta} (abre en nueva pestaña)` : pilar.cta}
-              >
-                {pilar.cta}
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200 group-hover/link:translate-x-1" aria-hidden="true">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-            </div>
-          </article>
-        );
-      })}
-    </div>
-
-    <!-- Detalle de seguridad electrónica -->
-    <div class="reveal mt-24 mb-12 max-w-2xl">
-      <p class="eyebrow mb-4 text-[#98C665]">SEGURIDAD ELECTRÓNICA</p>
-      <h3 class="heading-section text-[#0A0A0A]">
-        Todo lo que necesitás,<br />en un solo lugar.
-      </h3>
-      <p class="body-text mt-4">
-        Desde la planificación en obra hasta la instalación en tu casa terminada.
-        No vendemos paquetes genéricos: planificamos desde el plano el sistema que
-        realmente necesitás.
+      <p class="body-text mt-5">
+        Cámaras, alarmas, redes y automatización. Todo instalado a medida de tu
+        lugar, sin puntos ciegos y con acceso desde el celular.
       </p>
     </div>
 
@@ -117,6 +29,18 @@ import { whatsappLink } from '../../lib/whatsapp';
             hover:border-[#98C665]/60 transition-all duration-300
           `}
         >
+          {serv.image && (
+            <div class="relative w-full aspect-[4/3] overflow-hidden bg-[#0F0F0F]">
+              <img
+                src={serv.image}
+                alt={`${serv.title} — INSOLVA Group`}
+                loading="lazy"
+                decoding="async"
+                class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          )}
+
           <div class="p-8 flex flex-col flex-1">
             <!-- Título + número -->
             <div class="flex items-start justify-between mb-4">

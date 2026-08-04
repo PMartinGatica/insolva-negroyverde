@@ -8,9 +8,11 @@ interface Props {
 }
 
 const {
-  title = `${BRAND.name} — Ingeniería + Seguridad Electrónica en Ushuaia`,
+  title = `Cámaras, Alarmas y Domótica en Ushuaia | Automatización – ${BRAND.name}`,
   description = BRAND.description,
 } = Astro.props;
+
+const keywords = "cámaras de seguridad en Ushuaia, instalación de cámaras Ushuaia, alarmas para casa Ushuaia, domótica Ushuaia, automatización del hogar Ushuaia, casa inteligente Ushuaia, seguridad para negocios Ushuaia, cámaras con celular Ushuaia, videovigilancia Ushuaia";
 
 const ogImage = '/og-image.png';
 const canonicalUrl = 'https://insolvagroup.com';
@@ -78,6 +80,7 @@ const schema = {
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph -->

@@ -17,8 +17,26 @@ pnpm-debug.log*
 .env
 .env.production
 
+# secretos de infraestructura (no subir nunca)
+claves.md
+
+# videos fuente pesados (los frames WebP sí se versionan; el mp4 no)
+assets/source/*.mp4
+
+# material fuente sin optimizar — NO subir al repo (el sitio usa /public/img/*.webp).
+# Los videos/fotos originales viven solo en disco; para el sitio se generan webp/frames.
+public/fotos-trabajos/
+*.mp4
+*.mov
+# imágenes generadas por IA / sueltas en la raíz que no usa el sitio
+/ChatGPT Image*.png
+/hf_*.mp4
+
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# Local Netlify folder
+.netlify

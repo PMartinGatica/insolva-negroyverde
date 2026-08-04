@@ -1,0 +1,334 @@
+---
+// Sección scroll-driven: la casa se construye y se instala la seguridad al
+// hacer scroll. Técnica "Apple": secuencia de frames WebP pintados en <canvas>,
+// sin <video> y sin GSAP (scroll nativo + sección sticky).
+//
+// Requiere haber corrido: node scripts/build-frames.mjs <video> construccion <N>
+// y ajustar FRAME_COUNT abajo al número real de frames generados.
+
+const SEQ = 'construccion';
+const FRAME_COUNT = 140; // output real de build-frames.mjs (video orbital 360°)
+const SCROLL_VH = 400;   // alto de la sección en vh (más alto = scroll más largo)
+
+// Hitos de texto sincronizados con el progreso (0–1).
+const HITOS = [
+  { at: 0.0,  titulo: 'Desde los cimientos', sub: 'Empezamos por el plano.' },
+  { at: 0.35, titulo: 'Tu casa, a medida',    sub: 'Estructura y aberturas a tu escenario.' },
+  { at: 0.62, titulo: 'Domótica y luces',     sub: 'Todo controlado desde el celular.' },
+  { at: 0.82, titulo: 'Seguridad instalada',  sub: 'Cámaras y alarmas, sin zonas ciegas.' },
+];
+---
+
+<section
+  id="construccion"
+  class="cs-section"
+  style={`height:${SCROLL_VH}vh;`}
+  data-seq={SEQ}
+  data-frames={FRAME_COUNT}
+>
+  <div class="cs-sticky">
+    <canvas id="cs-canvas" class="cs-canvas" aria-hidden="true"></canvas>
+
+    <!-- Fundido de empalme con el hero (negro arriba → transparente) -->
+    <div class="cs-fade-top" aria-hidden="true"></div>
+    <!-- Fundido de salida hacia Servicios (transparente → negro abajo) -->
+    <div class="cs-fade-bottom" aria-hidden="true"></div>
+
+    <!-- Fallback estático (reduced-motion / error de carga) -->
+    <img
+      id="cs-fallback"
+      src={`/frames/${SEQ}/desktop/frame-${String(FRAME_COUNT).padStart(4, '0')}.webp`}
+      alt="Casa moderna terminada en Ushuaia con cámaras de seguridad instaladas"
+      class="cs-fallback"
+      loading="lazy"
+      decoding="async"
+      hidden
+    />
+
+    <!-- Overlays de texto -->
+    <div class="cs-overlay">
+      <div class="cs-overlay-inner">
+        {HITOS.map((h, i) => (
+          <div class="cs-hito" data-at={h.at} data-index={i}>
+            <p class="cs-hito-titulo">{h.titulo}</p>
+            <p class="cs-hito-sub">{h.sub}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- HUD de debug (?debug=1) -->
+    <div id="cs-hud" class="cs-hud" hidden></div>
+  </div>
+</section>
+
+<style>
+  .cs-section { position: relative; background: #050505; }
+  .cs-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cs-canvas, .cs-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cs-fallback[hidden] { display: none; }
+
+  /* Fundido superior: empalma el negro del hero con el primer frame (cielo gris)
+     para que la transición al entrar a la sección no sea un corte brusco. */
+  .cs-fade-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 22vh;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(to bottom, #050505 0%, rgba(5,5,5,0.6) 40%, transparent 100%);
+  }
+  /* Fundido inferior: empalma el último frame con el blanco de la sección Servicios,
+     para que la salida no sea un corte brusco de la foto al fondo blanco. */
+  .cs-fade-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 30vh;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.55) 55%, #FFFFFF 100%);
+  }
+
+  .cs-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(5,5,5,0.75) 0%, rgba(5,5,5,0.1) 35%, transparent 60%);
+  }
+  .cs-overlay-inner {
+    position: relative;
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+    min-height: 8rem;
+  }
+  .cs-hito {
+    position: absolute;
+    bottom: 5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    max-width: 34rem;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .cs-hito.cs-active { opacity: 1; transform: translateY(0); }
+  .cs-hito-titulo {
+    font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: clamp(1.8rem, 4vw, 3.2rem);
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  .cs-hito-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+    line-height: 1.55;
+    color: #cfd3d8;
+    max-width: 30rem;
+  }
+
+  .cs-hud {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    background: rgba(0,0,0,0.7);
+    color: #98C665;
+    font: 12px/1.5 monospace;
+    padding: 0.5rem 0.75rem;
+    border-radius: 3px;
+    z-index: 10;
+    white-space: pre;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cs-hito { transition: none; }
+  }
+</style>
+
+<script is:inline>
+(function () {
+  function init() {
+    var section = document.getElementById('construccion');
+    if (!section) return;
+    var canvas = document.getElementById('cs-canvas');
+    var fallback = document.getElementById('cs-fallback');
+    var hud = document.getElementById('cs-hud');
+    var hitos = Array.prototype.slice.call(section.querySelectorAll('.cs-hito'));
+    var ctx = canvas.getContext('2d');
+
+    var seq = section.getAttribute('data-seq');
+    var FRAME_COUNT = parseInt(section.getAttribute('data-frames'), 10) || 120;
+    var debug = /[?&]debug=1/.test(location.search);
+    if (debug) hud.hidden = false;
+
+    // reduced-motion → fallback estático, sin canvas
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { showFallback(); return; }
+
+    var variant = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+    var images = new Array(FRAME_COUNT);
+    var loaded = 0;
+    var currentFrame = -1;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function framePath(i) {
+      var n = String(i + 1);
+      while (n.length < 4) n = '0' + n;
+      return '/frames/' + seq + '/' + variant + '/frame-' + n + '.webp';
+    }
+
+    function showFallback() {
+      if (fallback) { fallback.hidden = false; }
+      if (canvas) canvas.style.display = 'none';
+      updateHitos(1);
+    }
+
+    function resizeCanvas() {
+      var r = canvas.getBoundingClientRect();
+      if (!r.width || !r.height) return; // aún sin layout: reintenta el ResizeObserver
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      draw(currentFrame < 0 ? 0 : currentFrame, true);
+    }
+
+    function draw(i, force) {
+      if (i === currentFrame && !force) return;
+      var img = images[i];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+      currentFrame = i;
+      // object-fit: cover manual
+      var cw = canvas.width, ch = canvas.height;
+      var iw = img.naturalWidth, ih = img.naturalHeight;
+      var scale = Math.max(cw / iw, ch / ih);
+      var dw = iw * scale, dh = ih * scale;
+      var dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, dx, dy, dw, dh);
+    }
+
+    // Precarga progresiva: primero 1 de cada 4, después el resto.
+    function loadImage(i) {
+      if (images[i]) return;
+      var img = new Image();
+      img.decoding = 'async';
+      img.onload = function () {
+        loaded++;
+        // Repinta si este frame es el que toca, o si todavía no se pintó ninguno
+        // (el primer pintado ocurre antes de que carguen las imágenes).
+        var apply = function () {
+          if (currentFrame < 0 || i === currentFrame) { currentFrame = -1; onScroll(); }
+          if (debug) updateHud();
+        };
+        if (typeof img.decode === 'function') img.decode().then(apply).catch(apply);
+        else apply();
+      };
+      img.onerror = function () { if (loaded === 0) showFallback(); };
+      img.src = framePath(i);
+      images[i] = img;
+    }
+
+    var started = false;
+    function startLoading() {
+      if (started) return;
+      started = true;
+      // pasada 1: 1 de cada 4
+      for (var i = 0; i < FRAME_COUNT; i += 4) loadImage(i);
+      // pasada 2: el resto, diferido
+      setTimeout(function () {
+        for (var j = 0; j < FRAME_COUNT; j++) loadImage(j);
+      }, 400);
+    }
+
+    // Arranca a cargar cuando la sección se acerca
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { startLoading(); } });
+    }, { rootMargin: '600px 0px' });
+    io.observe(section);
+
+    function progress() {
+      var rect = section.getBoundingClientRect();
+      var total = section.offsetHeight - window.innerHeight;
+      if (total <= 0) return 0;
+      var p = -rect.top / total;
+      return Math.max(0, Math.min(1, p));
+    }
+
+    function updateHitos(p) {
+      var activeIdx = -1;
+      for (var i = 0; i < hitos.length; i++) {
+        if (p >= parseFloat(hitos[i].getAttribute('data-at'))) activeIdx = i;
+      }
+      hitos.forEach(function (h, i) {
+        if (i === activeIdx) h.classList.add('cs-active');
+        else h.classList.remove('cs-active');
+      });
+    }
+
+    function updateHud() {
+      if (!debug) return;
+      hud.textContent =
+        'seq: ' + seq + ' (' + variant + ')\n' +
+        'frame: ' + (currentFrame + 1) + ' / ' + FRAME_COUNT + '\n' +
+        'cargados: ' + loaded + ' / ' + FRAME_COUNT + '\n' +
+        'progreso: ' + (progress() * 100).toFixed(1) + '%';
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        var p = progress();
+        var idx = Math.min(FRAME_COUNT - 1, Math.floor(p * (FRAME_COUNT - 1)));
+        draw(idx);
+        updateHitos(p);
+        updateHud();
+        ticking = false;
+      });
+    }
+
+    resizeCanvas();
+    // El canvas puede medir 0x0 en el primer init (sticky sin layout todavía);
+    // el observer lo redimensiona en cuanto tiene tamaño real.
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { resizeCanvas(); }).observe(canvas);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function () {
+      var nv = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+      // currentFrame = -1 fuerza el repintado en cuanto cargue la primera imagen
+      // del nuevo juego; si no, el canvas se queda con el frame viejo.
+      if (nv !== variant) { variant = nv; started = false; images = new Array(FRAME_COUNT); loaded = 0; currentFrame = -1; startLoading(); }
+      resizeCanvas();
+    }, { passive: true });
+
+    // primer pintado
+    startLoading();
+    onScroll();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>

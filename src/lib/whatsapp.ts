@@ -6,11 +6,11 @@ interface WhatsAppLinkOptions {
 }
 
 const MESSAGES: Record<string, string> = {
-  hero: "Hola INSOLVA, quiero planificar mi sistema de seguridad.",
+  hero: "Hola INSOLVA, quiero un presupuesto para mi casa/negocio en Ushuaia.",
   "pilar-ingenieria": "Hola INSOLVA, quiero hablar de un proyecto de ingeniería.",
-  "pilar-seguridad": "Hola INSOLVA, quiero un presupuesto de seguridad electrónica.",
-  contacto: "Hola INSOLVA, vi su web y quiero coordinar una visita para mi proyecto.",
-  float: "Hola INSOLVA, quiero más información sobre seguridad electrónica.",
+  "pilar-seguridad": "Hola INSOLVA, quiero un presupuesto de cámaras y alarmas.",
+  contacto: "Hola INSOLVA, quiero un presupuesto para mi casa, negocio u obra en Ushuaia (seguridad, electricidad o automatización).",
+  float: "Hola INSOLVA, quiero más información sobre sus servicios.",
   general: "Hola INSOLVA, quiero más información.",
 };
 

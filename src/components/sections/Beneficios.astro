@@ -3,17 +3,22 @@ const beneficios = [
   {
     num: "01",
     title: "PLANIFICACIÓN A MEDIDA",
-    body: "No vendemos paquetes genéricos. Simulamos desde el plano el tipo, la cantidad y la ubicación de cada equipo según tu escenario real, para que inviertas justo en lo que necesitás.",
+    body: "No vendemos paquetes genéricos. Relevamos tu lugar y planificamos desde el plano cada instalación —eléctrica, cámaras, automatización o redes— para que inviertas justo en lo que necesitás.",
   },
   {
     num: "02",
-    title: "PROTECCIÓN INTEGRAL 24/7",
-    body: "Cámaras, alarmas, redes y automatización del hogar funcionando juntas en un solo sistema, con acceso remoto desde el celular. Tu hogar y tu negocio protegidos, estés donde estés.",
+    title: "TODO EN UN SOLO SISTEMA",
+    body: "Electricidad, seguridad, automatización del hogar y redes funcionando integradas, con acceso y control desde el celular. Una sola empresa que se ocupa de todo, sin coordinar mil proveedores.",
   },
   {
     num: "03",
     title: "CALIDAD PROFESIONAL, PRECIO JUSTO",
-    body: "Usamos las mismas marcas y estándares que las grandes empresas —Hikvision, Dahua, TP-Link— con el trato directo y la ingeniería que te dan una solución de nivel sin pagar de más.",
+    body: "Usamos las mismas marcas y estándares que las grandes empresas —Hikvision, Dahua, TP-Link, Starlink— con el trato directo y la ingeniería que te dan una solución de nivel sin pagar de más.",
+  },
+  {
+    num: "04",
+    title: "GENTE DE USHUAIA",
+    body: "Somos de Tierra del Fuego y trabajamos acá. Nos conocés, respondemos rápido y damos garantía en equipos e instalación. Nada de call centers ni empresas que desaparecen después de cobrar.",
   },
 ];
 ---
@@ -22,13 +27,13 @@ const beneficios = [
   <div class="max-w-7xl mx-auto px-6">
 
     <div class="reveal mb-16 max-w-2xl">
-      <p class="eyebrow mb-4">04 — POR QUÉ INSOLVA</p>
+      <p class="eyebrow mb-4">POR QUÉ INSOLVA</p>
       <h2 class="heading-section text-[#0A0A0A]">
-        Tres resultados concretos<br />que dejamos en cada cliente.
+        Lo que dejamos<br />en cada cliente.
       </h2>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
       {beneficios.map((b, i) => (
         <div class={`reveal reveal-delay-${i + 1} relative`}>
 

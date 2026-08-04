@@ -6,25 +6,40 @@ import Hero from '../components/sections/Hero.astro';
 import QuienesSomos from '../components/sections/QuienesSomos.astro';
 import Pilares from '../components/sections/Pilares.astro';
 import ParaQuien from '../components/sections/ParaQuien.astro';
-import Beneficios from '../components/sections/Beneficios.astro';
+// Beneficios y Confianza fusionadas dentro de QuiénesSomos (decían lo mismo: "por qué elegirnos").
+// import Beneficios from '../components/sections/Beneficios.astro';
+// Sección scroll-driven de la casa construyéndose — video orbital 360° (140 frames WebP).
+// Regenerar: node scripts/build-frames.mjs assets/source/casa-construccion.mp4 construccion 140
+import ConstruccionScroll from '../components/sections/ConstruccionScroll.astro';
+import Embudo from '../components/sections/Embudo.astro';
+import Trabajos from '../components/sections/Trabajos.astro';
+// Galería "Manos a la obra" eliminada: las fotos ahora viven en el modal de cada card de Trabajos.
+// Confianza fusionada dentro de Beneficios (decían lo mismo: "por qué elegirnos").
+// import Confianza from '../components/sections/Confianza.astro';
+// Calculadora conservada en el repo pero fuera de la página (cambio de enfoque):
+// import Calculadora from '../components/sections/Calculadora.astro';
 import FAQ from '../components/sections/FAQ.astro';
 import Contacto from '../components/sections/Contacto.astro';
 import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
 import CookieBanner from '../components/ui/CookieBanner.astro';
+import ChatAsistente from '../components/ui/ChatAsistente.astro';
 ---
 
 <Layout>
   <Header />
   <main>
     <Hero />
-    <QuienesSomos />
+    <ConstruccionScroll />
     <Pilares />
     <ParaQuien />
-    <Beneficios />
+    <Trabajos />
+    <Embudo />
+    <QuienesSomos />
     <FAQ />
     <Contacto />
   </main>
   <Footer />
   <WhatsAppFloat />
+  <ChatAsistente />
   <CookieBanner />
 </Layout>

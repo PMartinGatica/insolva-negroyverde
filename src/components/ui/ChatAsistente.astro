@@ -1,0 +1,276 @@
+---
+import { BRAND } from '../../lib/constants';
+---
+
+<!-- Botón flotante del asistente -->
+<button
+  id="chat-toggle"
+  type="button"
+  class="
+    fixed bottom-6 right-24 md:right-28 z-50
+    w-14 h-14 md:w-16 md:h-16
+    flex items-center justify-center
+    bg-[#0A0A0A] text-[#98C665] rounded-full
+    border border-[#98C665]/40
+    shadow-lg shadow-black/30
+    hover:border-[#98C665] hover:scale-110
+    transition-all duration-300
+  "
+  aria-label="Abrir asistente de INSOLVA"
+  aria-expanded="false"
+  aria-controls="chat-panel"
+>
+  <svg id="chat-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+  <svg id="chat-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden" aria-hidden="true">
+    <path d="M18 6 6 18M6 6l12 12"/>
+  </svg>
+</button>
+
+<!-- Panel del chat -->
+<div
+  id="chat-panel"
+  class="
+    fixed bottom-24 right-6 md:right-8 z-50
+    w-[calc(100vw-3rem)] max-w-sm h-[28rem] max-h-[70vh]
+    flex flex-col
+    bg-[#0A0A0A] border border-[#98C665]/25 rounded-sm
+    shadow-2xl shadow-black/50
+    opacity-0 scale-95 pointer-events-none
+    transition-all duration-250
+    origin-bottom-right
+  "
+  role="dialog"
+  aria-modal="false"
+  aria-label="Asistente de INSOLVA"
+>
+  <!-- Header -->
+  <div class="flex items-center gap-3 px-5 py-4 border-b border-[#98C665]/15">
+    <div class="w-2.5 h-2.5 rounded-full bg-[#98C665] flex-shrink-0"></div>
+    <div class="flex-1 min-w-0">
+      <p class="font-['Barlow_Condensed'] font-700 uppercase tracking-wider text-sm text-white truncate">
+        Asistente INSOLVA
+      </p>
+      <p class="text-[0.7rem] text-[#9ca3af]" style="font-family:'Space Grotesk',sans-serif;">
+        Seguridad electrónica y automatización
+      </p>
+    </div>
+  </div>
+
+  <!-- Mensajes -->
+  <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3 flex flex-col">
+    <div class="chat-bubble chat-bubble-bot">
+      Hola 👋 Soy el asistente de INSOLVA. Puedo ayudarte con dudas sobre cámaras de
+      seguridad, alarmas, redes WiFi o automatización para tu casa o negocio en Ushuaia.
+      ¿En qué te puedo ayudar?
+    </div>
+  </div>
+
+  <!-- Input -->
+  <form id="chat-form" class="flex items-center gap-2 p-3 border-t border-[#98C665]/15">
+    <input
+      id="chat-input"
+      type="text"
+      maxlength="500"
+      placeholder="Escribí tu consulta..."
+      autocomplete="off"
+      class="
+        flex-1 bg-[#151515] text-white placeholder:text-[#6b7280]
+        text-sm rounded-sm px-3 py-2.5
+        border border-white/10 focus:border-[#98C665]/60 outline-none
+        transition-colors duration-200
+      "
+      style="font-family:'Space Grotesk',sans-serif;"
+    />
+    <button
+      type="submit"
+      id="chat-send"
+      class="
+        flex items-center justify-center w-10 h-10 flex-shrink-0
+        bg-[#98C665] text-white rounded-sm
+        hover:bg-[#6AA03A] transition-colors duration-200
+        disabled:opacity-40 disabled:cursor-not-allowed
+      "
+      aria-label="Enviar mensaje"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m22 2-7 20-4-9-9-4Z"/>
+        <path d="M22 2 11 13"/>
+      </svg>
+    </button>
+  </form>
+
+  <p class="px-4 pb-3 text-[0.65rem] text-[#6b7280] text-center" style="font-family:'Space Grotesk',sans-serif;">
+    Respuestas generadas por IA · para presupuestos escribí por
+    <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noopener noreferrer" class="text-[#98C665] hover:underline">WhatsApp</a>
+  </p>
+</div>
+
+<style>
+  #chat-panel.chat-open {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    pointer-events: auto !important;
+  }
+  #chat-messages::-webkit-scrollbar { width: 5px; }
+  #chat-messages::-webkit-scrollbar-thumb { background: rgba(152,198,101,0.3); border-radius: 3px; }
+</style>
+
+<style is:global>
+  /*
+    is:global a propósito: estas burbujas las crea el script con
+    document.createElement, así que nunca reciben el atributo
+    data-astro-cid-* que usa el scoping por defecto de Astro — con scoping
+    normal el selector nunca matchea y el texto queda invisible (color por
+    defecto sobre fondo transparente).
+  */
+  .chat-bubble {
+    max-width: 85%;
+    padding: 0.65rem 0.9rem;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    font-family: 'Space Grotesk', sans-serif;
+    animation: chatFadeIn 0.25s ease-out;
+  }
+  .chat-bubble-bot {
+    background: rgba(152, 198, 101, 0.08);
+    border: 1px solid rgba(152, 198, 101, 0.2);
+    color: #e5e7eb;
+    align-self: flex-start;
+  }
+  .chat-bubble-user {
+    background: #98C665;
+    color: #0A0A0A;
+    align-self: flex-end;
+    margin-left: auto;
+    font-weight: 500;
+  }
+  .chat-bubble-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    align-self: flex-start;
+  }
+  @keyframes chatFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script is:inline>
+(function () {
+  function safe(fn) {
+    try { fn(); } catch (e) { console.error('[chat-asistente]', e); }
+  }
+
+  safe(function () {
+    var toggleBtn = document.getElementById('chat-toggle');
+    var panel = document.getElementById('chat-panel');
+    var iconOpen = document.getElementById('chat-icon-open');
+    var iconClose = document.getElementById('chat-icon-close');
+    var form = document.getElementById('chat-form');
+    var input = document.getElementById('chat-input');
+    var messages = document.getElementById('chat-messages');
+    var sendBtn = document.getElementById('chat-send');
+
+    if (!toggleBtn || !panel || !form || !input || !messages) return;
+
+    var isOpen = false;
+    var history = [];
+    var isSending = false;
+
+    function setOpen(open) {
+      isOpen = open;
+      toggleBtn.setAttribute('aria-expanded', String(open));
+      if (open) {
+        panel.classList.add('chat-open');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+        setTimeout(function () { input.focus(); }, 150);
+      } else {
+        panel.classList.remove('chat-open');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    }
+
+    toggleBtn.addEventListener('click', function () {
+      setOpen(!isOpen);
+    });
+
+    function addBubble(text, kind) {
+      var div = document.createElement('div');
+      div.className = 'chat-bubble ' + (
+        kind === 'user' ? 'chat-bubble-user' :
+        kind === 'error' ? 'chat-bubble-error' : 'chat-bubble-bot'
+      );
+      div.textContent = text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+      return div;
+    }
+
+    function addTypingIndicator() {
+      var div = document.createElement('div');
+      div.className = 'chat-bubble chat-bubble-bot';
+      div.id = 'chat-typing';
+      div.textContent = '···';
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+      return div;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (isSending) return;
+
+      var text = input.value.trim();
+      if (!text) return;
+
+      addBubble(text, 'user');
+      history.push({ role: 'user', text: text });
+      input.value = '';
+      isSending = true;
+      sendBtn.disabled = true;
+
+      var typingEl = addTypingIndicator();
+
+      var controller = new AbortController();
+      var timeoutId = setTimeout(function () { controller.abort(); }, 20000);
+
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: history.slice(0, -1) }),
+        signal: controller.signal,
+      })
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (result) {
+          clearTimeout(timeoutId);
+          typingEl.remove();
+          if (!result.ok) {
+            addBubble(result.data.error || 'Ocurrió un problema. Probá de nuevo.', 'error');
+            return;
+          }
+          addBubble(result.data.reply, 'bot');
+          history.push({ role: 'model', text: result.data.reply });
+        })
+        .catch(function (err) {
+          clearTimeout(timeoutId);
+          typingEl.remove();
+          if (err && err.name === 'AbortError') {
+            addBubble('El asistente está tardando más de lo normal. Probá de nuevo en un momento.', 'error');
+          } else {
+            addBubble('No pudimos conectar con el asistente. Revisá tu conexión e intentá de nuevo.', 'error');
+          }
+        })
+        .finally(function () {
+          isSending = false;
+          sendBtn.disabled = false;
+        });
+    });
+  });
+})();
+</script>

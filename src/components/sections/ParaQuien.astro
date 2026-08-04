@@ -3,17 +3,29 @@ const segmentos = [
   {
     icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
     title: "HOGARES",
-    body: "Familias que quieren vivir tranquilas: cámaras, alarmas, redes sin zonas muertas y automatización del hogar para controlar todo desde el celular. Protegé tu casa estés donde estés.",
+    beneficios: [
+      "Cámaras y alarmas que ves desde el celular",
+      "Automatización de luces, climatización y accesos",
+      "Instalación eléctrica y redes WiFi sin zonas muertas",
+    ],
   },
   {
     icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>`,
-    title: "COMERCIOS Y GASTRONOMÍA",
-    body: "Locales, restaurantes y negocios que necesitan videovigilancia con acceso remoto, redes profesionales y sistemas integrados para operar tranquilos y proteger su inversión.",
+    title: "COMERCIOS",
+    beneficios: [
+      "Videovigilancia y control de caja 24/7",
+      "Instalación eléctrica y redes profesionales",
+      "Todo integrado y con acceso remoto",
+    ],
   },
   {
     icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
-    title: "INDUSTRIAS Y OBRADORES",
-    body: "Empresas, industrias y obras en construcción. Monitoreo de obradores con equipos robustos 4G, seguridad perimetral e ingeniería a medida para cada instalación.",
+    title: "INDUSTRIAS Y OBRAS",
+    beneficios: [
+      "Monitoreo de obradores con 4G y Starlink",
+      "Instalación eléctrica y seguridad perimetral",
+      "Solución robusta a medida de cada obra",
+    ],
   },
 ];
 ---
@@ -22,30 +34,32 @@ const segmentos = [
   <div class="max-w-7xl mx-auto px-6">
 
     <div class="reveal mb-16 max-w-2xl">
-      <p class="eyebrow mb-4">03 — PARA QUIÉN</p>
+      <p class="eyebrow mb-4">¿PARA QUIÉN ES ESTO?</p>
       <h2 class="heading-section text-[#0A0A0A]">
-        Trabajamos con quien<br />quiere crecer sin caos.
+        Soluciones pensadas<br />para tu situación.
       </h2>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {segmentos.map((seg, i) => (
-        <div class={`reveal reveal-delay-${i + 1} flex flex-col gap-4`}>
+        <div class={`reveal reveal-delay-${i + 1} flex flex-col gap-5 bg-white rounded-sm p-8 border border-[#0A0A0A]/8`}>
           <!-- Ícono -->
           <div class="w-12 h-12 flex items-center justify-center text-[#98C665]" set:html={seg.icon} />
 
-          <!-- Línea separadora -->
-          <div class="h-px bg-[#0A0A0A]/10 w-full"></div>
-
           <!-- Título -->
-          <h3 class="font-['Barlow_Condensed'] font-800 uppercase tracking-wider text-base text-[#0A0A0A]">
+          <h3 class="font-['Barlow_Condensed'] font-800 uppercase tracking-wider text-lg text-[#0A0A0A]">
             {seg.title}
           </h3>
 
-          <!-- Body -->
-          <p class="body-text">
-            {seg.body}
-          </p>
+          <!-- Beneficios -->
+          <ul class="flex flex-col gap-3">
+            {seg.beneficios.map((b) => (
+              <li class="flex items-start gap-2.5 text-[#4A4A4A]" style="font-family:'Space Grotesk',sans-serif; font-size:0.9rem;">
+                <svg class="mt-0.5 flex-shrink-0 text-[#98C665]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       ))}
     </div>

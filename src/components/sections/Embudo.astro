@@ -1,0 +1,343 @@
+---
+import { BRAND } from '../../lib/constants';
+---
+
+<section id="embudo" class="emb-section">
+  <div class="emb-wrap">
+    <div class="reveal emb-head">
+      <p class="eyebrow emb-eyebrow">PRESUPUESTO SIN CARGO</p>
+      <h2 class="emb-title">Contanos qué necesitás.</h2>
+      <p class="emb-lead">
+        En 3 pasos te armamos un presupuesto a medida. Sin compromiso.
+      </p>
+    </div>
+
+    <div class="reveal emb-card" data-wa={BRAND.whatsapp}>
+      <!-- Barra de progreso -->
+      <div class="emb-progress" aria-hidden="true">
+        <span class="emb-progress-bar" id="emb-bar"></span>
+      </div>
+      <p class="emb-step-label"><span id="emb-step-n">1</span> de 3</p>
+
+      <!-- Paso 1: tipo de propiedad -->
+      <div class="emb-step emb-step-active" data-step="1">
+        <p class="emb-q">¿Dónde es el trabajo?</p>
+        <div class="emb-options">
+          <button type="button" class="emb-opt" data-field="tipo_propiedad" data-value="casa">
+            <span class="emb-opt-ico">🏠</span> Mi casa
+          </button>
+          <button type="button" class="emb-opt" data-field="tipo_propiedad" data-value="negocio">
+            <span class="emb-opt-ico">🏪</span> Mi negocio
+          </button>
+          <button type="button" class="emb-opt" data-field="tipo_propiedad" data-value="obra">
+            <span class="emb-opt-ico">🏗️</span> Una obra en construcción
+          </button>
+        </div>
+      </div>
+
+      <!-- Paso 2: interés -->
+      <div class="emb-step" data-step="2">
+        <p class="emb-q">¿Qué necesitás?</p>
+        <div class="emb-options">
+          <button type="button" class="emb-opt" data-field="interes" data-value="camaras">
+            <span class="emb-opt-ico">📹</span> Cámaras y alarmas
+          </button>
+          <button type="button" class="emb-opt" data-field="interes" data-value="electricidad">
+            <span class="emb-opt-ico">⚡</span> Instalación eléctrica
+          </button>
+          <button type="button" class="emb-opt" data-field="interes" data-value="automatizacion">
+            <span class="emb-opt-ico">💡</span> Automatización del hogar
+          </button>
+          <button type="button" class="emb-opt" data-field="interes" data-value="redes">
+            <span class="emb-opt-ico">📶</span> Redes WiFi / Starlink
+          </button>
+          <button type="button" class="emb-opt" data-field="interes" data-value="todo">
+            <span class="emb-opt-ico">✨</span> Un proyecto completo
+          </button>
+        </div>
+        <button type="button" class="emb-back" data-back>← Volver</button>
+      </div>
+
+      <!-- Paso 3: datos -->
+      <div class="emb-step" data-step="3">
+        <p class="emb-q">¿A dónde te contactamos?</p>
+        <div class="emb-fields">
+          <input type="text" id="emb-nombre" class="emb-input" placeholder="Tu nombre" autocomplete="name" maxlength="120" />
+          <input type="email" id="emb-email" class="emb-input" placeholder="Tu email" autocomplete="email" maxlength="160" />
+          <input type="tel" id="emb-whatsapp" class="emb-input" placeholder="Tu WhatsApp (ej: 2901 55 5555)" autocomplete="tel" maxlength="40" />
+          <p class="emb-hint">Dejá al menos un email o WhatsApp. No compartimos tus datos con nadie.</p>
+        </div>
+        <div class="emb-actions">
+          <button type="button" class="emb-back" data-back>← Volver</button>
+          <button type="button" class="emb-submit" id="emb-submit" disabled>
+            Pedir mi presupuesto
+          </button>
+        </div>
+        <p class="emb-error" id="emb-error" hidden></p>
+      </div>
+
+      <!-- Éxito -->
+      <div class="emb-step emb-success" data-step="ok">
+        <div class="emb-check">✓</div>
+        <p class="emb-q">¡Listo! Ya tenemos tus datos.</p>
+        <p class="emb-lead" style="margin:0 0 1.5rem;">
+          Te vamos a contactar a la brevedad. Si querés, escribinos ahora por WhatsApp
+          y te respondemos al toque.
+        </p>
+        <a id="emb-wa" href="#" target="_blank" rel="noopener noreferrer" class="emb-submit emb-wa-btn">
+          Escribinos por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .emb-section {
+    position: relative;
+    background: #0A0A0A;
+    padding: 6rem 1.5rem;
+    overflow: hidden;
+  }
+  .emb-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(152,198,101,1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(152,198,101,1) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.04;
+    pointer-events: none;
+  }
+  .emb-wrap { position: relative; max-width: 44rem; margin: 0 auto; }
+
+  .emb-head { text-align: center; margin-bottom: 2.5rem; }
+  .emb-eyebrow { color: #98C665; justify-content: center; }
+  .emb-title {
+    font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+    font-weight: 900; text-transform: uppercase;
+    font-size: clamp(1.9rem, 4.5vw, 3rem); line-height: 1;
+    color: #fff; margin: 0.75rem 0 1rem;
+  }
+  .emb-lead {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem; line-height: 1.6; color: #9ca3af;
+    max-width: 34rem; margin: 0 auto;
+  }
+
+  .emb-card {
+    position: relative;
+    background: #111112;
+    border: 1px solid rgba(152,198,101,0.2);
+    border-radius: 4px;
+    padding: 2rem;
+    min-height: 20rem;
+  }
+
+  .emb-progress {
+    height: 3px; background: rgba(255,255,255,0.08);
+    border-radius: 3px; overflow: hidden; margin-bottom: 0.75rem;
+  }
+  .emb-progress-bar {
+    display: block; height: 100%; width: 33%;
+    background: #98C665; transition: width 0.4s cubic-bezier(0.22,1,0.36,1);
+  }
+  .emb-step-label {
+    font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: #6b7280;
+    margin-bottom: 1.75rem;
+  }
+
+  .emb-step { display: none; animation: embIn 0.35s ease; }
+  .emb-step-active { display: block; }
+  @keyframes embIn { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+  .emb-q {
+    font-family: 'BlauerNue', 'Space Grotesk', sans-serif; font-weight: 800;
+    text-transform: uppercase; font-size: 1.4rem; color: #fff; margin-bottom: 1.5rem;
+  }
+
+  .emb-options { display: grid; gap: 0.75rem; }
+  .emb-opt {
+    display: flex; align-items: center; gap: 0.85rem;
+    width: 100%; text-align: left;
+    padding: 1rem 1.25rem;
+    background: #0A0A0A; color: #e5e7eb;
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 3px;
+    font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 500;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  }
+  .emb-opt:hover { border-color: #98C665; background: #141414; transform: translateX(3px); }
+  .emb-opt-ico { font-size: 1.3rem; line-height: 1; }
+
+  .emb-fields { display: grid; gap: 0.75rem; }
+  .emb-input {
+    width: 100%; padding: 0.9rem 1rem;
+    background: #0A0A0A; color: #fff;
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 3px;
+    font-family: 'Space Grotesk', sans-serif; font-size: 1rem;
+    transition: border-color 0.15s;
+  }
+  .emb-input::placeholder { color: #6b7280; }
+  .emb-input:focus { outline: none; border-color: #98C665; }
+  .emb-hint { font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; color: #6b7280; margin-top: 0.25rem; }
+
+  .emb-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; }
+  .emb-back {
+    background: none; border: none; color: #9ca3af; cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem;
+    padding: 0.5rem 0; transition: color 0.15s;
+  }
+  .emb-back:hover { color: #98C665; }
+
+  .emb-submit {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.9rem 1.75rem;
+    background: #98C665; color: #fff;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase;
+    border: none; border-radius: 3px; cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+  }
+  .emb-submit:hover { background: #6AA03A; }
+  .emb-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .emb-error {
+    color: #fca5a5; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem;
+    margin-top: 1rem;
+  }
+
+  .emb-success { text-align: center; }
+  .emb-check {
+    width: 3.5rem; height: 3.5rem; margin: 0 auto 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(152,198,101,0.15); border: 1px solid #98C665;
+    border-radius: 999px; color: #98C665; font-size: 1.6rem; font-weight: 700;
+  }
+  .emb-wa-btn { text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .emb-section { padding: 4rem 1rem; }
+    .emb-card { padding: 1.5rem; }
+  }
+</style>
+
+<script is:inline>
+(function () {
+  function init() {
+    var card = document.getElementById('embudo') && document.querySelector('#embudo .emb-card');
+    if (!card) return;
+    var waNumber = card.getAttribute('data-wa');
+    var bar = document.getElementById('emb-bar');
+    var stepN = document.getElementById('emb-step-n');
+    var steps = Array.prototype.slice.call(card.querySelectorAll('.emb-step'));
+    var submitBtn = document.getElementById('emb-submit');
+    var errorEl = document.getElementById('emb-error');
+    var nombreEl = document.getElementById('emb-nombre');
+    var emailEl = document.getElementById('emb-email');
+    var waEl = document.getElementById('emb-whatsapp');
+    var waLink = document.getElementById('emb-wa');
+
+    var state = { tipo_propiedad: null, interes: null, nombre: '', email: '', whatsapp: '' };
+    var current = 1;
+    var sending = false;
+
+    function show(step) {
+      steps.forEach(function (s) {
+        s.classList.toggle('emb-step-active', s.getAttribute('data-step') === String(step));
+      });
+      if (step === 1 || step === 2 || step === 3) {
+        current = step;
+        bar.style.width = (step / 3 * 100) + '%';
+        stepN.textContent = step;
+      }
+    }
+
+    // Opciones (paso 1 y 2): al elegir, guarda y avanza
+    card.querySelectorAll('.emb-opt').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var field = btn.getAttribute('data-field');
+        state[field] = btn.getAttribute('data-value');
+        // marcar activa dentro del grupo
+        var group = btn.parentElement;
+        group.querySelectorAll('.emb-opt').forEach(function (b) { b.style.borderColor = ''; b.style.background = ''; });
+        btn.style.borderColor = '#98C665';
+        setTimeout(function () { show(current + 1); }, 180);
+      });
+    });
+
+    // Volver
+    card.querySelectorAll('[data-back]').forEach(function (b) {
+      b.addEventListener('click', function () { show(Math.max(1, current - 1)); });
+    });
+
+    // Validación paso 3
+    function emailValid(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    function waValid(v) { return /\d{6,}/.test(v.replace(/\D/g, '')); }
+    function validate() {
+      state.nombre = nombreEl.value.trim();
+      state.email = emailEl.value.trim();
+      state.whatsapp = waEl.value.trim();
+      var ok = state.nombre.length >= 2 && (emailValid(state.email) || waValid(state.whatsapp));
+      submitBtn.disabled = !ok;
+      return ok;
+    }
+    [nombreEl, emailEl, waEl].forEach(function (el) { el.addEventListener('input', validate); });
+
+    var INTERES_TXT = {
+      camaras: 'cámaras y alarmas',
+      electricidad: 'instalación eléctrica',
+      automatizacion: 'automatización del hogar',
+      redes: 'redes WiFi / Starlink',
+      todo: 'un proyecto completo',
+    };
+    var LUGAR_TXT = { casa: 'mi casa', negocio: 'mi negocio', obra: 'una obra' };
+
+    function buildWaLink() {
+      var partes = ['Hola INSOLVA, soy ' + state.nombre + '.'];
+      if (state.tipo_propiedad) {
+        partes.push('El trabajo es en ' + (LUGAR_TXT[state.tipo_propiedad] || state.tipo_propiedad) + '.');
+      }
+      if (state.interes) {
+        partes.push('Necesito: ' + (INTERES_TXT[state.interes] || state.interes) + '.');
+      }
+      if (state.email) partes.push('Mi email: ' + state.email + '.');
+      partes.push('¿Me pasan un presupuesto?');
+      return 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(partes.join(' ') + '\n');
+    }
+
+    submitBtn.addEventListener('click', function () {
+      if (sending || !validate()) return;
+      sending = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+      errorEl.hidden = true;
+
+      fetch('/api/guardar-lead-embudo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state),
+      })
+        .then(function (res) { return res.json().then(function (d) { return { ok: res.ok, d: d }; }); })
+        .then(function (r) {
+          // Pase lo que pase con el guardado, dejamos avanzar al WhatsApp
+          // (best-effort: no perdemos al lead que igual quiere escribir).
+          if (!r.ok) console.warn('guardar-lead-embudo:', r.d && r.d.error);
+          waLink.href = buildWaLink();
+          show('ok');
+        })
+        .catch(function () {
+          waLink.href = buildWaLink();
+          show('ok');
+        })
+        .finally(function () {
+          sending = false;
+          submitBtn.textContent = 'Pedir mi presupuesto';
+        });
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
