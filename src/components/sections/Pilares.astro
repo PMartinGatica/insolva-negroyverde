@@ -31,12 +31,22 @@ import { SERVICIOS_SEGURIDAD } from '../../lib/constants';
         >
           {serv.image && (
             <div class="relative w-full aspect-[4/3] overflow-hidden bg-[#0F0F0F]">
+              <!-- Fondo: la misma foto ampliada y desenfocada, para que las fotos
+                   verticales no dejen barras negras a los costados (efecto CapCut). -->
+              <img
+                src={serv.image}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-60"
+              />
               <img
                 src={serv.image}
                 alt={`${serv.title} — INSOLVA Group`}
                 loading="lazy"
                 decoding="async"
-                class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                class="relative w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
           )}
