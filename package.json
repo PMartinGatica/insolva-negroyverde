@@ -12,7 +12,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/netlify": "^7.0.13",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.2.1",
