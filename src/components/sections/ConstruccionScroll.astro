@@ -7,7 +7,7 @@
 // y ajustar FRAME_COUNT abajo al número real de frames generados.
 
 const SEQ = 'construccion';
-const FRAME_COUNT = 140; // output real de build-frames.mjs (video orbital 360°)
+const FRAME_COUNT = 70; // output real de build-frames.mjs (video orbital 360°)
 const SCROLL_VH = 400;   // alto de la sección en vh (más alto = scroll más largo)
 
 // Hitos de texto sincronizados con el progreso (0–1).
@@ -212,10 +212,27 @@ const HITOS = [
       draw(currentFrame < 0 ? 0 : currentFrame, true);
     }
 
+    function ready(i) {
+      var img = images[i];
+      return img && img !== 'pending' && img.complete && img.naturalWidth > 0;
+    }
+
+    // Si el frame exacto todavía no llegó, pinta el más cercano ya cargado.
+    // Sin esto la sección parpadea en blanco mientras la cola trabaja.
+    function nearestReady(i) {
+      if (ready(i)) return i;
+      for (var d = 1; d < FRAME_COUNT; d++) {
+        if (i - d >= 0 && ready(i - d)) return i - d;
+        if (i + d < FRAME_COUNT && ready(i + d)) return i + d;
+      }
+      return -1;
+    }
+
     function draw(i, force) {
       if (i === currentFrame && !force) return;
-      var img = images[i];
-      if (!img || !img.complete || img.naturalWidth === 0) return;
+      var use = nearestReady(i);
+      if (use < 0) return;
+      var img = images[use];
       currentFrame = i;
       // object-fit: cover manual
       var cw = canvas.width, ch = canvas.height;
@@ -227,43 +244,85 @@ const HITOS = [
       ctx.drawImage(img, dx, dy, dw, dh);
     }
 
-    // Precarga progresiva: primero 1 de cada 4, después el resto.
+    // Descarga con concurrencia limitada. Disparar las 140 a la vez satura la
+    // conexión (se pelean por los ~6 sockets del navegador) y ninguna termina
+    // rápido; con una cola corta el primer frame aparece casi instantáneo.
+    var MAX_PARALLEL = 6;
+    var queue = [];
+    var inFlight = 0;
+
     function loadImage(i) {
       if (images[i]) return;
+      images[i] = 'pending';
+      queue.push(i);
+      pump();
+    }
+
+    function pump() {
+      while (inFlight < MAX_PARALLEL && queue.length) {
+        fetchFrame(queue.shift());
+      }
+    }
+
+    function fetchFrame(i) {
+      inFlight++;
       var img = new Image();
       img.decoding = 'async';
       img.onload = function () {
         loaded++;
+        inFlight--;
         // Repinta si este frame es el que toca, o si todavía no se pintó ninguno
         // (el primer pintado ocurre antes de que carguen las imágenes).
         var apply = function () {
           if (currentFrame < 0 || i === currentFrame) { currentFrame = -1; onScroll(); }
           if (debug) updateHud();
+          pump();
         };
         if (typeof img.decode === 'function') img.decode().then(apply).catch(apply);
         else apply();
       };
-      img.onerror = function () { if (loaded === 0) showFallback(); };
+      img.onerror = function () {
+        inFlight--;
+        images[i] = null;
+        if (loaded === 0) showFallback();
+        pump();
+      };
       img.src = framePath(i);
       images[i] = img;
     }
 
+    // La sección vive justo debajo del hero, así que no se puede diferir mucho
+    // sin que el usuario la alcance vacía. En vez de traer los 70 frames de
+    // entrada, cargamos un esqueleto mínimo y el resto por demanda según dónde
+    // esté el scroll: así la home arranca liviana y los frames entran mientras
+    // el usuario recorre la sección.
     var started = false;
+    var STEP_INICIAL = 10; // 7 frames de arranque (70/10)
+    var RADIO = 8;         // cuántos frames traer alrededor del actual
+
     function startLoading() {
       if (started) return;
       started = true;
-      // pasada 1: 1 de cada 4
-      for (var i = 0; i < FRAME_COUNT; i += 4) loadImage(i);
-      // pasada 2: el resto, diferido
-      setTimeout(function () {
-        for (var j = 0; j < FRAME_COUNT; j++) loadImage(j);
-      }, 400);
+      for (var i = 0; i < FRAME_COUNT; i += STEP_INICIAL) loadImage(i);
+      loadImage(FRAME_COUNT - 1); // último frame (fallback/cierre)
+    }
+
+    // Trae los frames cercanos al índice actual, priorizando hacia adelante
+    // (el usuario casi siempre scrollea hacia abajo).
+    function loadAround(idx) {
+      if (!started) return;
+      for (var d = 0; d <= RADIO; d++) {
+        var next = idx + d;
+        if (next < FRAME_COUNT) loadImage(next);
+        var prev = idx - d;
+        if (d && prev >= 0) loadImage(prev);
+      }
     }
 
     // Arranca a cargar cuando la sección se acerca
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { if (e.isIntersecting) { startLoading(); } });
-    }, { rootMargin: '600px 0px' });
+    }, { rootMargin: '200px 0px' });
     io.observe(section);
 
     function progress() {
@@ -301,6 +360,7 @@ const HITOS = [
       requestAnimationFrame(function () {
         var p = progress();
         var idx = Math.min(FRAME_COUNT - 1, Math.floor(p * (FRAME_COUNT - 1)));
+        loadAround(idx);   // trae los frames de esta zona si aún no están
         draw(idx);
         updateHitos(p);
         updateHud();
@@ -323,8 +383,9 @@ const HITOS = [
       resizeCanvas();
     }, { passive: true });
 
-    // primer pintado
-    startLoading();
+    // Primer pintado. NO llamamos startLoading() acá: la descarga la dispara el
+    // IntersectionObserver cuando la sección se acerca (rootMargin 600px). Si se
+    // arrancaba en el init, los 140 frames competían con el hero y el LCP.
     onScroll();
   }
 
