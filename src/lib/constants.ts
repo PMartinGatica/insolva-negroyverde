@@ -63,13 +63,20 @@ export const TRABAJOS = [
     ],
   },
   {
+    image: "/img/trabajo-domicilio.webp",
+    tipo: "Domicilio · Ushuaia",
+    detalle: "Cámaras en el exterior de la casa, con visión nocturna",
+    galeria: [
+      "/img/trabajos/domicilio-01.webp", "/img/trabajos/domicilio-02.webp",
+      "/img/trabajos/domicilio-03.webp",
+    ],
+  },
+  {
     image: "/img/trabajo-obra.webp",
     tipo: "Obra · Tierra del Fuego",
     detalle: "Monitoreo de obrador con equipos 4G y antena Starlink",
     galeria: [
       "/img/trabajos/obra-01.webp", "/img/trabajos/obra-02.webp",
-      "/img/trabajos/obra-03.webp", "/img/trabajos/obra-04.webp",
-      "/img/trabajos/obra-05.webp",
     ],
   },
 ] as const;
