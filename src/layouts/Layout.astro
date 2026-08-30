@@ -8,11 +8,11 @@ interface Props {
 }
 
 const {
-  title = `Cámaras, Alarmas y Domótica en Ushuaia | Automatización – ${BRAND.name}`,
+  title = `Cámaras, Alarmas, Redes y Electricista en Ushuaia | ${BRAND.name}`,
   description = BRAND.description,
 } = Astro.props;
 
-const keywords = "cámaras de seguridad en Ushuaia, instalación de cámaras Ushuaia, alarmas para casa Ushuaia, domótica Ushuaia, automatización del hogar Ushuaia, casa inteligente Ushuaia, seguridad para negocios Ushuaia, cámaras con celular Ushuaia, videovigilancia Ushuaia";
+const keywords = "cámaras de seguridad en Ushuaia, instalación de cámaras Ushuaia, empresa de alarmas en Ushuaia, alarmas para casa Ushuaia, empresa de redes en Ushuaia, redes WiFi Ushuaia, domótica en Ushuaia, automatización del hogar Ushuaia, casa inteligente Ushuaia, electricista en Ushuaia, instalaciones eléctricas Ushuaia, seguridad para negocios Ushuaia, cámaras con celular Ushuaia, videovigilancia Ushuaia";
 
 const ogImage = '/og-image.png';
 const canonicalUrl = 'https://insolvagroup.com';
@@ -60,10 +60,11 @@ const schema = {
     "name": "Servicios",
     "itemListElement": [
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ingeniería" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Videovigilancia" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Redes Wi-Fi profesionales" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Automatización del hogar" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Alarmas" } }
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Videovigilancia", "alternateName": "Cámaras de seguridad" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Redes Wi-Fi profesionales", "alternateName": "Instalación de redes" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Domótica y automatización del hogar" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Alarmas" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Instalaciones eléctricas", "alternateName": "Electricista" } }
     ]
   },
   "sameAs": [BRAND.instagramUrl]

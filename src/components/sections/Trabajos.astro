@@ -17,8 +17,8 @@ const waHref = whatsappLink({ source: 'contacto' });
       </p>
     </div>
 
-    <!-- 2 columnas en desktop: con 4 trabajos quedan 2+2 parejas (con 3 columnas
-         la cuarta card quedaba huérfana en una fila sola). -->
+    <!-- 2 columnas en desktop (con 3 columnas las cards quedaban huérfanas en
+         filas sueltas según la cantidad de trabajos). -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
       {TRABAJOS.map((t, i) => (
         <button

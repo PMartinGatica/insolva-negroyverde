@@ -1,7 +1,7 @@
 export const BRAND = {
   name: "INSOLVA Group",
   tagline: "Cámaras y sistemas de seguridad que funcionan de verdad, en Ushuaia",
-  description: "Instalamos cámaras, alarmas y sistemas de seguridad en Ushuaia. Controlá tu casa o negocio desde el celular. Presupuesto por WhatsApp.",
+  description: "Empresa de cámaras, alarmas, redes, domótica e instalaciones eléctricas en Ushuaia. Controlá tu casa o negocio desde el celular. Presupuesto por WhatsApp.",
   location: "Ushuaia, Tierra del Fuego, Argentina",
   whatsapp: "5492901641452",
   email: "contacto@insolvagroup.com",
@@ -35,7 +35,7 @@ export const TRABAJOS = [
   {
     image: "/img/trabajo-comercio.webp",
     tipo: "Comercio · Ushuaia",
-    detalle: "Cámaras en el frente con acceso desde el celular",
+    detalle: "Cámaras en el frente y en locales, con acceso desde el celular",
     galeria: [
       "/img/trabajos/comercio-01.webp", "/img/trabajos/comercio-02.webp",
       "/img/trabajos/comercio-03.webp", "/img/trabajos/comercio-04.webp",
@@ -43,6 +43,10 @@ export const TRABAJOS = [
       "/img/trabajos/comercio-07.webp", "/img/trabajos/comercio-08.webp",
       "/img/trabajos/comercio-09.webp", "/img/trabajos/comercio-10.webp",
       "/img/trabajos/comercio-11.webp", "/img/trabajos/comercio-12.webp",
+      "/img/trabajos/comercio-13.webp", "/img/trabajos/comercio-14.webp",
+      "/img/trabajos/comercio-15.webp", "/img/trabajos/comercio-16.webp",
+      "/img/trabajos/comercio-17.webp", "/img/trabajos/comercio-18.webp",
+      "/img/trabajos/comercio-19.webp",
     ],
   },
   {
@@ -65,10 +69,32 @@ export const TRABAJOS = [
   {
     image: "/img/trabajo-domicilio.webp",
     tipo: "Domicilio · Ushuaia",
-    detalle: "Cámaras en el exterior de la casa, con visión nocturna",
+    detalle: "Cámaras y cerraduras digitales en casas, cabañas y departamentos",
     galeria: [
       "/img/trabajos/domicilio-01.webp", "/img/trabajos/domicilio-02.webp",
-      "/img/trabajos/domicilio-03.webp",
+      "/img/trabajos/domicilio-03.webp", "/img/trabajos/domicilio-04.webp",
+      "/img/trabajos/domicilio-05.webp", "/img/trabajos/domicilio-06.webp",
+      "/img/trabajos/domicilio-07.webp", "/img/trabajos/domicilio-08.webp",
+      "/img/trabajos/domicilio-09.webp", "/img/trabajos/domicilio-10.webp",
+      "/img/trabajos/domicilio-11.webp", "/img/trabajos/domicilio-12.webp",
+      "/img/trabajos/domicilio-13.webp", "/img/trabajos/domicilio-14.webp",
+      "/img/trabajos/domicilio-15.webp", "/img/trabajos/domicilio-16.webp",
+      "/img/trabajos/domicilio-17.webp", "/img/trabajos/domicilio-18.webp",
+      "/img/trabajos/domicilio-19.webp", "/img/trabajos/domicilio-20.webp",
+      "/img/trabajos/domicilio-21.webp", "/img/trabajos/domicilio-22.webp",
+      "/img/trabajos/domicilio-23.webp", "/img/trabajos/domicilio-24.webp",
+      "/img/trabajos/domicilio-25.webp", "/img/trabajos/domicilio-26.webp",
+      "/img/trabajos/domicilio-27.webp", "/img/trabajos/domicilio-28.webp",
+    ],
+  },
+  {
+    image: "/img/trabajos/electricidad-01.webp",
+    tipo: "Instalación eléctrica · Ushuaia",
+    detalle: "Tableros y cableado, listos para sumar cámaras o domótica",
+    galeria: [
+      "/img/trabajos/electricidad-01.webp", "/img/trabajos/electricidad-02.webp",
+      "/img/trabajos/electricidad-03.webp", "/img/trabajos/electricidad-04.webp",
+      "/img/trabajos/electricidad-05.webp",
     ],
   },
   {
@@ -77,6 +103,7 @@ export const TRABAJOS = [
     detalle: "Monitoreo de obrador con equipos 4G y antena Starlink",
     galeria: [
       "/img/trabajos/obra-01.webp", "/img/trabajos/obra-02.webp",
+      "/img/trabajos/obra-03.webp",
     ],
   },
 ] as const;
@@ -165,7 +192,7 @@ export const SERVICIOS_SEGURIDAD = [
   },
   {
     number: "04",
-    title: "Automatización del hogar",
+    title: "Domótica y automatización del hogar",
     resumen: "Luces, portones, climatización y accesos, controlados desde una app.",
     image: "/img/servicio-automatizacion.webp",
     items: [
@@ -173,6 +200,18 @@ export const SERVICIOS_SEGURIDAD = [
       "Luces, portones y accesos desde la app",
       "Climatización controlada",
       "Compatible con Alexa y Google",
+    ],
+  },
+  {
+    number: "05",
+    title: "Instalaciones eléctricas",
+    resumen: "El electricista de confianza para tu casa, negocio u obra en Ushuaia.",
+    image: "/img/galeria-2.webp",
+    items: [
+      "Instalaciones eléctricas nuevas y reformas",
+      "Tableros, cableado y puesta a tierra",
+      "Hogares, comercios, industrias y obras",
+      "Base lista para sumar cámaras, redes o domótica",
     ],
   },
 ] as const;
