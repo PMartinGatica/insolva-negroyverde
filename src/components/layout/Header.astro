@@ -34,19 +34,24 @@ const waHref = whatsappLink({ source: 'hero' });
       "
       aria-label="Navegación principal"
     >
-      {NAV_LINKS.map((link) => (
-        <a
-          href={link.href}
-          class="
-            text-white text-2xl hover:text-[#98C665] transition-colors duration-200
-            md:text-[#0A0A0A] md:text-sm md:hover:text-[#98C665]
-          "
-          style="font-family:'enma',sans-serif; font-weight:600; letter-spacing:0.15em; text-transform:uppercase;"
-          onclick="document.getElementById('nav-menu').classList.remove('translate-y-0'); document.getElementById('nav-menu').classList.add('-translate-y-full');"
-        >
-          {link.label}
-        </a>
-      ))}
+      {NAV_LINKS.map((link) => {
+        const esExterno = link.href.startsWith('http');
+        return (
+          <a
+            href={link.href}
+            target={esExterno ? '_blank' : undefined}
+            rel={esExterno ? 'noopener noreferrer' : undefined}
+            class="
+              text-white text-2xl hover:text-[#98C665] transition-colors duration-200
+              md:text-[#0A0A0A] md:text-sm md:hover:text-[#98C665]
+            "
+            style="font-family:'enma',sans-serif; font-weight:600; letter-spacing:0.15em; text-transform:uppercase;"
+            onclick="document.getElementById('nav-menu').classList.remove('translate-y-0'); document.getElementById('nav-menu').classList.add('-translate-y-full');"
+          >
+            {link.label}
+          </a>
+        );
+      })}
 
       <!-- CTA WhatsApp mobile -->
       <a

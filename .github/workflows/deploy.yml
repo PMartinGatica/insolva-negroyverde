@@ -25,6 +25,10 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          WOOCOMMERCE_URL: ${{ secrets.WOOCOMMERCE_URL }}
+          WOOCOMMERCE_KEY: ${{ secrets.WOOCOMMERCE_KEY }}
+          WOOCOMMERCE_SECRET: ${{ secrets.WOOCOMMERCE_SECRET }}
 
       - name: Deploy to branch
         uses: peaceiris/actions-gh-pages@v4

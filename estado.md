@@ -186,3 +186,18 @@ Pendiente de decisión del usuario si se limpian:
 ## 8. Próximos pasos posibles (a confirmar con el usuario)
 - Decidir si limpiar las menciones "de fondo" de "ingeniería" (schema SEO + política de privacidad + constants) para consistencia 100%.
 - El usuario dijo que va a adjuntar archivos para continuar.
+
+---
+
+## 9. Tienda (fusión con WooCommerce) — 2026-09-16
+
+**Qué es:** INSOLVA tiene una tienda real en WordPress + Blocksy + WooCommerce (`darkcyan-rail-217476.hostingersite.com`, gestionada con Novamira), con productos de domótica/seguridad que encajan con el negocio de la landing. El pedido del usuario fue "fusionar" landing y tienda sin perder ninguna de las dos. Decisión de arquitectura completa: **ADR-018**.
+
+**Resumen de lo implementado (Fase 1, código en este repo):**
+- `src/lib/tienda.ts`: ya no es un catálogo estático. `getProductosDestacados(limit)` trae productos reales de WooCommerce (`wc/v3/products`) **en build time** (Node, corre en `astro build`/`astro dev`, nunca en el navegador — el sitio sigue `output: 'static'`). Si faltan credenciales o la API falla, devuelve `[]` y la sección se oculta sola (no rompe el build). `COPY_PRODUCTOS` guarda copy de venta escrita a mano por `id` de WooCommerce (detalle/badge/imagen de fallback); un producto nuevo sin entrada ahí usa su `short_description` de WooCommerce tal cual.
+- `src/components/sections/Tienda.astro` (nueva sección, montada en `index.astro` después de `<Pilares />`): vidriera de hasta 4 productos reales, mismo lenguaje visual que `Pilares.astro` (cards `border ... hover:border-[#98C665]/60`, imagen `object-contain` sobre fondo blureado). CTA "Ver tienda completa" a `TIENDA_URL`.
+- `NAV_LINKS` (en `constants.ts`) suma `{ label: "Tienda", href: TIENDA_URL }`. `Header.astro` ahora abre en pestaña nueva (`target="_blank"`) cualquier link de nav que empiece con `http` (antes todos eran anclas internas `#...`). `Footer.astro` suma "Tienda online" a la columna Servicios, mismo patrón que WhatsApp/Instagram (external, `target="_blank"`).
+- Env nuevas (`.env`, `.env.example`, y como GitHub Secrets en `PMartinGatica/insolva-negroyverde` para que el build de CI las tenga): `WOOCOMMERCE_URL`, `WOOCOMMERCE_KEY`, `WOOCOMMERCE_SECRET` — mismas que en `D:\insolva\Desarrollo\woocommerce-insolva\.env`. Solo se leen en build time; verificado que no quedan en el HTML generado.
+- `TIENDA_URL` hoy apunta a la URL temporal `darkcyan-rail-217476.hostingersite.com`. Cuando se conecte el subdominio `tienda.insolvagroup.com` (Fase 3, pendiente — requiere acceso al hPanel de Hostinger que el asistente no tiene), es un cambio de una sola línea en `src/lib/tienda.ts`.
+
+**Pendiente (Fase 2, en el sitio WooCommerce, no en este repo):** aplicar colores/logo/tipografía de INSOLVA en Blocksy; activar los 3 métodos de pago pedidos por el usuario (Mercado Pago — faltan credenciales; transferencia bancaria vía BACS — faltan CBU/alias/banco; WhatsApp — reutilizando el gateway de contra-reembolso). Ver ADR-018 para el detalle completo.

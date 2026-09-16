@@ -1,3 +1,5 @@
+import { TIENDA_URL } from './tienda';
+
 export const BRAND = {
   name: "INSOLVA Group",
   tagline: "Cámaras y sistemas de seguridad que funcionan de verdad, en Ushuaia",
@@ -218,6 +220,7 @@ export const SERVICIOS_SEGURIDAD = [
 
 export const NAV_LINKS = [
   { label: "Servicios", href: "#pilares" },
+  { label: "Tienda", href: TIENDA_URL },
   { label: "Nosotros", href: "#nosotros" },
   { label: "Contacto", href: "#contacto" },
 ] as const;

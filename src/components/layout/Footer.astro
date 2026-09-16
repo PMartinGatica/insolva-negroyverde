@@ -1,5 +1,6 @@
 ---
 import { BRAND } from '../../lib/constants';
+import { TIENDA_URL } from '../../lib/tienda';
 ---
 
 <footer class="bg-[#0A0A0A] border-t border-white/10">
@@ -40,6 +41,13 @@ import { BRAND } from '../../lib/constants';
               class="text-sm text-[#C2C1C1] hover:text-[#98C665] transition-colors"
               style="font-family:'enma',sans-serif;">
               Redes WiFi y Starlink
+            </a>
+          </li>
+          <li>
+            <a href={TIENDA_URL} target="_blank" rel="noopener noreferrer"
+              class="text-sm text-[#C2C1C1] hover:text-[#98C665] transition-colors"
+              style="font-family:'enma',sans-serif;">
+              Tienda online
             </a>
           </li>
         </ul>

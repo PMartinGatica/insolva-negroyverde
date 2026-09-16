@@ -117,6 +117,18 @@
 
 ---
 
+## ADR-018 — Tienda: fusión "vidriera estática + WooCommerce real", no headless completo ni migración a WordPress
+
+**Decisión:** La landing (`insolvaweb`) sigue 100% estática, sin cambios de arquitectura. La tienda real (carrito, checkout, pago) vive y sigue viviendo en el sitio WordPress + Blocksy + WooCommerce ya existente (`darkcyan-rail-217476.hostingersite.com`, gestionado con Novamira). La "fusión" entre ambas se resuelve con tres cosas baratas y de bajo riesgo: (1) una sección nueva en la home (`Tienda.astro`) que muestra productos reales traídos de la API de WooCommerce **en build time** (`src/lib/tienda.ts`, `getProductosDestacados()`), (2) un link "Tienda" en nav/footer hacia el sitio WooCommerce, y (3) identidad visual (colores/logo/tipografía de INSOLVA) aplicada en Blocksy para que se sienta la misma marca.
+
+**Por qué (se descartaron dos opciones más "completas"):**
+- **Headless de verdad (carrito/checkout viviendo en Astro):** `insolvaweb` no tiene servidor — es estática por decisión explícita (ver `src/_api-landing/README.md`) para no arriesgar el email `@insolvagroup.com`, cuyos MX apuntan a Hostinger. Un carrito con checkout ahí exigiría reactivar un adapter (el riesgo que se evitó antes) o resolver un checkout cross-domain contra la Store API de WooCommerce, sin ganar nada que WooCommerce no resuelva ya solo.
+- **Meter todo en WordPress/Elementor y dar de baja Astro** (opción que el usuario prefería si no era "mucho quilombo"): sí lo es — implica reimplementar en Elementor Free (más limitado que Astro) piezas a medida que costaron varias iteraciones documentadas acá (scroll-video en canvas — ADR-004/005/006, chatbot con sus fixes — ADR-009/016, embudo a Supabase+Resend — ADR-007/008/017, bug de CSS scoping de las burbujas — ADR-010), con riesgo real de regresión y pérdida de rendimiento/SEO estático.
+
+**Consecuencia:** el catálogo/precio/stock vive en un solo lugar (WooCommerce) — la landing solo lee, nunca escribe. Los 3 métodos de pago pedidos por el usuario (Mercado Pago, transferencia bancaria, WhatsApp) se resuelven 100% con configuración nativa de WooCommerce (plugin oficial de Mercado Pago, gateway BACS, gateway de contra-reembolso renombrado), sin código de servidor propio. Cuando se conecte el subdominio `tienda.insolvagroup.com` (pendiente, requiere hPanel de Hostinger), solo cambia `TIENDA_URL` en `src/lib/tienda.ts`. Detalle de implementación en `estado.md` §9.
+
+---
+
 ## ADR-016 — Chatbot: subir `maxOutputTokens` y cerrar prolijo si se corta
 **Decisión:** En `chat.ts`, `maxOutputTokens` pasó de 600 → **900**, y ahora se detecta `finishReason === 'MAX_TOKENS'`: si la respuesta se cortó, se recorta la oración incompleta y se cierra derivando a WhatsApp. Prompt reforzado a "máximo 3-4 oraciones y SIEMPRE terminá tus frases".
 **Por qué:** Con 600 tokens Gemini truncaba respuestas a mitad de frase (`finishReason` MAX_TOKENS); el turno siguiente arrancaba pidiendo perdón. El usuario reportó "no me da toda la respuesta, se corta y después me pide perdón".
