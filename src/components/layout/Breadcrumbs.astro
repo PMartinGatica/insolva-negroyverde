@@ -1,0 +1,39 @@
+---
+/**
+ * Migas de pan. Cumplen dos funciones: le dan al visitante una salida hacia
+ * arriba, y le dicen a Google cómo se ordena el sitio (el JSON-LD de
+ * BreadcrumbList lo arma la página con `breadcrumbSchema`).
+ */
+interface Props {
+  /** Pasos SIN la home; la home se agrega sola. El último es la página actual. */
+  trail: { name: string; path: string }[];
+  claro?: boolean;
+}
+
+const { trail, claro = false } = Astro.props;
+// Barra final, igual que el resto de los enlaces internos: el servidor sirve
+// estas rutas como directorio y sin ella cada clic pasaría por un redirect.
+const conBarra = (p: string) => (p === '/' || /\.[a-z0-9]{2,5}$/i.test(p) ? p : `${p.replace(/\/+$/, '')}/`);
+const color = claro ? 'text-[#AFB2AD]' : 'text-[#72766F]';
+const colorLink = claro ? 'hover:text-[#98C665]' : 'hover:text-[#4F7D22]';
+---
+
+<nav aria-label="Migas de pan" class={`text-xs ${color}`} style="font-family:'Space Grotesk',sans-serif;">
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <li>
+      <a href="/" class={`transition-colors ${colorLink}`}>Inicio</a>
+    </li>
+    {trail.map((paso, i) => (
+      <>
+        <li aria-hidden="true" class="opacity-50">/</li>
+        <li>
+          {i === trail.length - 1 ? (
+            <span aria-current="page" class={claro ? 'text-white' : 'text-[#11140F]'}>{paso.name}</span>
+          ) : (
+            <a href={conBarra(paso.path)} class={`transition-colors ${colorLink}`}>{paso.name}</a>
+          )}
+        </li>
+      </>
+    ))}
+  </ol>
+</nav>

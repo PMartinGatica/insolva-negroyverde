@@ -2,18 +2,18 @@
 import { BRAND } from '../../lib/constants';
 ---
 
-<section id="calculadora" class="py-24 md:py-32 bg-[#FFFFFF] relative overflow-hidden">
+<section id="calculadora" class="py-24 md:py-32 bg-[#FCFDFA] relative overflow-hidden">
 
   <div
     class="absolute inset-0 pointer-events-none opacity-[0.03]"
-    style="background-image: linear-gradient(#0A0A0A 1px, transparent 1px), linear-gradient(90deg, #0A0A0A 1px, transparent 1px); background-size: 60px 60px;"
+    style="background-image: linear-gradient(#11140F 1px, transparent 1px), linear-gradient(90deg, #11140F 1px, transparent 1px); background-size: 60px 60px;"
   ></div>
 
   <div class="relative max-w-3xl mx-auto px-6">
 
     <div class="reveal mb-12 text-center">
       <p class="eyebrow mb-4">04.5 — CALCULÁ TU AHORRO</p>
-      <h2 class="heading-section text-[#0A0A0A] mb-4">
+      <h2 class="heading-section text-[#11140F] mb-4">
         ¿Cuánto podés ahorrar<br />automatizando tu hogar?
       </h2>
       <p class="body-text max-w-xl mx-auto">
@@ -23,19 +23,19 @@ import { BRAND } from '../../lib/constants';
       </p>
     </div>
 
-    <div class="reveal reveal-delay-1 border border-[#0A0A0A]/10 rounded-sm bg-[#F7F7F5] p-6 md:p-10">
+    <div class="reveal reveal-delay-1 border border-[#11140F]/10 rounded-sm bg-[#F4F7F1] p-6 md:p-10">
 
       <!-- Barra de progreso -->
       <div class="flex items-center gap-2 mb-10" aria-hidden="true">
         {[1, 2, 3, 4].map((n) => (
-          <div class={`calc-step-dot h-1 flex-1 rounded-full bg-[#0A0A0A]/10`} data-step-dot={n}></div>
+          <div class={`calc-step-dot h-1 flex-1 rounded-full bg-[#11140F]/10`} data-step-dot={n}></div>
         ))}
       </div>
 
       <!-- Paso 1: subir factura -->
       <div class="calc-step" data-step="1">
         <p class="eyebrow mb-3 text-[#98C665]">PASO 1 DE 4</p>
-        <h3 class="heading-card text-[#0A0A0A] mb-2">Subí tu factura de luz</h3>
+        <h3 class="heading-card text-[#11140F] mb-2">Subí tu factura de luz</h3>
         <p class="body-text mb-6">Una foto o PDF alcanza. La leemos automáticamente para calcular tu consumo.</p>
 
         <label
@@ -43,7 +43,7 @@ import { BRAND } from '../../lib/constants';
           id="calc-dropzone"
           class="
             flex flex-col items-center justify-center gap-3
-            border-2 border-dashed border-[#0A0A0A]/20 rounded-sm
+            border-2 border-dashed border-[#11140F]/20 rounded-sm
             py-12 px-6 cursor-pointer
             hover:border-[#98C665]/60 hover:bg-[#98C665]/5
             transition-colors duration-200
@@ -54,7 +54,7 @@ import { BRAND } from '../../lib/constants';
             <polyline points="17 8 12 3 7 8"/>
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
-          <span class="text-sm text-[#0A0A0A]" style="font-family:'Space Grotesk',sans-serif;">
+          <span class="text-sm text-[#11140F]" style="font-family:'Space Grotesk',sans-serif;">
             Hacé clic o arrastrá tu factura acá
           </span>
           <span class="text-xs text-[#6b7280]">JPG, PNG o PDF · máx. 8MB</span>
@@ -65,7 +65,7 @@ import { BRAND } from '../../lib/constants';
         <p id="calc-file-error" class="text-sm text-red-600 mt-3 hidden"></p>
 
         <div class="mt-6 flex justify-between items-center">
-          <button type="button" class="calc-skip text-sm text-[#6b7280] hover:text-[#0A0A0A] underline underline-offset-2" data-goto="2">
+          <button type="button" class="calc-skip text-sm text-[#6b7280] hover:text-[#11140F] underline underline-offset-2" data-goto="2">
             Prefiero cargar el consumo manualmente
           </button>
         </div>
@@ -74,17 +74,17 @@ import { BRAND } from '../../lib/constants';
       <!-- Paso 1b: consumo manual (fallback / confirmación) -->
       <div class="calc-step hidden" data-step="2">
         <p class="eyebrow mb-3 text-[#98C665]">PASO 2 DE 4</p>
-        <h3 class="heading-card text-[#0A0A0A] mb-2">Confirmá tu consumo</h3>
+        <h3 class="heading-card text-[#11140F] mb-2">Confirmá tu consumo</h3>
         <p id="calc-consumo-msg" class="body-text mb-6">Completá o ajustá estos datos de tu factura.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div>
             <label class="text-xs text-[#6b7280] mb-1 block" for="calc-kwh">Consumo (kWh por período)</label>
-            <input id="calc-kwh" type="number" min="1" placeholder="ej. 450" class="w-full bg-white border border-[#0A0A0A]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
+            <input id="calc-kwh" type="number" min="1" placeholder="ej. 450" class="w-full bg-[#FCFDFA] border border-[#11140F]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
           </div>
           <div>
             <label class="text-xs text-[#6b7280] mb-1 block" for="calc-costo">Costo total (ARS)</label>
-            <input id="calc-costo" type="number" min="1" placeholder="ej. 45000" class="w-full bg-white border border-[#0A0A0A]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
+            <input id="calc-costo" type="number" min="1" placeholder="ej. 45000" class="w-full bg-[#FCFDFA] border border-[#11140F]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
           </div>
         </div>
 
@@ -103,7 +103,7 @@ import { BRAND } from '../../lib/constants';
         </div>
 
         <div class="flex justify-between items-center">
-          <button type="button" class="text-sm text-[#6b7280] hover:text-[#0A0A0A]" data-goto="1">← Volver</button>
+          <button type="button" class="text-sm text-[#6b7280] hover:text-[#11140F]" data-goto="1">← Volver</button>
           <button type="button" id="calc-continue-2" class="btn-calc-primary" data-goto="3" disabled>Continuar</button>
         </div>
       </div>
@@ -111,17 +111,17 @@ import { BRAND } from '../../lib/constants';
       <!-- Paso 3: email -->
       <div class="calc-step hidden" data-step="3">
         <p class="eyebrow mb-3 text-[#98C665]">PASO 3 DE 4</p>
-        <h3 class="heading-card text-[#0A0A0A] mb-2">¿A dónde te mandamos el resultado?</h3>
+        <h3 class="heading-card text-[#11140F] mb-2">¿A dónde te mandamos el resultado?</h3>
         <p class="body-text mb-6">Dejanos tu email y tu nombre para enviarte tu estimación personalizada.</p>
 
         <div class="grid grid-cols-1 gap-4 mb-6">
           <div>
             <label class="text-xs text-[#6b7280] mb-1 block" for="calc-nombre">Nombre</label>
-            <input id="calc-nombre" type="text" placeholder="Tu nombre" class="w-full bg-white border border-[#0A0A0A]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
+            <input id="calc-nombre" type="text" placeholder="Tu nombre" class="w-full bg-[#FCFDFA] border border-[#11140F]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
           </div>
           <div>
             <label class="text-xs text-[#6b7280] mb-1 block" for="calc-email">Email</label>
-            <input id="calc-email" type="email" placeholder="tu@email.com" class="w-full bg-white border border-[#0A0A0A]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
+            <input id="calc-email" type="email" placeholder="tu@email.com" class="w-full bg-[#FCFDFA] border border-[#11140F]/15 rounded-sm px-3 py-2.5 text-sm focus:border-[#98C665]/60 outline-none" style="font-family:'Space Grotesk',sans-serif;" />
           </div>
         </div>
 
@@ -131,7 +131,7 @@ import { BRAND } from '../../lib/constants';
         </p>
 
         <div class="flex justify-between items-center">
-          <button type="button" class="text-sm text-[#6b7280] hover:text-[#0A0A0A]" data-goto="2">← Volver</button>
+          <button type="button" class="text-sm text-[#6b7280] hover:text-[#11140F]" data-goto="2">← Volver</button>
           <button type="button" id="calc-continue-3" class="btn-calc-primary" data-goto="4" disabled>Ver mi estimación</button>
         </div>
       </div>
@@ -139,12 +139,12 @@ import { BRAND } from '../../lib/constants';
       <!-- Paso 4: resultado -->
       <div class="calc-step hidden" data-step="4">
         <p class="eyebrow mb-3 text-[#98C665]">TU ESTIMACIÓN</p>
-        <h3 class="heading-card text-[#0A0A0A] mb-6">Esto es lo que podrías ahorrar</h3>
+        <h3 class="heading-card text-[#11140F] mb-6">Esto es lo que podrías ahorrar</h3>
 
-        <div class="bg-[#0A0A0A] rounded-sm p-6 md:p-8 mb-6">
+        <div class="bg-[#11140F] rounded-sm p-6 md:p-8 mb-6">
           <p class="text-xs uppercase tracking-widest text-[#98C665] mb-2" style="font-family:'Barlow_Condensed',sans-serif;">Ahorro mensual estimado</p>
           <p id="calc-resultado-monto" class="text-4xl md:text-5xl font-bold text-white mb-1" style="font-family:'BlauerNue',sans-serif;">—</p>
-          <p id="calc-resultado-detalle" class="text-sm text-[#9ca3af]"></p>
+          <p id="calc-resultado-detalle" class="text-sm text-[#AFB2AD]"></p>
         </div>
 
         <p class="text-xs text-[#6b7280] mb-8">
@@ -185,7 +185,7 @@ import { BRAND } from '../../lib/constants';
     border: 1px solid rgba(10,10,10,0.15);
     border-radius: 999px;
     background: #fff;
-    color: #0A0A0A;
+    color: #11140F;
     font-family: 'Space Grotesk', sans-serif;
     transition: all 0.2s;
   }

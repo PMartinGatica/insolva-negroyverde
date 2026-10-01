@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
-/* ─── Space Grotesk (body / UI) via Google Fonts ───────────── */
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+/*
+  Space Grotesk se carga con <link> desde Layout.astro, NO con @import.
+  Un @import que queda después de una regla es inválido y el optimizador de CSS
+  lo descartaba en el build: la fuente nunca llegaba al navegador y todo el
+  sitio caía al sans-serif del sistema. Con <link> además no bloquea el render.
+*/
 
 /* ─── Tipografías de marca (display) ───────────────────────── */
 @font-face {
@@ -16,17 +20,98 @@
   font-weight: 200;
   font-display: swap;
 }
+/* enma se usaba por nombre en `style=` sin estar declarada: caía siempre al
+   fallback sans-serif. Declarada acá, los labels y navegación salen en la
+   tipografía de marca real. */
+@font-face {
+  font-family: "enma";
+  src: url("/fonts/enma-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "enma";
+  src: url("/fonts/enma-SemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "enma";
+  src: url("/fonts/enma-Italic.otf") format("opentype");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
 
 /* ─── Design tokens ────────────────────────────────────────── */
 @theme {
   --color-brand-green:      #98C665;
   --color-brand-green-dark: #6AA03A;
-  --color-brand-gray:       #C2C1C1;
-  --color-ink:              #0A0A0A;
-  --color-ink-soft:         #4A4A4A;
-  --color-bg:               #FFFFFF;
-  --color-bg-soft:          #F7F7F5;
-  --color-bg-dark:          #0A0A0A;
+  --color-brand-gray:       #AFB2AD;
+  --color-ink:              #11140F;
+  --color-ink-soft:         #4E514A;
+  --color-bg:               #FCFDFA;
+  --color-bg-soft:          #F4F7F1;
+  --color-bg-dark:          #11140F;
+}
+
+/*
+  Sistema visual "editorial oscuro".
+  Estructura tomada del sistema de tokens de DESIGN.md (escala tipográfica
+  enorme con tracking negativo, negro dominante, un solo acento reservado al
+  CTA, cero cards flotantes), aplicada con la paleta y tipografías reales de
+  INSOLVA — no con el violeta ni las partículas de ese documento, que
+  multiseccion.md prohíbe explícitamente.
+*/
+:root {
+  /* Superficies oscuras (dominantes) */
+  --void:        #090B07;
+  --ink:         #11140F;
+  --carbon:      #1E201B;
+  --carbon-2:    #2A2C28;
+  --carbon-3:    #363933;
+
+  /* Superficies claras (para alternar ritmo, no para dominar) */
+  --bone:        #FCFDFA;
+  --paper:       #F4F7F1;
+
+  /* Texto */
+  --text-on-dark:        #FFFFFF;
+  --text-on-dark-2:      #AFB2AD;
+  --text-on-dark-3:      #848782;
+  --text-on-light:       #11140F;
+  --text-on-light-2:     #4E514A;
+  --text-on-light-3:     #72766F;
+
+  /* Acento — SOLO detalles, líneas, números, hover y el CTA principal */
+  --green:       #98C665;
+  --green-dark:  #6AA03A;
+  /*
+    El verde de marca sobre blanco da 1.85:1 y el oscuro 3.13:1: ninguno de los
+    dos alcanza el 4.5:1 que necesita el texto chico. `--green-text` es la
+    versión profunda del mismo verde (4.9:1 sobre blanco) y se usa SOLO para
+    texto pequeño sobre fondo claro — eyebrows, links, flechas.
+    Sobre fondo oscuro sigue usándose --green, que ahí da 11:1.
+  */
+  --green-text:  #4F7D22;
+
+  /* Líneas: hairlines en vez de bordes de card */
+  --line-on-dark:  rgba(255, 255, 255, 0.12);
+  --line-on-light: rgba(10, 10, 10, 0.12);
+
+  /* Ritmo vertical — densidad espaciosa */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+  --space-7: 8.75rem;
+  --section-y: clamp(4.5rem, 9vw, 8.75rem);
+  --page-max: 80rem; /* 1280px */
+
+  /* Movimiento */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* ─── Base ─────────────────────────────────────────────────── */
@@ -34,41 +119,111 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   font-family: 'Space Grotesk', sans-serif;
-  background-color: #FFFFFF;
-  color: #0A0A0A;
+  background-color: var(--bone);
+  color: var(--text-on-light);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* ─── Clases tipográficas reutilizables ────────────────────── */
+/* Foco visible en todo lo interactivo. Antes no había ninguna regla de focus:
+   el sitio era imposible de recorrer con teclado. */
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection { background: var(--green); color: #11140F; }
+
+img { max-width: 100%; }
+
+/* ─── Contenedor y ritmo de sección ────────────────────────── */
+.wrap {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 2.5rem);
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+
+.section-dark {
+  background-color: var(--ink);
+  color: var(--text-on-dark);
+}
+.section-void {
+  background-color: var(--void);
+  color: var(--text-on-dark);
+}
+.section-light {
+  background-color: var(--bone);
+  color: var(--text-on-light);
+}
+.section-paper {
+  background-color: var(--paper);
+  color: var(--text-on-light);
+}
+
+/* ─── Clases tipográficas ──────────────────────────────────── */
 .eyebrow {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'enma', 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 0.68rem;
-  letter-spacing: 0.28em;
+  font-size: 0.7rem;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: #98C665;
+  color: var(--green-text);
+}
+.on-dark .eyebrow,
+.section-dark .eyebrow,
+.section-void .eyebrow,
+footer .eyebrow { color: var(--green); }
+
+/* La jerarquía viene de la ESCALA y el tracking, no de meter más peso. */
+.heading-hero {
+  font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: -0.025em;
+  font-size: clamp(2.9rem, 8.5vw, 7rem);
+  text-wrap: balance;
 }
 
 .heading-display {
   font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
   font-weight: 900;
   text-transform: uppercase;
-  line-height: 0.92;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
   font-size: clamp(2.8rem, 7vw, 6rem);
+  text-wrap: balance;
 }
 
 .heading-section {
   font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
   font-weight: 900;
   text-transform: uppercase;
-  line-height: 0.95;
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 0.93;
+  letter-spacing: -0.018em;
+  font-size: clamp(2rem, 4.4vw, 3.6rem);
+  text-wrap: balance;
+}
+
+.heading-sub {
+  font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
 }
 
 .heading-card {
@@ -76,40 +231,220 @@ body {
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1.05;
+  letter-spacing: -0.005em;
   font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+
+.body-lead {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.05rem, 1.45vw, 1.3rem);
+  line-height: 1.6;
+  font-weight: 300;
+  color: var(--text-on-light-2);
+  max-width: 58ch;
 }
 
 .body-text {
   font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(0.95rem, 1.1vw, 1.05rem);
-  line-height: 1.65;
-  color: #4A4A4A;
+  line-height: 1.7;
+  color: var(--text-on-light-2);
 }
 
-/* ─── Nav blur on scroll ───────────────────────────────────── */
+/* En bloques oscuros el gris claro no alcanza contraste: se sube el tono. */
+.section-dark .body-text,
+.section-void .body-text,
+.on-dark .body-text { color: var(--text-on-dark-2); }
+.section-dark .body-lead,
+.section-void .body-lead,
+.on-dark .body-lead { color: var(--text-on-dark-2); }
+
+/* Números de índice editoriales (01, 02…) — estructura, no decoración. */
+.num-index {
+  font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+  font-weight: 200;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  /* El verde oscuro da 3.13:1 sobre blanco puro, pero 2.92 sobre el fondo
+     papel (#F4F7F1) — justo por debajo del mínimo de 3:1 para texto grande.
+     Va el mismo verde de texto que el resto. */
+  color: var(--green-text);
+  display: block;
+}
+.on-dark .num-index,
+.section-dark .num-index,
+.section-void .num-index { color: var(--green); }
+
+/* Hairline: reemplaza el borde de card. */
+.rule {
+  height: 1px;
+  background: var(--line-on-light);
+  border: 0;
+}
+.section-dark .rule,
+.section-void .rule,
+.on-dark .rule { background: var(--line-on-dark); }
+
+.rule-accent {
+  height: 2px;
+  width: 3rem;
+  background: var(--green);
+  border: 0;
+}
+
+/* ─── Botones ──────────────────────────────────────────────── */
+/*
+  Van en @layer components para que las utilidades de Tailwind ganen siempre.
+  Sin la capa, el `display: inline-flex` de .btn le ganaba a `md:hidden` y el
+  botón de WhatsApp del menú mobile se veía también en desktop, al lado del
+  de Presupuesto: dos botones verdes pegados en la barra.
+
+  Un solo botón verde por vista: ese es el CTA principal. El resto, ghost o texto.
+*/
+@layer components {
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem 1.75rem;
+  border-radius: 2px;
+  font-family: 'enma', 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.22s var(--ease-out-quart),
+              border-color 0.22s var(--ease-out-quart),
+              color 0.22s var(--ease-out-quart);
+  /* Objetivo táctil mínimo de 44px incluso con texto corto. */
+  min-height: 48px;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: #11140F;
+}
+.btn-primary:hover { background: var(--green-dark); color: #FFFFFF; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-on-light);
+  border-color: var(--line-on-light);
+}
+.btn-ghost:hover { border-color: var(--green); color: var(--green-text); }
+
+.on-dark .btn-ghost,
+.section-dark .btn-ghost,
+.section-void .btn-ghost {
+  color: var(--text-on-dark);
+  border-color: var(--line-on-dark);
+}
+.on-dark .btn-ghost:hover,
+.section-dark .btn-ghost:hover,
+.section-void .btn-ghost:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* Enlace de texto con subrayado que crece — secundario, sin caja. */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'enma', 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-text);
+  text-decoration: none;
+  transition: gap 0.22s var(--ease-out-quart), color 0.22s var(--ease-out-quart);
+}
+.link-arrow:hover { gap: 0.9rem; }
+.on-dark .link-arrow,
+.section-dark .link-arrow,
+.section-void .link-arrow { color: var(--green); }
+
+} /* fin @layer components */
+
+/* ─── Nav ──────────────────────────────────────────────────── */
 .nav-scrolled {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  box-shadow: 0 1px 24px rgba(0,0,0,0.05);
 }
+
+/*
+  Sobre un hero oscuro la barra nace transparente: logo, links y hamburguesa
+  van en blanco. Al hacer scroll la barra se vuelve clara (.nav-scrolled) y
+  todo pasa a negro. Un solo lugar decide el color, en vez de dos scripts.
+*/
+#main-nav[data-hero-oscuro="true"]:not(.nav-scrolled) #nav-logo {
+  filter: brightness(0) invert(1);
+}
+
+@media (min-width: 768px) {
+  #main-nav .nav-link { color: var(--ink); }
+  #main-nav .nav-link[aria-current="page"] { color: var(--green-text); }
+  #main-nav .nav-link:hover { color: var(--green-text); }
+  #main-nav[data-hero-oscuro="true"]:not(.nav-scrolled) .nav-link { color: #FFFFFF; }
+  #main-nav[data-hero-oscuro="true"]:not(.nav-scrolled) .nav-link[aria-current="page"],
+  #main-nav[data-hero-oscuro="true"]:not(.nav-scrolled) .nav-link:hover { color: var(--green); }
+}
+
+#main-nav[data-hero-oscuro="true"]:not(.nav-scrolled) .nav-burger { color: #FFFFFF; }
 
 /* ─── Reveal on scroll ─────────────────────────────────────── */
-@keyframes revealUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.reveal {
+/*
+  El estado oculto se aplica SOLO si el JS arrancó (la clase `js` la pone un
+  script inline en el <head>). Sin esta guarda, un error de JS o un navegador
+  con scripts bloqueados dejaba media página en opacity: 0 — invisible para
+  la persona aunque el texto estuviera en el HTML.
+*/
+.js .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.65s ease, transform 0.65s ease;
+  transform: translateY(18px) scale(0.995);
+  transition: opacity 0.75s var(--ease-out-quart), transform 0.75s var(--ease-out-quart);
+  will-change: opacity, transform;
 }
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
+/* Terminada la entrada, se libera la capa de composición. */
+.js .reveal.visible { will-change: auto; }
+.reveal-delay-1 { transition-delay: 0.07s; }
+.reveal-delay-2 { transition-delay: 0.14s; }
+.reveal-delay-3 { transition-delay: 0.21s; }
+.reveal-delay-4 { transition-delay: 0.28s; }
+
+/* Zoom lento de fotografía al hover — una de las pocas animaciones que
+   multiseccion.md permite. */
+.photo-zoom img {
+  transition: transform 0.9s var(--ease-out-quart);
+}
+.photo-zoom:hover img { transform: scale(1.04); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal,
+  .js .reveal.visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .photo-zoom img { transition: none; }
+  .photo-zoom:hover img { transform: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

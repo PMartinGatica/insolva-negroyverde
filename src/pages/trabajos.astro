@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import PageHero from '../components/layout/PageHero.astro';
+import Trabajos from '../components/sections/Trabajos.astro';
+import Videos from '../components/sections/Videos.astro';
+import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
+import { whatsappLink } from '../lib/whatsapp';
+import { videosRecientes } from '../lib/videos';
+import { breadcrumbSchema, videoSchemas } from '../lib/seo';
+
+const path = '/trabajos';
+const wa = whatsappLink({ source: 'contacto' });
+
+// Esta página es el único lugar de los videos: los 5 más nuevos, y un enlace al canal.
+const recientes = videosRecientes(5);
+
+const schemas = [
+  breadcrumbSchema([{ name: 'Trabajos', path }]),
+  ...videoSchemas(recientes),
+];
+---
+
+<Layout
+  title="Trabajos Realizados en Ushuaia y Tierra del Fuego | INSOLVA Group"
+  description="Instalaciones reales de cámaras, cerraduras digitales, redes y electricidad en casas, comercios y obras de Ushuaia, Río Grande y Tolhuin. Fotos y videos de los trabajos."
+  path={path}
+  keywords="trabajos INSOLVA Ushuaia, instalaciones de cámaras Ushuaia fotos, empresa de seguridad Tierra del Fuego trabajos realizados"
+  ogImage="/img/servicios/camaras-domo-complejo.webp"
+  schemas={schemas}
+>
+  <Header heroOscuro />
+
+  <main>
+    <PageHero
+      eyebrow="TRABAJOS REALIZADOS · TIERRA DEL FUEGO"
+      titulo="Lo que ya"
+      destacado="tomó forma."
+      lead="Casas, comercios, restaurantes y obras de Ushuaia y Tierra del Fuego donde ya instalamos. Todas las fotos y los videos son de instalaciones que hicimos nosotros."
+      trail={[{ name: 'Trabajos', path }]}
+      foto="/img/servicios/camaras-domo-complejo.webp"
+    />
+
+    <Trabajos />
+    <Videos videos={recientes} titulo="Mirá cómo trabajamos." bajada="Videos cortos grabados durante el trabajo, con el celular." />
+
+    <!-- ── CTA ──────────────────────────────────────────────── -->
+    <section class="section section-void on-dark">
+      <div class="wrap max-w-3xl">
+        <div class="reveal">
+          <h2 class="heading-display text-white">¿Tenés una obra,<br />una casa o un negocio?</h2>
+          <p class="body-lead mt-6">
+            Contanos qué necesitás y vemos la mejor forma de resolverlo.
+          </p>
+          <div class="mt-9 flex flex-wrap items-center gap-4">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              Hablar con INSOLVA
+            </a>
+            <a href="/servicios/" class="btn btn-ghost">Ver servicios</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <WhatsAppFloat />
+  <CookieBanner />
+</Layout>

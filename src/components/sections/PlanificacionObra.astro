@@ -1,0 +1,86 @@
+---
+import { whatsappLink } from '../../lib/whatsapp';
+import Foto from '../ui/Foto.astro';
+
+/*
+  Sección 04 + 05 de multiseccion.md: el diferencial ("no empezamos por el
+  equipo") y la planificación desde obra. Es la parte que le habla a
+  constructoras, arquitectos e inmobiliarias, y la que evita que INSOLVA se
+  lea como "una empresa que instala cámaras".
+*/
+
+const wa = whatsappLink({
+  message: 'Hola INSOLVA, tengo una obra en marcha y quiero planificar la instalación desde el plano.',
+});
+
+const previsiones = [
+  'Dónde va cada cámara y por dónde pasa su cable',
+  'Bocas de red y puntos WiFi',
+  'Alimentación para portones, cerraduras y sensores',
+  'Canalizaciones y previsiones en el tablero',
+];
+---
+
+<section id="obra" class="section section-dark on-dark overflow-hidden">
+  <div class="wrap">
+
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-20 lg:items-center">
+
+      <div class="reveal">
+        <p class="eyebrow mb-5">PLANIFICACIÓN DESDE OBRA</p>
+        <h2 class="heading-section text-white">
+          La tecnología se planifica<br />
+          <span class="text-[#98C665]">antes de cerrar<br />las paredes.</span>
+        </h2>
+        <hr class="rule-accent my-8" />
+        <p class="body-text max-w-xl">
+          No empezamos por el equipo: empezamos por el proyecto. Si estás en
+          obra, este es el momento más barato para dejar previsto todo junto.
+          Después de cerrar las paredes, cada agregado implica romper, rehacer
+          terminaciones y resolver con un cable a la vista lo que podría haber
+          ido embutido.
+        </p>
+
+        <ul class="mt-9">
+          {previsiones.map((item) => (
+            <li class="flex items-start gap-4 py-4 border-t border-white/12 last:border-b">
+              <span class="text-[#98C665] shrink-0 mt-1" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <span class="body-text">{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-10">
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Planificar mi proyecto
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-1 grid gap-4">
+        <Foto
+          src="/img/servicios/obra-cableado-steelframe.webp"
+          alt="Cableado ya pasado dentro de un tabique de steel frame, con la aislación colocada y antes de cerrar la pared, en una obra de Tierra del Fuego"
+          ratio="aspect-[4/3]"
+          width={1200}
+          height={900}
+          class="photo-zoom"
+        />
+        <Foto
+          src="/img/servicios/electricidad-casa-02.webp"
+          alt="Caja eléctrica embutida en un tabique, replanteada con nivel láser antes de cerrar la pared"
+          ratio="aspect-[16/9]"
+          width={1200}
+          height={675}
+          class="photo-zoom"
+        />
+      </div>
+
+    </div>
+
+  </div>
+</section>

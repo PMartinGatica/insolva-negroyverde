@@ -1,4 +1,3 @@
-import { TIENDA_URL } from './tienda';
 
 export const BRAND = {
   name: "INSOLVA Group",
@@ -6,7 +5,13 @@ export const BRAND = {
   description: "Empresa de cámaras, alarmas, redes, domótica e instalaciones eléctricas en Ushuaia. Controlá tu casa o negocio desde el celular. Presupuesto por WhatsApp.",
   location: "Ushuaia, Tierra del Fuego, Argentina",
   whatsapp: "5492901641452",
+  // Mismo número, como se muestra en pantalla. Un solo lugar para cambiarlo.
+  whatsappLegible: "+54 9 2901 64-1452",
   email: "contacto@insolvagroup.com",
+  // A dónde LLEGAN el formulario de contacto y el alta al newsletter. Va
+  // aparte de `email`, que es la dirección que se muestra en el sitio, para
+  // poder cambiar una sin tocar la otra.
+  emailLeads: "proyectos@insolvagroup.com",
   instagram: "@insolvagroup",
   instagramUrl: "https://instagram.com/insolvagroup",
 } as const;
@@ -218,9 +223,13 @@ export const SERVICIOS_SEGURIDAD = [
   },
 ] as const;
 
+// El sitio dejó de ser una landing con anclas: cada ítem es una página propia.
+// La Tienda es el WooCommerce aparte, por eso abre en pestaña nueva.
 export const NAV_LINKS = [
-  { label: "Servicios", href: "#pilares" },
-  { label: "Tienda", href: TIENDA_URL },
-  { label: "Nosotros", href: "#nosotros" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Servicios", href: "/servicios/" },
+  { label: "Trabajos", href: "/trabajos/" },
+  { label: "Nosotros", href: "/nosotros/" },
+  { label: "Contacto", href: "/contacto/" },
+  // Tienda fuera del menú hasta que el WooCommerce esté listo (pedido del
+  // usuario, 2026-09-25). Para volver a sumarla: { label: "Tienda", href: TIENDA_URL }.
 ] as const;

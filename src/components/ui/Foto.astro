@@ -1,0 +1,53 @@
+---
+/**
+ * Foto real de una instalación, mostrada COMPLETA (ADR-011).
+ *
+ * Casi todas las fotos son verticales, de celular. Con `object-cover` en un
+ * contenedor apaisado se recorta justo la cámara o la cerradura, que es lo que
+ * hay que ver. Por eso va `object-contain` sobre una copia ampliada y
+ * desenfocada de la misma foto, que rellena los costados sin barras negras.
+ *
+ * No se altera el contenido de la foto: solo se la encuadra.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  /** Relación de aspecto del marco. */
+  ratio?: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  /** La primera foto visible de la página no debe ir en lazy. */
+  eager?: boolean;
+}
+
+const {
+  src,
+  alt,
+  ratio = 'aspect-[4/3]',
+  width = 800,
+  height = 600,
+  class: clase = '',
+  eager = false,
+} = Astro.props;
+---
+
+<div class={`relative overflow-hidden rounded-[10px] bg-[#1E201B] ${ratio} ${clase}`}>
+  <img
+    src={src}
+    alt=""
+    aria-hidden="true"
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    class="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-55"
+  />
+  <img
+    src={src}
+    alt={alt}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    width={width}
+    height={height}
+    class="relative w-full h-full object-contain"
+  />
+</div>

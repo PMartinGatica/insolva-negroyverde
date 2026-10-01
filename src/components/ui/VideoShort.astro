@@ -1,0 +1,162 @@
+---
+import type { Video } from '../../lib/videos';
+
+/**
+ * Reproductor de un Short con fachada.
+ *
+ * No hay iframe hasta que la persona toca play: se ve una miniatura local y
+ * recién al hacer clic se inserta el reproductor. Un iframe de YouTube arrastra
+ * cerca de 1 MB y varias conexiones a dominios de Google en cuanto se pinta la
+ * página, aunque nadie mire el video — con tres videos en una página eso sería
+ * el triple, y se come el presupuesto de performance que pide multiseccion.md.
+ *
+ * Además usa `youtube-nocookie.com`, que no deja cookies de seguimiento hasta
+ * que hay reproducción.
+ */
+interface Props {
+  video: Video;
+  /** La primera de la fila puede cargar su miniatura sin lazy. */
+  eager?: boolean;
+}
+const { video, eager = false } = Astro.props;
+
+const mm = Math.floor(video.duracionSegundos / 60);
+const ss = String(video.duracionSegundos % 60).padStart(2, '0');
+const duracionLegible = `${mm}:${ss}`;
+---
+
+<figure class="vs">
+  <div
+    class="vs-marco"
+    data-video-id={video.id}
+    data-titulo={video.titulo}
+  >
+    <button type="button" class="vs-play" aria-label={`Reproducir: ${video.titulo}`}>
+      <img
+        src={`/img/videos/${video.id}.webp`}
+        alt=""
+        width="540"
+        height="960"
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        class="vs-thumb"
+      />
+      <span class="vs-icono" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </span>
+      <span class="vs-duracion" aria-hidden="true">{duracionLegible}</span>
+    </button>
+  </div>
+  <figcaption class="vs-titulo">{video.titulo}</figcaption>
+</figure>
+
+<style>
+  .vs { margin: 0; }
+
+  .vs-marco {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #1E201B;
+  }
+
+  .vs-play {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    display: block;
+  }
+
+  .vs-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s;
+  }
+  .vs-play:hover .vs-thumb { transform: scale(1.04); filter: brightness(0.85); }
+
+  .vs-icono {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #98C665;
+    color: #11140F;
+    padding-left: 3px; /* centra ópticamente el triángulo */
+    transition: background 0.22s, transform 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .vs-play:hover .vs-icono { background: #FFFFFF; transform: translate(-50%, -50%) scale(1.08); }
+
+  .vs-duracion {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.78);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .vs-titulo {
+    margin-top: 0.85rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: inherit;
+  }
+
+  .vs-marco iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vs-thumb, .vs-icono { transition: none; }
+    .vs-play:hover .vs-thumb { transform: none; }
+    .vs-play:hover .vs-icono { transform: translate(-50%, -50%); }
+  }
+</style>
+
+<script>
+  // Un solo listener delegado para todos los videos de la página.
+  document.addEventListener('click', (e) => {
+    const boton = (e.target as HTMLElement)?.closest?.('.vs-play');
+    if (!boton) return;
+
+    const marco = boton.closest('.vs-marco') as HTMLElement | null;
+    const id = marco?.dataset.videoId;
+    if (!marco || !id) return;
+
+    const iframe = document.createElement('iframe');
+    // youtube-nocookie: no deja cookies de seguimiento hasta que hay reproducción.
+    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
+    iframe.title = marco.dataset.titulo ?? 'Video de INSOLVA Group';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    iframe.loading = 'lazy';
+
+    marco.replaceChildren(iframe);
+    iframe.focus();
+  });
+</script>

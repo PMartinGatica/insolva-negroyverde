@@ -41,21 +41,21 @@ const faqSchema = {
 };
 ---
 
-<section id="faq" class="py-24 md:py-32 bg-[#F7F7F5]">
+<section id="faq" class="section section-paper">
   <div class="max-w-3xl mx-auto px-6">
 
     <div class="reveal mb-16 max-w-2xl">
       <p class="eyebrow mb-4">PREGUNTAS FRECUENTES</p>
-      <h2 class="heading-section text-[#0A0A0A]">
+      <h2 class="heading-section text-[#11140F]">
         Lo que la gente<br />nos pregunta.
       </h2>
     </div>
 
     <div class="space-y-4">
       {faqs.map((faq, i) => (
-        <details class={`reveal reveal-delay-${(i % 3) + 1} group border border-[#0A0A0A]/10 rounded-sm bg-[#FFFFFF] overflow-hidden`}>
+        <details class={`reveal reveal-delay-${(i % 3) + 1} group border border-[#11140F]/10 rounded-sm bg-[#FCFDFA] overflow-hidden`}>
           <summary class="flex items-center justify-between gap-4 cursor-pointer p-6 list-none">
-            <h3 class="text-[#0A0A0A] text-base md:text-lg font-medium" style="font-family:'Space Grotesk',sans-serif;">{faq.q}</h3>
+            <h3 class="text-[#11140F] text-base md:text-lg font-medium" style="font-family:'Space Grotesk',sans-serif;">{faq.q}</h3>
             <span class="text-[#98C665] flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             </span>

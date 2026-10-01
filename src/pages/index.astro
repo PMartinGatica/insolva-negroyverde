@@ -3,45 +3,63 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Hero from '../components/sections/Hero.astro';
-import QuienesSomos from '../components/sections/QuienesSomos.astro';
-import Pilares from '../components/sections/Pilares.astro';
-import Tienda from '../components/sections/Tienda.astro';
-import ParaQuien from '../components/sections/ParaQuien.astro';
-// Beneficios y Confianza fusionadas dentro de QuiénesSomos (decían lo mismo: "por qué elegirnos").
-// import Beneficios from '../components/sections/Beneficios.astro';
 // Sección scroll-driven de la casa construyéndose — video orbital 360° (140 frames WebP).
 // Regenerar: node scripts/build-frames.mjs assets/source/casa-construccion.mp4 construccion 140
 import ConstruccionScroll from '../components/sections/ConstruccionScroll.astro';
-// Embudo desmontado: su formulario necesita servidor (/api/guardar-lead-embudo) y el
-// sitio se sirve estático desde Hostinger. Vive en una landing aparte de captación.
-// import Embudo from '../components/sections/Embudo.astro';
-import Trabajos from '../components/sections/Trabajos.astro';
-// Galería "Manos a la obra" eliminada: las fotos ahora viven en el modal de cada card de Trabajos.
-// Confianza fusionada dentro de Beneficios (decían lo mismo: "por qué elegirnos").
-// import Confianza from '../components/sections/Confianza.astro';
-// Calculadora conservada en el repo pero fuera de la página (cambio de enfoque):
-// import Calculadora from '../components/sections/Calculadora.astro';
-import FAQ from '../components/sections/FAQ.astro';
-import Contacto from '../components/sections/Contacto.astro';
+import Clientes from '../components/sections/Clientes.astro';
+import Pilares from '../components/sections/Pilares.astro';
+import PlanificacionObra from '../components/sections/PlanificacionObra.astro';
+import Ushuaia from '../components/sections/Ushuaia.astro';
+import Guias from '../components/sections/Guias.astro';
 import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
 import CookieBanner from '../components/ui/CookieBanner.astro';
-// ChatAsistente desmontado: consume /api/chat (Gemini), que requiere servidor.
-// El contacto del sitio es WhatsApp, que no depende de ninguna función.
-// import ChatAsistente from '../components/ui/ChatAsistente.astro';
+import { whatsappLink } from '../lib/whatsapp';
+
+/*
+  La home presenta la empresa y deriva. Nada de contenido completo acá: los
+  servicios con sus fotos viven en /servicios, las instalaciones y los videos
+  en /trabajos, la empresa en /nosotros y las vías de contacto en /contacto.
+  Antes era una landing única que repetía las mismas fotos y los mismos textos
+  que después mostraban las páginas internas.
+
+  Secciones fuera de página (siguen en el repo, ver estado.md):
+  Tienda (va al WooCommerce aparte), Beneficios, Confianza, Galeria, Calculadora,
+  Embudo y ChatAsistente (estos dos necesitan servidor).
+*/
+const wa = whatsappLink({ source: 'contacto' });
 ---
 
 <Layout>
-  <Header />
+  <Header heroOscuro />
   <main>
     <Hero />
+    <Clientes />
     <ConstruccionScroll />
     <Pilares />
-    <Tienda />
-    <ParaQuien />
-    <Trabajos />
-    <QuienesSomos />
-    <FAQ />
-    <Contacto />
+    <PlanificacionObra />
+    <Ushuaia />
+    <Guias />
+
+    <!-- ── CTA FINAL ────────────────────────────────────────── -->
+    <section class="section section-void on-dark">
+      <div class="wrap max-w-3xl">
+        <div class="reveal">
+          <h2 class="heading-display text-white">
+            ¿Tenés una obra,<br />una casa o un negocio?
+          </h2>
+          <p class="body-lead mt-6">
+            Contanos qué necesitás y analizamos la mejor forma de resolverlo. El
+            relevamiento y el presupuesto no tienen cargo.
+          </p>
+          <div class="mt-9 flex flex-wrap items-center gap-4">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              Hablar con INSOLVA
+            </a>
+            <a href="/trabajos/" class="btn btn-ghost">Ver trabajos</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
   <Footer />
   <WhatsAppFloat />

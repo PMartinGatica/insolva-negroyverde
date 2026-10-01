@@ -1,0 +1,65 @@
+---
+/**
+ * Sección 12 de multiseccion.md: del relevamiento a la puesta en marcha.
+ * Sin plazos ni tiempos: no están confirmados y no se inventan.
+ */
+const pasos = [
+  {
+    numero: '01',
+    titulo: 'Relevamiento',
+    texto: 'Vamos al lugar. Miramos accesos, recorridos, luz y qué infraestructura hay.',
+  },
+  {
+    numero: '02',
+    titulo: 'Planificación',
+    texto: 'Definimos qué va en cada punto, por dónde pasa el cableado y de dónde sale la alimentación.',
+  },
+  {
+    numero: '03',
+    titulo: 'Propuesta',
+    texto: 'Te pasamos el presupuesto con lo que hace falta para tu lugar. Si algo se puede dejar para después, te lo decimos.',
+  },
+  {
+    numero: '04',
+    titulo: 'Instalación',
+    texto: 'Cableado canalizado, equipos montados donde se definió, conexiones protegidas.',
+  },
+  {
+    numero: '05',
+    titulo: 'Configuración',
+    texto: 'Dejamos el acceso remoto andando en tu celular y probamos que todo responda.',
+  },
+  {
+    numero: '06',
+    titulo: 'Entrega',
+    texto: 'Te mostramos cómo usarlo antes de irnos. Después seguimos disponibles por WhatsApp.',
+  },
+];
+---
+
+<section id="metodologia" class="section section-dark on-dark">
+  <div class="wrap">
+
+    <div class="reveal max-w-2xl mb-14">
+      <p class="eyebrow mb-4">CÓMO TRABAJAMOS</p>
+      <h2 class="heading-section text-white">
+        Del relevamiento<br />a la puesta en marcha.
+      </h2>
+      <p class="body-text mt-5">
+        Seis pasos, siempre los mismos. Sabés en qué etapa está tu trabajo y qué
+        sigue después.
+      </p>
+    </div>
+
+    <ol class="grid md:grid-cols-2 lg:grid-cols-3">
+      {pasos.map((paso, i) => (
+        <li class={`reveal reveal-delay-${(i % 3) + 1} border-t border-white/12 py-8 pr-8`}>
+          <span class="num-index mb-5" aria-hidden="true">{paso.numero}</span>
+          <h3 class="heading-card text-white mb-3">{paso.titulo}</h3>
+          <p class="body-text">{paso.texto}</p>
+        </li>
+      ))}
+    </ol>
+
+  </div>
+</section>

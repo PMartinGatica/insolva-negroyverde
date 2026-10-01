@@ -30,31 +30,31 @@ const segmentos = [
 ];
 ---
 
-<section class="py-24 md:py-32 bg-[#F7F7F5]">
-  <div class="max-w-7xl mx-auto px-6">
+<section class="section section-paper">
+  <div class="wrap">
 
     <div class="reveal mb-16 max-w-2xl">
       <p class="eyebrow mb-4">¿PARA QUIÉN ES ESTO?</p>
-      <h2 class="heading-section text-[#0A0A0A]">
+      <h2 class="heading-section text-[#11140F]">
         Soluciones pensadas<br />para tu situación.
       </h2>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {segmentos.map((seg, i) => (
-        <div class={`reveal reveal-delay-${i + 1} flex flex-col gap-5 bg-white rounded-sm p-8 border border-[#0A0A0A]/8`}>
+        <div class={`reveal reveal-delay-${i + 1} flex flex-col gap-5 bg-[#FCFDFA] rounded-sm p-8 border border-[#11140F]/8`}>
           <!-- Ícono -->
           <div class="w-12 h-12 flex items-center justify-center text-[#98C665]" set:html={seg.icon} />
 
           <!-- Título -->
-          <h3 class="font-['Barlow_Condensed'] font-800 uppercase tracking-wider text-lg text-[#0A0A0A]">
+          <h3 class="font-['Barlow_Condensed'] font-800 uppercase tracking-wider text-lg text-[#11140F]">
             {seg.title}
           </h3>
 
           <!-- Beneficios -->
           <ul class="flex flex-col gap-3">
             {seg.beneficios.map((b) => (
-              <li class="flex items-start gap-2.5 text-[#4A4A4A]" style="font-family:'Space Grotesk',sans-serif; font-size:0.9rem;">
+              <li class="flex items-start gap-2.5 text-[#4E514A]" style="font-family:'Space Grotesk',sans-serif; font-size:0.9rem;">
                 <svg class="mt-0.5 flex-shrink-0 text-[#98C665]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
                 <span>{b}</span>
               </li>

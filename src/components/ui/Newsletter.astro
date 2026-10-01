@@ -1,0 +1,135 @@
+---
+import { BRAND } from '../../lib/constants';
+import { NEWSLETTER_ENDPOINT } from '../../lib/newsletter';
+
+interface Props {
+  /** `paper` para fondo claro, `dark` para fondo oscuro. */
+  variante?: 'paper' | 'dark';
+}
+const { variante = 'dark' } = Astro.props;
+const esOscuro = variante === 'dark';
+---
+
+<section
+  id="newsletter"
+  class={`section ${esOscuro ? 'section-void on-dark' : 'section-paper'}`}
+>
+  <div class="wrap">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-end">
+
+      <div class="reveal">
+        <p class="eyebrow mb-4">NEWSLETTER</p>
+        <h2 class={`heading-section ${esOscuro ? 'text-white' : 'text-[#11140F]'}`}>
+          Enterate antes<br />que el resto.
+        </h2>
+        <p class="body-text mt-5 max-w-lg">
+          Dejanos tu mail y te escribimos cuando hay algo que vale la pena:
+          novedades de equipos, consejos para cuidar tu casa o tu negocio y
+          promociones puntuales. Sin spam.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-1">
+        <form
+          id="newsletter-form"
+          class="flex flex-col sm:flex-row gap-3"
+          data-endpoint={NEWSLETTER_ENDPOINT}
+          data-email={BRAND.emailLeads}
+          novalidate
+        >
+          <div class="flex-1">
+            <label for="newsletter-email" class="sr-only">Tu correo electrónico</label>
+            <input
+              id="newsletter-email"
+              name="email"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              required
+              placeholder="tucorreo@ejemplo.com"
+              aria-describedby="newsletter-estado"
+              class={`
+                w-full min-h-[48px] px-4 py-3 rounded-sm border text-base
+                focus:outline-none focus-visible:outline-2 focus-visible:outline-[#98C665] focus-visible:outline-offset-2
+                ${esOscuro
+                  ? 'bg-[#1E201B] border-white/15 text-white placeholder:text-[#757575]'
+                  : 'bg-[#FCFDFA] border-black/15 text-[#11140F] placeholder:text-[#848782]'}
+              `}
+              style="font-family:'Space Grotesk',sans-serif;"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary shrink-0">
+            Suscribirme
+          </button>
+        </form>
+
+        <p
+          id="newsletter-estado"
+          role="status"
+          aria-live="polite"
+          class={`mt-3 text-sm min-h-[1.25rem] ${esOscuro ? 'text-[#AFB2AD]' : 'text-[#4E514A]'}`}
+          style="font-family:'Space Grotesk',sans-serif;"
+        ></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+  const estado = document.getElementById('newsletter-estado');
+  const input = document.getElementById('newsletter-email') as HTMLInputElement | null;
+
+  if (form && estado && input) {
+    const endpoint = form.dataset.endpoint ?? '';
+    const emailEmpresa = form.dataset.email ?? '';
+    const boton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    const decir = (msg: string, error = false) => {
+      estado.textContent = msg;
+      estado.classList.toggle('text-[#E06C5B]', error);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = input.value.trim();
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        decir('Revisá el correo: parece que falta algo.', true);
+        input.focus();
+        return;
+      }
+
+      // Sin endpoint configurado, el alta se abre como un mail dirigido a la
+      // empresa. Preferimos eso antes que simular un éxito y perder la
+      // dirección: nunca se traga un mail en silencio.
+      if (!endpoint) {
+        const asunto = encodeURIComponent('Alta al newsletter de INSOLVA');
+        const cuerpo = encodeURIComponent(
+          `Hola INSOLVA, quiero sumarme al newsletter con este correo: ${email}`
+        );
+        window.location.href = `mailto:${emailEmpresa}?subject=${asunto}&body=${cuerpo}`;
+        decir('Te abrimos un mail ya escrito. Envialo y quedás suscripto.');
+        return;
+      }
+
+      boton?.setAttribute('disabled', 'true');
+      decir('Enviando…');
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, origen: window.location.pathname }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        decir('Listo, quedaste suscripto. Gracias.');
+      } catch {
+        decir('No pudimos registrarte ahora. Probá de nuevo o escribinos por WhatsApp.', true);
+      } finally {
+        boton?.removeAttribute('disabled');
+      }
+    });
+  }
+</script>

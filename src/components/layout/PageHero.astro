@@ -1,0 +1,62 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+
+/**
+ * Cabecera de las páginas internas (Servicios, Trabajos, Nosotros, Contacto).
+ * Todas arrancan igual para que se lean como secciones de un mismo sitio y no
+ * como landings sueltas.
+ */
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  /** Segunda línea del título, en verde. */
+  destacado?: string;
+  lead?: string;
+  /** Pasos de las migas, sin la home. */
+  trail: { name: string; path: string }[];
+  /** Foto de fondo, oscurecida. Sin foto queda el negro liso. */
+  foto?: string;
+}
+
+const { eyebrow, titulo, destacado, lead, trail, foto } = Astro.props;
+---
+
+<section class="relative bg-[#11140F] text-white overflow-hidden on-dark">
+  {foto && (
+    <>
+      <!-- Misma composición que las páginas de servicio: foto a la derecha,
+           visible, y el velo oscuro solo donde va el texto. -->
+      <div class="absolute inset-y-0 right-0 w-full md:w-[62%]" aria-hidden="true">
+        <img
+          src={foto}
+          alt=""
+          class="w-full h-full object-cover opacity-30 md:opacity-75"
+          width="1200"
+          height="800"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <div class="absolute inset-0 bg-[#090B07]/65 md:hidden" aria-hidden="true"></div>
+      <div
+        class="absolute inset-0 hidden md:block bg-gradient-to-r from-[#090B07] from-36% via-[#090B07]/65 via-58% to-[#090B07]/5"
+        aria-hidden="true"
+      ></div>
+    </>
+  )}
+
+  <div class="wrap relative pt-32 pb-16 md:pt-44 md:pb-24">
+    <div class="mb-8">
+      <Breadcrumbs claro trail={trail} />
+    </div>
+
+    <p class="eyebrow mb-5">{eyebrow}</p>
+    <h1 class="heading-hero max-w-4xl">
+      {titulo}{destacado && <><br /><span class="text-[#98C665]">{destacado}</span></>}
+    </h1>
+
+    {lead && <p class="body-lead mt-8 max-w-2xl">{lead}</p>}
+
+    <slot />
+  </div>
+</section>

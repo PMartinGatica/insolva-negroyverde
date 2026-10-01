@@ -1,6 +1,6 @@
 # ESTADO DEL PROYECTO — INSOLVA Group Web
 
-> Documento de traspaso. Guarda el estado actual del sitio para poder retomar el trabajo desde cero (chat nuevo). Última actualización: **2026-08-04**.
+> Documento de traspaso. Guarda el estado actual del sitio para poder retomar el trabajo desde cero (chat nuevo). Última actualización: **2026-09-18** (ver §10: multisección SEO + rediseño editorial).
 
 ---
 
@@ -200,4 +200,201 @@ Pendiente de decisión del usuario si se limpian:
 - Env nuevas (`.env`, `.env.example`, y como GitHub Secrets en `PMartinGatica/insolva-negroyverde` para que el build de CI las tenga): `WOOCOMMERCE_URL`, `WOOCOMMERCE_KEY`, `WOOCOMMERCE_SECRET` — mismas que en `D:\insolva\Desarrollo\woocommerce-insolva\.env`. Solo se leen en build time; verificado que no quedan en el HTML generado.
 - `TIENDA_URL` hoy apunta a la URL temporal `darkcyan-rail-217476.hostingersite.com`. Cuando se conecte el subdominio `tienda.insolvagroup.com` (Fase 3, pendiente — requiere acceso al hPanel de Hostinger que el asistente no tiene), es un cambio de una sola línea en `src/lib/tienda.ts`.
 
-**Pendiente (Fase 2, en el sitio WooCommerce, no en este repo):** aplicar colores/logo/tipografía de INSOLVA en Blocksy; activar los 3 métodos de pago pedidos por el usuario (Mercado Pago — faltan credenciales; transferencia bancaria vía BACS — faltan CBU/alias/banco; WhatsApp — reutilizando el gateway de contra-reembolso). Ver ADR-018 para el detalle completo.
+**Fase 2 (sitio WooCommerce, no en este repo) — hecha 2026-09-16, vía API + Novamira (sin wp-admin manual):**
+- Tienda sacada de modo "Coming soon" → pública (autorizado por el usuario).
+- Logo, ícono del sitio, título/tagline de INSOLVA cargados; home del dominio apunta a la página Tienda.
+- Paleta global de Blocksy (`theme_mod colorPalette`) remapeada a los colores de INSOLVA (verde `#98C665`/`#6AA03A`, ink `#0A0A0A`/`#4A4A4A`, fondos `#F7F7F5`/`#FFFFFF`) — botones y acentos de la tienda ya salen en verde de marca. Tipografía del sitio (body + headings) pasada a Space Grotesk vía Additional CSS nativo de WordPress. Verificado con captura + computed styles.
+- Gateway "Contra reembolso" reconfigurado como "Coordinar por WhatsApp" (activo). Plugin oficial de Mercado Pago instalado y activo, sin configurar todavía.
+- **Pendiente:** credenciales de Mercado Pago (Public Key/Access Token) y datos bancarios (CBU/alias/banco/titular) para BACS — los tiene que pasar el usuario. Fotos reales de producto (WooCommerce no tiene ninguna imagen cargada todavía, se ve el placeholder gris). El texto del copyright del footer ("Tema para WordPress de CreativeThemes") no se pudo cambiar por API — el theme_mod plano `copyright_text` no es el que lee el footer builder de Blocksy (usa una estructura anidada distinta); cambiarlo a mano en Personalizar → Pie de página → Copyright toma un minuto.
+
+Ver ADR-018 para el detalle completo de la decisión de arquitectura.
+
+---
+
+## 10. Multisección SEO + rediseño editorial — 2026-09-18
+
+**Por qué:** el problema central era que el sitio no aparecía en Google. La causa principal no eran los meta tags: era que el sitio era **one-page**, y una sola URL no puede rankear a la vez por "cámaras de seguridad Ushuaia", "cerraduras digitales", "electricista" y "domótica". Ver **ADR-019**.
+
+### Páginas nuevas (9 en total, antes 2)
+| URL | Tema |
+|---|---|
+| `/servicios/` | Hub + "tienda de servicios" con botón a WhatsApp por servicio |
+| `/camaras-de-seguridad-tierra-del-fuego/` | Cámaras / CCTV |
+| `/cerraduras-digitales-tierra-del-fuego/` | Cerraduras digitales y control de acceso |
+| `/alarmas-tierra-del-fuego/` | Alarmas |
+| `/domotica-tierra-del-fuego/` | Domótica / automatización del hogar |
+| `/redes-wifi-tierra-del-fuego/` | Redes WiFi, cableado y Starlink |
+| `/electricidad-tierra-del-fuego/` | Instalaciones eléctricas |
+
+Todo el contenido vive en **`src/lib/servicios.ts`** (un objeto por servicio: H1, lead, problema, qué incluye, bloques, para quién, galería, FAQ, mensaje de WhatsApp, relacionados). La plantilla es **`src/pages/[servicio].astro`** con `getStaticPaths`. **Agregar un servicio = agregar un objeto**: página, schema, sitemap, footer, menú mobile, hub y home se actualizan solos.
+
+### Archivos nuevos
+- `src/lib/servicios.ts` — contenido de las 6 páginas.
+- `src/lib/seo.ts` — `absoluteUrl`, `organizationSchema`, `serviceSchema`, `faqSchema`, `breadcrumbSchema`.
+- `src/lib/newsletter.ts` — `NEWSLETTER_ENDPOINT` (vacía; ver ADR-021).
+- `src/pages/[servicio].astro`, `src/pages/servicios.astro`.
+- `src/components/layout/Breadcrumbs.astro`, `src/components/ui/Newsletter.astro`, `src/components/ui/Foto.astro`, `src/components/sections/PlanificacionObra.astro`.
+- `scripts/build-fotos-servicios.mjs` — convierte las fotos de `assets/source/fotos-originales/` a WebP en `public/img/servicios/` (**36 fotos, 4 MB en total**, ninguna sobre 290 KB). Solo redimensiona y comprime: no altera el contenido de la foto (ADR-011 / multiseccion.md). **Para sumar fotos nuevas:** copiarlas a `assets/source/fotos-originales/`, agregar el par `[origen, destino]` al `MAPA` del script, correrlo, y referenciar el nuevo `.webp` desde `servicios.ts`.
+- `public/llms.txt` — para ChatGPT/Perplexity/Claude.
+
+### Bugs preexistentes encontrados y corregidos
+1. **Space Grotesk nunca se cargaba.** El `@import` de Google Fonts en `global.css` quedaba después de reglas → inválido → el optimizador lo descartaba del build. Todo el sitio venía en el sans-serif del sistema. Ahora va como `<link>` en `Layout.astro`. Ídem `enma`, que se usaba por nombre en `style=` sin `@font-face` declarado.
+2. **`canonical` fijo en la home** para todas las páginas. Cualquier página interna se declaraba duplicado de `/`. `Layout.astro` ahora recibe `path`.
+3. **Dos botones verdes en la barra en desktop.** `.btn { display:inline-flex }` le ganaba a `md:hidden` de Tailwind. Resuelto poniendo los componentes en `@layer components`.
+4. **53 fallos de contraste** (verde de marca sobre blanco = 1.85:1). Nuevo token `--green-text: #4F7D22` + clase `on-dark`. Ver ADR-020. Ahora 0.
+5. **Sin estilos de `:focus`** en todo el sitio: imposible de recorrer con teclado. Agregado `:focus-visible` global.
+6. **Copyright del footer** en `#4A4A4A` sobre `#0A0A0A` (~1.9:1), ilegible.
+7. **Banner de cookies** tapaba el CTA del hero en mobile. Ahora es una barra fina abajo, aparece a los 1,2 s y respeta el safe-area; el botón flotante de WhatsApp sube mientras está abierta.
+8. **Menú mobile** sin cierre por Escape, sin `aria-expanded` y dejando scrollear la página por detrás.
+9. **`.reveal` dejaba el contenido en `opacity: 0` si fallaba el JS.** Ahora el estado oculto se aplica solo bajo `.js`, que pone un script inline en el `<head>`.
+10. **Fotos de producto engañosas:** los productos de WooCommerce sin imagen se ilustraban con fotos de instalaciones nuestras (un sensor de apertura mostraba una pared). Ahora sale un marcador neutro. **Pendiente: cargar las fotos reales en WooCommerce** — aparecen solas en el siguiente build.
+
+### Verificación hecha
+- `npm run build` OK, 9 páginas, sin warnings.
+- Overflow horizontal en 360 / 390 / 768 / 1440: **0 px**.
+- Errores de consola y requests fallidos: **ninguno**.
+- Contraste de texto (4 páginas, WCAG AA): **0 fallos**.
+- Rastreo de enlaces desde la home: **las 9 páginas alcanzables**, 0 enlaces internos rotos, 0 anclas rotas.
+- `canonical` y `sitemap` coinciden (ambos con barra final).
+
+### Pendiente
+- **Newsletter:** pegar la URL del proveedor en `NEWSLETTER_ENDPOINT` (ADR-021). Hasta entonces el formulario abre un mail redactado.
+- **Fotos de producto en WooCommerce.**
+- **Google Business Profile:** cambiar la categoría a "Empresa de seguridad electrónica" / "Instalación de sistemas de seguridad" y juntar reseñas. Nada de esto se resuelve desde el código.
+- **Google Search Console:** enviar `sitemap-index.xml` y pedir indexación de las 7 URLs nuevas.
+
+### Tanda de fotos 2026-09-18 (16 nuevas)
+Fotos de trabajos recientes, varias con técnicos trabajando — que es justo lo que pedía `multiseccion.md` y lo que más construye confianza. Reemplazaron heros más flojos:
+
+| Foto | Dónde se usa |
+|---|---|
+| `cerraduras-terminada` (Keylessoft con teclado y huella, terminada) | **Hero de Cerraduras** — reemplazó la EZVIZ sobre puerta vieja |
+| `redes-starlink-instalacion` (técnico montando la antena) | **Hero de Redes** — reemplazó una foto de producto chica |
+| `obra-camara-poste` (cámara + reflector con el canal y montaña nevada) | **Hero de Cámaras** |
+| `electricidad-tablero` (térmicas y diferenciales, apaisada) | Bloque 02 de Electricidad, "un tablero que se entienda" |
+| `obra-cableado-steelframe` (cableado pasado antes de cerrar) | **Sección de obra de la home** + Redes bloque 03 + Electricidad bloque 03 |
+| `cerraduras-medicion` (plantilla sobre la puerta) | Bloque 03 nuevo de Cerraduras: "cada puerta se mide antes de comprar nada" |
+| `camaras-domo-complejo`, `camaras-instalando-alero` | Cámaras: bloques y galería |
+| `camaras-complejo`, `camaras-alero-obra`, `camaras-ptz-detalle` | Cámaras y Alarmas |
+| `cerraduras-teclado`, `cerraduras-instalacion` | Cerraduras y Domótica |
+| `obra-starlink-camara` | Redes bloque 02 + galería de Cámaras |
+| `electricidad-complejo`, `obra-steelframe-montaje` | Galerías de Electricidad y Domótica |
+
+Las galerías de **Alarmas** y **Domótica** pasaron de 3 a 6 fotos. Alarmas sigue siendo la página con menos material propio: no hay fotos de paneles, sensores ni sirenas instaladas. Si aparecen, es la primera que conviene reforzar.
+
+### Bug adicional corregido
+11. **`<img src="">`** en el lightbox de `Trabajos.astro` (dos elementos). Un `src` vacío hace que el navegador vuelva a pedir la URL de la página como si fuera una imagen — una petición extra al documento por cada carga de la home. Se quitó el atributo; el JS igual les asigna el `src` real al abrir el modal.
+
+---
+
+## 11. Videos del canal de YouTube — 2026-09-18
+
+**Qué hay:** el canal `@insolva` (`UClOP0XI75lb_09YRVO2vrBg`) tiene **13 Shorts**, todos verticales, de 13 a 51 segundos. Estaba desconectado del sitio: ni un link en ninguna dirección.
+
+**Implementación:** `src/lib/videos.ts` (los 13 con id, título, descripción propia, duración ISO 8601, fecha y en qué páginas va cada uno), `src/components/ui/VideoShort.astro` (reproductor con fachada) y `src/components/sections/Videos.astro` (la sección). Decisión de arquitectura completa en **ADR-022**.
+
+### Reparto por página
+| Página | Videos |
+|---|---|
+| Home | El error N°1 al instalar · Nivelación láser · El error más caro al construir (obra Kau Kren) · Lo PRIMERO que tenés que poner al construir |
+| Cámaras | Instalación profesional de cámaras · El error N°1 al instalar · Instalación, canalización y cableado · Lo PRIMERO al construir |
+| Alarmas | Lo que las cámaras NO pueden evitar |
+| Cerraduras | El cambio que tu puerta necesita · Olvidarte las llaves adentro |
+| Domótica | No dejes tu casa inteligente al azar · Canalización de reflectores LED |
+| Redes | Instalación de cámaras, canalización y cableado |
+| Electricidad | Instalación y cableado · Esto nadie lo hace · Reflectores LED en terraza · Nivelación láser |
+
+"Lo que las cámaras de seguridad NO pueden evitar" cayó justo en Alarmas: dice en video exactamente el argumento con el que abre esa página (la cámara registra, la alarma avisa mientras pasa).
+
+### Miniaturas
+`scripts/build-miniaturas-video.mjs` las baja de YouTube (`oardefault.jpg`, la vertical) y las guarda como WebP 540×960 en `public/img/videos/` — 13 archivos, **486 KB en total**. Se guardan locales a propósito: ver ADR-022.
+
+### Verificado
+- **0 peticiones a YouTube antes de tocar play**; 5 después. Medido con Playwright.
+- 0 `<iframe>` en el HTML servido de las 9 páginas.
+- `VideoObject` emitido: home 5, cámaras 4, electricidad 5, cerraduras 2, domótica 2, alarmas 1, redes 1.
+- Build OK · 0 px de overflow en 390 y 1440 · 0 enlaces o anclas rotas · 0 errores de consola o red · 0 fallos de contraste.
+
+### Pendiente
+- **Los videos siguen siendo pocos por página.** Alarmas y Redes tienen uno solo. Si el canal suma material, se reparte editando `paginas` en `videos.ts`.
+- **Enlazar al revés:** poner `insolvagroup.com` en la descripción del canal y de cada Short. Eso es en YouTube, no en el código, y es la mitad que falta del cruce sitio ↔ canal.
+
+---
+
+## 12. Reestructuración a sitio por secciones — 2026-09-19
+
+El sitio dejó de ser una landing de scroll largo. Ahora son **cinco secciones con página propia** más la tienda aparte. Ver **ADR-023**.
+
+| Página | Qué tiene |
+|---|---|
+| `/` | Hero · ConstruccionScroll · índice de servicios (sin fotos) · planificación desde obra · Ushuaia · CTA |
+| `/servicios/` | Los 6 servicios con foto y WhatsApp · para quién · metodología · FAQ · CTA |
+| `/trabajos/` | Instalaciones con galería en modal · videos · CTA |
+| `/nosotros/` | Quiénes somos · cuatro diferenciales · Ushuaia · CTA |
+| `/contacto/` | 4 canales (WhatsApp, correo, Instagram, YouTube) · formulario · zona y horario · newsletter |
+| Tienda | Externa, el WooCommerce. Abre en pestaña nueva desde nav y footer. |
+
+Más las 6 páginas de servicio y la política de privacidad: **12 páginas en total**.
+
+### Archivos nuevos
+- `src/pages/trabajos.astro`, `src/pages/nosotros.astro`, `src/pages/contacto.astro`
+- `src/components/layout/PageHero.astro` — cabecera común de las páginas internas
+- `src/components/sections/Metodologia.astro` — los 6 pasos, sin inventar plazos
+- `src/components/sections/Ushuaia.astro` — el territorio
+- `src/components/ui/FormContacto.astro` + `src/lib/contacto.ts`
+- `.claude/skills/humanizalo/` — la skill de edición de textos
+
+### Qué cambió de lo que ya estaba
+- `Pilares.astro` quedó **sin fotos**: era la fuente de la duplicación visual con `/servicios`.
+- `NAV_LINKS`: de anclas a rutas reales. Nuevo orden: Servicios, Trabajos, Nosotros, Contacto, Tienda.
+- El **newsletter vive solo en `/contacto/`**. Se sacó de la home y de las páginas de servicio.
+- `Tienda.astro` (la vidriera de productos WooCommerce) salió de la home y de `/servicios`. Queda en el repo por si se quiere volver a montar.
+- `QuienesSomos.astro` y `FAQ.astro`: el primero salió de página (su contenido vive en `/nosotros`), el segundo se mudó a `/servicios`.
+- `ParaQuien`, `FAQ`, `Trabajos` y `QuienesSomos` pasaron a las clases del sistema (`section section-paper`, `wrap`).
+
+### Formulario de contacto
+Mismo criterio que el newsletter (ADR-021): sin servidor propio, el destino está detrás de `CONTACTO_ENDPOINT` en `src/lib/contacto.ts`, hoy vacía. Mientras tanto abre un mail ya redactado con todos los datos cargados. **Pendiente: elegir proveedor** (Formspree, Supabase propio o el WooCommerce) y pegar la URL.
+
+### Textos
+Se pasó todo el copy visible por `humanizalo`. Ver **ADR-024**: cero tells restantes en texto visible.
+
+### Verificado
+Build OK, 12 páginas · 0 enlaces o anclas rotas · 0 px de overflow en 390 y 1440 · 0 errores de consola o red · contraste AA en los dos estados de la barra (verde claro sobre el hero oscuro, verde oscuro sobre la barra blanca con scroll).
+
+---
+
+## 13. Funnel, videos solo en Trabajos, portadas y logos de clientes — 2026-09-30
+
+### Funnel de guías gratis (`funnel-ventas.vercel.app`)
+App Next.js aparte, con su propio backend (`POST /api/lead`). **Se enlaza, no se integra.** Su endpoint no manda cabeceras CORS (se verificó con un preflight), así que un formulario de este sitio estático no podría enviarle datos desde el navegador.
+- `src/lib/funnel.ts`: `FUNNEL_URL` y `funnelLink(origen)`. Agrega `utm_source/medium/campaign/content`, que la app ya lee y guarda con cada lead, así se sabe de qué sección llegó cada registro.
+- Enlaces en: sección `Guias.astro` de la home (`utm_content=home`), bloque en `/contacto/` (`contacto`) y footer (`footer`).
+- **Pendiente:** pasarlo a un subdominio propio (p. ej. `guias.insolvagroup.com`) apuntado a Vercel. Es un cambio de una línea en `funnel.ts`. La política de privacidad ya lo menciona (sección 2 y 4) y habla de Vercel como proveedor.
+- El funnel dice "grupo de WhatsApp con promos" y "promo de instalación con precio especial hasta fin de mes". Esa promo es un ejemplo de aviso dentro de su propia página, no una oferta de este sitio.
+
+### Videos: solo en `/trabajos/`
+Decisión del usuario: los videos no se repiten en las páginas de servicio porque el canal ya los tiene todos. `Videos.astro` ahora recibe `videos` y cierra la tira con una celda "Ver más en YouTube" que va al canal. `/trabajos/` muestra los **5 más nuevos** por fecha. Se quitó el campo `paginas` de `videos.ts`; quedó `oculto?: boolean`.
+- El canal tiene **17 videos** (había 13): se sumaron `_UzbFjtkyh4`, `aYrIN9ndeOM`, `GEO49te3T30`, `dEcQR_UXav0`. Las descripciones de esos cuatro se escribieron a partir del título y la miniatura, sin ver el video.
+- **`utu_V5138AY` ("Lo que las cámaras NO pueden evitar") está `oculto`:** lo presenta otra persona, sin marca INSOLVA, y habla de cámaras, no de alarmas. Confirmar que es del canal antes de mostrarlo.
+- `VideoObject` ahora se emite solo en `/trabajos/`.
+
+### Fotos nuevas (10) y portadas
+- Nuevas: alarmas (central Hikvision, detector de humo, sensor magnético: las primeras propias de esa página), cerraduras (puerta terminada, conexión del cable), electricidad (canalización, cableado en rollos, caja con cables), cámaras (viga de madera, galería).
+- **Portadas nuevas** de Cerraduras (puerta de madera con cerradura negra), Alarmas (central Hikvision) y Electricidad (caja con cables en steel frame). `Foto.pos` en `servicios.ts` ajusta el encuadre de cada portada.
+- La portada de las páginas de servicio pasó de cubrir todo el ancho bajo un velo casi opaco (no se veía) a ocupar el 62% derecho con el velo solo del lado del texto.
+- `camaras-galeria-madera` se recortó un 7% por la izquierda: en el borde se leía el número de casa del cliente.
+- **Alarmas ya no usa fotos de cámaras ni la imagen de catálogo de Hikvision.** Tiene 3 fotos propias y su galería quedó vacía: la plantilla oculta la galería con menos de 3. Domótica quedó solo con fotos de domótica.
+- Dos de las 12 fotos enviadas eran duplicadas (cartel con Starlink y mecanismo de cerradura) y se omitieron. Se detectó con un hash perceptual.
+
+### Logos de clientes en el hero
+`Clientes.astro`, dentro del hero y antes del "Scroll". Prismatica, Chez Manu y Biorn, **a color sobre pastillas blancas** para que se vean nítidos sobre el negro. `scripts/build-logos-clientes.mjs` los prepara desde `src/LOGOS/` (Chez Manu se pasa a negro y se recorta el gallo: era un panel gris semitransparente). Con 6 o más logos pasa solo a una cinta continua.
+- Se verificó que entran en el primer pantallazo, sin tapar el aviso de cookies, en 1920×1080, 1440×900, 1366×768, 1280×720, tablet y celular de 390×844.
+- Para lograrlo se compactó el hero y se ocultan los accesos a servicios en ventanas de hasta 940px de alto (siguen en el menú y en la sección siguiente).
+- **Pendiente:** el rótulo dice "Confían en INSOLVA". Confirmar que los tres clientes autorizan mostrar su logo.
+- **Pendiente:** 360×740 (celular muy chico) deja la franja apenas debajo del aviso de cookies.
+
+### Otros
+- Teléfono centralizado en `BRAND.whatsappLegible`. En el JSON-LD sale completo (`+5492901641452`); el `+549****1452` de la auditoría no aparece en el build.
+- `robots.txt` apunta a `sitemap-index.xml`, que lista `sitemap-0.xml` con las 12 URLs. Se verificó en `dist/`.
+- **Pendiente (SEO):** no hay página de "control de acceso". Hoy vive dentro de cerraduras y domótica. Es una keyword propia que vale una página cuando haya contenido real.
+- Los formularios de contacto y newsletter llegan a `proyectos@insolvagroup.com` (`BRAND.emailLeads`).

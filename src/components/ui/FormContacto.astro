@@ -1,0 +1,136 @@
+---
+import { BRAND } from '../../lib/constants';
+import { CONTACTO_ENDPOINT, MOTIVOS } from '../../lib/contacto';
+
+const campo = `
+  w-full min-h-[48px] px-4 py-3 rounded-sm border border-black/15 bg-[#FCFDFA] text-[#11140F]
+  placeholder:text-[#848782] text-base
+  focus:outline-none focus-visible:outline-2 focus-visible:outline-[#98C665] focus-visible:outline-offset-2
+`;
+const etiqueta = "block mb-2 text-sm text-[#11140F]";
+---
+
+<form id="form-contacto" data-endpoint={CONTACTO_ENDPOINT} data-email={BRAND.emailLeads} novalidate>
+  <div class="grid gap-5 sm:grid-cols-2">
+
+    <div>
+      <label for="c-nombre" class={etiqueta} style="font-family:'Space Grotesk',sans-serif; font-weight:500;">
+        Tu nombre <span class="text-[#4F7D22]" aria-hidden="true">*</span>
+      </label>
+      <input id="c-nombre" name="nombre" type="text" autocomplete="name" required class={campo} style="font-family:'Space Grotesk',sans-serif;" />
+    </div>
+
+    <div>
+      <label for="c-telefono" class={etiqueta} style="font-family:'Space Grotesk',sans-serif; font-weight:500;">
+        WhatsApp <span class="text-[#4F7D22]" aria-hidden="true">*</span>
+      </label>
+      <input id="c-telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" required placeholder="2901 12-3456" class={campo} style="font-family:'Space Grotesk',sans-serif;" />
+    </div>
+
+    <div>
+      <label for="c-email" class={etiqueta} style="font-family:'Space Grotesk',sans-serif; font-weight:500;">
+        Correo
+      </label>
+      <input id="c-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@ejemplo.com" class={campo} style="font-family:'Space Grotesk',sans-serif;" />
+    </div>
+
+    <div>
+      <label for="c-motivo" class={etiqueta} style="font-family:'Space Grotesk',sans-serif; font-weight:500;">
+        Qué necesitás
+      </label>
+      <select id="c-motivo" name="motivo" class={campo} style="font-family:'Space Grotesk',sans-serif;">
+        {MOTIVOS.map((m) => <option value={m}>{m}</option>)}
+      </select>
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="c-lugar" class={etiqueta} style="font-family:'Space Grotesk',sans-serif; font-weight:500;">
+        Dónde es
+      </label>
+      <input id="c-lugar" name="lugar" type="text" placeholder="Ushuaia, Río Grande, Tolhuin…" class={campo} style="font-family:'Space Grotesk',sans-serif;" />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="c-mensaje" class={etiqueta} style="font-family:'Space Grotesk',sans-serif; font-weight:500;">
+        Contanos un poco
+      </label>
+      <textarea id="c-mensaje" name="mensaje" rows="5" placeholder="Es una casa de dos plantas, quiero cubrir el frente y el patio…" class={campo} style="font-family:'Space Grotesk',sans-serif; resize:vertical;"></textarea>
+    </div>
+
+  </div>
+
+  <div class="mt-6 flex flex-wrap items-center gap-4">
+    <button type="submit" class="btn btn-primary">Enviar consulta</button>
+    <p id="form-estado" role="status" aria-live="polite" class="text-sm text-[#4E514A] min-h-[1.25rem]" style="font-family:'Space Grotesk',sans-serif;"></p>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('form-contacto') as HTMLFormElement | null;
+  const estado = document.getElementById('form-estado');
+
+  if (form && estado) {
+    const endpoint = form.dataset.endpoint ?? '';
+    const emailEmpresa = form.dataset.email ?? '';
+    const boton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    const decir = (msg: string, error = false) => {
+      estado.textContent = msg;
+      estado.classList.toggle('text-[#C0392B]', error);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const datos = Object.fromEntries(d.entries()) as Record<string, string>;
+
+      if (!datos.nombre?.trim()) {
+        decir('Falta tu nombre.', true);
+        (form.querySelector('#c-nombre') as HTMLInputElement)?.focus();
+        return;
+      }
+      if (!datos.telefono?.trim()) {
+        decir('Dejanos un WhatsApp para poder responderte.', true);
+        (form.querySelector('#c-telefono') as HTMLInputElement)?.focus();
+        return;
+      }
+
+      // Sin endpoint configurado abrimos un mail ya escrito, en vez de fingir
+      // un envío y tirar la consulta.
+      if (!endpoint) {
+        const asunto = encodeURIComponent(`Consulta web: ${datos.motivo || 'general'}`);
+        const cuerpo = encodeURIComponent(
+          [
+            `Nombre: ${datos.nombre}`,
+            `WhatsApp: ${datos.telefono}`,
+            datos.email ? `Correo: ${datos.email}` : null,
+            `Necesita: ${datos.motivo || '(sin especificar)'}`,
+            datos.lugar ? `Lugar: ${datos.lugar}` : null,
+            '',
+            datos.mensaje || '',
+          ].filter(Boolean).join('\n')
+        );
+        window.location.href = `mailto:${emailEmpresa}?subject=${asunto}&body=${cuerpo}`;
+        decir('Te abrimos un mail ya escrito. Envialo y te respondemos.');
+        return;
+      }
+
+      boton?.setAttribute('disabled', 'true');
+      decir('Enviando…');
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        decir('Listo, nos llegó. Te respondemos a la brevedad.');
+      } catch {
+        decir('No pudimos enviarla. Escribinos por WhatsApp y lo resolvemos.', true);
+      } finally {
+        boton?.removeAttribute('disabled');
+      }
+    });
+  }
+</script>

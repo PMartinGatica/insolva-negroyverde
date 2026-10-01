@@ -8,23 +8,21 @@ const formatearPrecio = (precio: number) =>
 ---
 
 {productos.length > 0 && (
-  <section id="tienda" class="py-24 md:py-32 bg-[#F7F7F5]">
-    <div class="max-w-7xl mx-auto px-6">
+  <section id="tienda" class="section section-paper">
+    <div class="wrap">
 
-      <!-- Header sección -->
-      <div class="reveal mb-16 max-w-2xl">
-        <p class="eyebrow mb-4">TIENDA</p>
-        <h2 class="heading-section text-[#0A0A0A]">
+      <div class="reveal mb-14 max-w-2xl">
+        <p class="eyebrow mb-4">TIENDA ONLINE</p>
+        <h2 class="heading-section text-[#11140F]">
           Equipá tu casa<br />con un click.
         </h2>
         <p class="body-text mt-5">
-          Cámaras, cerraduras y dispositivos de automatización listos para instalar
-          vos mismo, con la misma calidad que ponemos en cada instalación.
+          Cámaras, cerraduras y dispositivos de automatización listos para llevar.
+          Si preferís que te lo instalemos nosotros, escribinos y lo coordinamos.
         </p>
       </div>
 
-      <!-- Grid de productos -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
         {productos.map((producto, index) => (
           <a
             href={producto.href}
@@ -32,32 +30,31 @@ const formatearPrecio = (precio: number) =>
             rel="noopener noreferrer"
             class={`
               reveal reveal-delay-${(index % 3) + 1}
-              group relative flex flex-col
-              border border-[#0A0A0A]/10 rounded-sm
-              bg-[#FFFFFF] overflow-hidden
-              hover:border-[#98C665]/60 transition-all duration-300
+              group flex flex-col border-t border-[#11140F]/12 pt-5
+              hover:border-[#98C665] transition-colors
             `}
           >
-            <div class="relative w-full aspect-[4/3] overflow-hidden bg-[#0F0F0F]">
-              <!-- Fondo: la misma foto ampliada y desenfocada, para que no queden barras negras -->
-              <img
-                src={producto.imagen}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                decoding="async"
-                class="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-60"
-              />
-              <img
-                src={producto.imagen}
-                alt={`${producto.nombre} — INSOLVA Group`}
-                loading="lazy"
-                decoding="async"
-                class="relative w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-              />
+            <div class="relative w-full aspect-square overflow-hidden rounded-sm bg-[#FCFDFA] mb-4 photo-zoom">
+              {producto.imagen ? (
+                <img
+                  src={producto.imagen}
+                  alt={`${producto.nombre}, INSOLVA Group`}
+                  loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="400"
+                  class="w-full h-full object-contain p-4"
+                />
+              ) : (
+                <!-- Sin foto real cargada en WooCommerce: marcador neutro, para
+                     no ilustrar un producto con la foto de otra cosa. -->
+                <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                  <img src="/isotipo-verde.svg" alt="" width="48" height="58" class="w-10 h-auto opacity-25" />
+                </span>
+              )}
               {producto.badge && (
                 <span
-                  class="absolute top-3 left-3 px-3 py-1 rounded-sm bg-[#98C665] text-white text-xs uppercase tracking-wider"
+                  class="absolute top-2 left-2 px-2.5 py-1 rounded-sm bg-[#98C665] text-[#11140F] text-[0.65rem] uppercase tracking-wider"
                   style="font-family:'enma',sans-serif; font-weight:600;"
                 >
                   {producto.badge}
@@ -65,33 +62,25 @@ const formatearPrecio = (precio: number) =>
               )}
             </div>
 
-            <div class="p-6 flex flex-col flex-1">
-              <h4 class="heading-card text-[#0A0A0A] mb-2">{producto.nombre}</h4>
-              <p class="body-text text-sm mb-4 flex-1">{producto.detalle}</p>
-              <div class="flex items-center justify-between">
-                <span class="font-['Barlow_Condensed'] font-900 text-2xl text-[#0A0A0A]">
-                  {formatearPrecio(producto.precio)}
-                </span>
-                <span
-                  class="text-[#98C665] text-sm uppercase tracking-wider group-hover:translate-x-1 transition-transform"
-                  style="font-family:'enma',sans-serif; font-weight:600;"
-                >
-                  Ver →
-                </span>
-              </div>
-            </div>
+            <h3
+              class="text-[#11140F] text-sm leading-snug mb-2 group-hover:text-[#4F7D22] transition-colors"
+              style="font-family:'Space Grotesk',sans-serif; font-weight:500;"
+            >
+              {producto.nombre}
+            </h3>
+            <p class="body-text text-sm mb-3">{producto.detalle}</p>
+            <span
+              class="text-[#11140F] text-base mt-auto"
+              style="font-family:'Barlow Condensed',sans-serif; font-weight:600;"
+            >
+              {formatearPrecio(producto.precio)}
+            </span>
           </a>
         ))}
       </div>
 
-      <div class="reveal text-center">
-        <a
-          href={TIENDA_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-[#0A0A0A] text-white hover:bg-[#98C665] transition-colors duration-200"
-          style="font-family:'enma',sans-serif; font-weight:600; font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase;"
-        >
+      <div class="reveal">
+        <a href={TIENDA_URL} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
           Ver tienda completa
         </a>
       </div>

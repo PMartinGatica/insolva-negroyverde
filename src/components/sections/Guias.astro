@@ -1,0 +1,54 @@
+---
+import { funnelLink } from '../../lib/funnel';
+
+/*
+  Puerta al funnel de guías gratis. Los cuatro ítems son los que el funnel
+  promete hoy en su propia página; si allá cambia el contenido, se actualiza
+  acá (no se agrega nada que el funnel no entregue).
+*/
+const href = funnelLink('home');
+
+const incluye = [
+  '5 guías para elegir cámaras, alarmas, WiFi y cerraduras',
+  'Un curso de domótica desde cero, en 5 lecciones',
+  'Fichas técnicas de 3 cerraduras digitales, para comparar',
+  'El grupo de WhatsApp con las promos de instalación',
+];
+---
+
+<section id="guias" class="section section-paper">
+  <div class="wrap grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-20 lg:items-center">
+
+    <div class="reveal">
+      <p class="eyebrow mb-5">GUÍAS GRATIS</p>
+      <h2 class="heading-section text-[#11140F]">
+        Antes de gastar en<br />seguridad, leé esto.
+      </h2>
+      <p class="body-text mt-6 max-w-xl">
+        Guías, un curso y fichas técnicas armados con lo que vemos instalando en
+        Ushuaia, Río Grande y Tolhuin. Sirven para saber qué equipo conviene y
+        qué pedir en un presupuesto.
+      </p>
+      <p class="body-text mt-4 max-w-xl">
+        Dejás tus datos y se abre todo. Es gratis y te lleva dos minutos.
+      </p>
+      <div class="mt-9">
+        <a href={href} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
+          Quiero las guías gratis
+        </a>
+      </div>
+    </div>
+
+    <ul class="reveal reveal-delay-1">
+      {incluye.map((item, i) => (
+        <li class="flex gap-5 py-5 border-t border-[#11140F]/12 last:border-b">
+          <span class="num-index !text-[1.6rem] shrink-0 w-10" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <span class="body-text">{item}</span>
+        </li>
+      ))}
+    </ul>
+
+  </div>
+</section>

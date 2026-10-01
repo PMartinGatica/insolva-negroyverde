@@ -132,3 +132,91 @@
 ## ADR-016 — Chatbot: subir `maxOutputTokens` y cerrar prolijo si se corta
 **Decisión:** En `chat.ts`, `maxOutputTokens` pasó de 600 → **900**, y ahora se detecta `finishReason === 'MAX_TOKENS'`: si la respuesta se cortó, se recorta la oración incompleta y se cierra derivando a WhatsApp. Prompt reforzado a "máximo 3-4 oraciones y SIEMPRE terminá tus frases".
 **Por qué:** Con 600 tokens Gemini truncaba respuestas a mitad de frase (`finishReason` MAX_TOKENS); el turno siguiente arrancaba pidiendo perdón. El usuario reportó "no me da toda la respuesta, se corta y después me pide perdón".
+
+---
+
+## ADR-019 — SEO: páginas de servicio propias, no una sola home one-page
+
+**Decisión:** Se crean **seis páginas de servicio con contenido propio** (`/camaras-de-seguridad-tierra-del-fuego/`, `/cerraduras-digitales-tierra-del-fuego/`, `/alarmas-tierra-del-fuego/`, `/domotica-tierra-del-fuego/`, `/redes-wifi-tierra-del-fuego/`, `/electricidad-tierra-del-fuego/`) más un hub `/servicios/`. El contenido vive en `src/lib/servicios.ts` y una sola plantilla dinámica (`src/pages/[servicio].astro`) las genera con `getStaticPaths` en build time.
+
+**Por qué:** El sitio era one-page. Una URL sola no puede competir por seis temas distintos a la vez: Google necesita una página específica por búsqueda ("cámaras de seguridad Ushuaia", "cerraduras digitales Tierra del Fuego", "electricista Ushuaia"). Esa era la causa principal de no aparecer, por encima de cualquier ajuste de meta tags.
+
+**Formato de URL — plana con localidad, decidido por el usuario:** `{keyword}-tierra-del-fuego`, no `/servicios/{keyword}`. La keyword local queda dentro de la URL, y "tierra-del-fuego" (en vez de "ushuaia") cubre también Río Grande y Tolhuin. "Ushuaia" igual aparece en `<title>`, H1 y cuerpo de cada página.
+
+**Barra final:** todas las URLs internas y los `canonical` la llevan, porque el build genera `dist/<ruta>/index.html` y el sitemap la escribe así. Sin eso, Google veía dos URLs por página y cada clic interno pasaba por un redirect.
+
+**Consecuencia:** agregar un servicio es agregar un objeto a `SERVICIOS` — se generan solos la página, el schema (`Service` + `FAQPage` + `BreadcrumbList`), la entrada del sitemap, el ítem del footer, el del menú mobile, el del hub y el de la home. **Regla: no crear una página sin contenido real suficiente** (multiseccion.md); una URL vacía perjudica más de lo que suma.
+
+---
+
+## ADR-020 — Dirección visual: editorial oscuro con el verde de marca, no el estilo "Dala" de DESIGN.md
+
+**Decisión:** Se toma de `DESIGN.md` (referencia "Dala") la **estructura**: escala tipográfica grande con tracking negativo, negro dominante, mucho aire, hairlines en lugar de tarjetas, y un solo acento reservado al CTA. Se **descarta** su paleta y su imaginería: nada de violeta `#8052ff`, ámbar, partículas ni Inter weight 200. Se aplica con la marca real de INSOLVA: `#0A0A0A` + blanco + verde `#98C665` como único acento, BlauerNue en titulares y Space Grotesk en cuerpo.
+
+**Por qué:** los dos documentos de referencia se contradicen. `multiseccion.md` prohíbe explícitamente partículas, neón, estética IA y plantilla SaaS, que es justo lo que `DESIGN.md` prescribe. La estructura de Dala es transferible; su piel, no. Decisión confirmada por el usuario antes de tocar código.
+
+**Verde de texto sobre fondo claro (`--green-text: #4F7D22`):** el verde de marca sobre blanco da **1.85:1** y el verde oscuro `#6AA03A` da **3.13:1** — ninguno llega al 4.5:1 que exige el texto chico. `--green-text` es la versión profunda del mismo verde (4.9:1) y se usa SOLO para texto pequeño sobre fondo claro. Sobre fondo oscuro se sigue usando `#98C665`, que ahí da 11:1. Las secciones oscuras se marcan con la clase `on-dark` y el sistema elige el tono solo.
+
+**Consecuencia:** una sección oscura nueva **debe** llevar `on-dark` (o `section-dark`/`section-void`), o sus eyebrows y números van a salir con el verde pensado para fondo claro. Auditoría de contraste: 53 fallos → 0.
+
+---
+
+## ADR-021 — Newsletter: solo la casilla, con `mailto` como red de contención
+
+**Decisión:** El bloque de newsletter (`Newsletter.astro`) se maqueta y funciona, pero el destino del alta está detrás de una única constante, `NEWSLETTER_ENDPOINT` en `src/lib/newsletter.ts`, hoy vacía. Mientras esté vacía, el formulario abre un mail ya redactado hacia `BRAND.email` con la dirección de la persona adentro.
+
+**Por qué:** el sitio es estático y no tiene función de servidor propia donde guardar el mail (ADR-018). El usuario pidió "solamente la casilla" porque el envío del newsletter se va a resolver aparte. La alternativa —mostrar un "gracias" y tirar el dato— era peor que no tener el formulario: perdía altas en silencio.
+
+**Consecuencia:** para activarlo alcanza con pegar una URL que reciba `POST {email, origen}` en esa constante. Opciones documentadas en el propio archivo: Brevo/Mailchimp (además permite enviar las campañas), Supabase propio con tabla `insolvaweb_newsletter` + RLS solo-INSERT y **anon key** (nunca la `service_role`, que en el navegador queda expuesta), o un endpoint REST en el sitio WooCommerce.
+
+---
+
+## ADR-022 — Videos de YouTube con fachada, no embebidos directos
+
+**Decisión:** Los 13 Shorts del canal `@insolva` se muestran en el sitio con una **fachada**: miniatura WebP guardada localmente en `public/img/videos/` + botón de play; el `<iframe>` de YouTube se inserta recién cuando la persona hace clic (`VideoShort.astro`). El reproductor apunta a `youtube-nocookie.com`.
+
+**Por qué:** un `<iframe>` de YouTube arrastra cerca de 1 MB de JavaScript y varias conexiones a dominios de Google apenas se pinta la página, mire el video quien lo mire. Con tres o cuatro videos en una página de servicio eso multiplica el costo y se come el presupuesto de performance que pide `multiseccion.md`. Las miniaturas van locales, y no hotlinkeadas a `i.ytimg.com`, para que el sitio **no le pida nada a Google hasta que hay una reproducción**: verificado con Playwright (0 peticiones a YouTube antes del play, 5 después).
+
+**Formato:** los 13 son Shorts, o sea verticales 9:16. La grilla es de 2 o 4 columnas y **nunca 3**, con un tope de 4 videos por página: así siempre cierra una fila completa en vez de dejar uno colgando con medio ancho vacío al lado. El orden de prioridad es el del array `VIDEOS` en `src/lib/videos.ts`.
+
+**SEO:** cada video emite `VideoObject` (`name`, `description`, `thumbnailUrl`, `uploadDate`, `duration`), que es lo que habilita el resultado enriquecido con miniatura de video en Google. El canal se sumó a `sameAs` del schema de la empresa y al footer, para que Google entienda que el sitio y el canal son el mismo negocio — YouTube es el segundo buscador más usado y hasta ahora vivía desconectado del sitio.
+
+**Consecuencia:** para sumar un video nuevo, agregar un objeto a `VIDEOS` con su `id`, `fecha`, `duracion` ISO 8601 y las `paginas` donde va, y correr `node scripts/build-miniaturas-video.mjs`. Un mismo video puede aparecer en varias páginas.
+
+---
+
+## ADR-023 — De landing única a sitio por secciones
+
+**Decisión:** el sitio deja de ser una landing de scroll largo y pasa a **cinco secciones con página propia**: Inicio, Servicios, Trabajos, Nosotros y Contacto, más la Tienda que vive aparte en WooCommerce. Estructura tomada de la referencia que pidió el usuario (`startersites.io/blocksy/codespot`, que usa Home / Services / News / About / Contact).
+
+**Por qué:** la home repetía el contenido de las internas. Mostraba las mismas fotos de portada de cada servicio que después repetía `/servicios`, y arrastraba secciones completas (trabajos, quiénes somos, FAQ, contacto) que ahora tienen página propia. El sitio se leía dos veces.
+
+**Reparto:**
+- **Inicio** presenta y deriva. Hero, el scroll de la casa construyéndose, el índice de servicios (**sin fotos**, solo nombre y link), planificación desde obra, Ushuaia y un CTA. Nada de contenido completo.
+- **Servicios** tiene los seis servicios con foto y WhatsApp, para quién, metodología y preguntas frecuentes. Las seis páginas de detalle cuelgan de acá.
+- **Trabajos** tiene las instalaciones con su galería y los videos.
+- **Nosotros** dice quiénes son y nada más.
+- **Contacto** junta el formulario, el newsletter y todas las vías: WhatsApp, correo, Instagram, YouTube, zona y horario.
+
+**Consecuencias:**
+- `NAV_LINKS` pasó de anclas (`/#trabajos`) a rutas reales (`/trabajos/`).
+- El **newsletter vive solo en Contacto**. Antes se repetía en cada página de servicio.
+- `Pilares.astro` quedó sin fotos: era el origen de la duplicación visual con `/servicios`.
+- `PageHero.astro` da la misma cabecera a las cuatro páginas internas, para que se lean como secciones de un sitio y no como landings sueltas.
+- `QuienesSomos.astro` y `Tienda.astro` quedan en el repo pero fuera de página: su contenido vive ahora en `/nosotros` y en el WooCommerce.
+
+---
+
+## ADR-024 — Textos pasados por `humanizalo`
+
+**Decisión:** se instaló `humanizalo` (github.com/Hainrixz/humanizalo) en `.claude/skills/` y se pasó por sus 40 patrones todo el copy visible del sitio.
+
+**Qué se corrigió:**
+- **P27, em dash.** El tell más delatador. Se sacaron de la prosa y también de los `alt` y `aria-label`, donde una coma además se lee mejor en un lector de pantalla.
+- **P15, contrastes binarios.** "El problema no es la cámara. Es dónde va." pasó a "La cámara importa menos que el lugar donde va."; "Automatizar no es llenar la casa de aparatos." a "Automatizar bien es automatizar poco."; "El trabajo completo, no solo el equipo." a "Qué entra en el precio del trabajo."
+- **P16, listado negativo.** "Sin producción, sin actores." pasó a "grabados durante el trabajo, con el celular".
+- **P11, adverbios en -mente.** Se eliminaron los siete que había.
+
+**Resultado:** cero tells en copy visible. Los dos que quedan en la auditoría están dentro de comentarios de código.
+
+**Consecuencia:** el chequeo se puede repetir con `/humanizalo` sobre cualquier texto nuevo. Los patrones que más aparecían acá eran P27 y P15, así que conviene mirarlos primero al escribir copy nuevo.

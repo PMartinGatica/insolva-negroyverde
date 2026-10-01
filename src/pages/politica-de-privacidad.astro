@@ -2,45 +2,57 @@
 import Layout from '../layouts/Layout.astro';
 import { BRAND } from '../lib/constants';
 
-const updated = '10 de julio de 2026';
+const updated = '30 de septiembre de 2026';
 ---
 
 <Layout
-  title={`Política de Privacidad — ${BRAND.name}`}
+  title={`Política de Privacidad | ${BRAND.name}`}
   description="Política de privacidad y uso de cookies de INSOLVA Group. Cómo tratamos tus datos de contacto y qué cookies usamos."
+  path="/politica-de-privacidad"
 >
-  <main class="bg-[#FFFFFF] min-h-screen">
+  <main class="bg-[#FCFDFA] min-h-screen">
     <div class="max-w-3xl mx-auto px-6 py-24 md:py-32">
 
-      <a href="/" class="eyebrow inline-block mb-8 hover:text-[#6AA03A] transition-colors">← Volver al inicio</a>
+      <a href="/" class="eyebrow inline-block mb-8 hover:text-[#4F7D22] transition-colors">← Volver al inicio</a>
 
       <p class="eyebrow mb-4">LEGAL</p>
-      <h1 class="heading-section text-[#0A0A0A] mb-4">Política de Privacidad</h1>
-      <p class="body-text mb-12 text-[#4A4A4A]">Última actualización: {updated}</p>
+      <h1 class="heading-section text-[#11140F] mb-4">Política de Privacidad</h1>
+      <p class="body-text mb-12 text-[#4E514A]">Última actualización: {updated}</p>
 
       <div class="space-y-10">
 
         <section>
-          <h2 class="heading-card text-[#0A0A0A] mb-3">1. Quiénes somos</h2>
+          <h2 class="heading-card text-[#11140F] mb-3">1. Quiénes somos</h2>
           <p class="body-text">
             {BRAND.name} es una empresa de ingeniería y seguridad electrónica con base en
             {BRAND.location}. Podés contactarnos por WhatsApp o por correo a
-            <a href={`mailto:${BRAND.email}`} class="text-[#6AA03A] underline underline-offset-2">{BRAND.email}</a>.
+            <a href={`mailto:${BRAND.email}`} class="text-[#4F7D22] underline underline-offset-2">{BRAND.email}</a>.
           </p>
         </section>
 
         <section>
-          <h2 class="heading-card text-[#0A0A0A] mb-3">2. Qué datos recogemos</h2>
+          <h2 class="heading-card text-[#11140F] mb-3">2. Qué datos recogemos</h2>
           <p class="body-text">
-            Este sitio es una página informativa. No tiene formularios que almacenen datos en
-            nuestros servidores. Cuando nos escribís por WhatsApp o email, recibimos únicamente
-            los datos que vos nos compartís (nombre, teléfono, correo y el mensaje de tu consulta),
-            y los usamos solo para responderte y coordinar tu proyecto.
+            Recogemos solo lo que vos nos dejás. Cuando nos escribís por WhatsApp o por correo,
+            recibimos tu nombre, tu teléfono, tu correo y el mensaje de tu consulta. Lo mismo
+            vale para el formulario de contacto y para el del newsletter de este sitio, que nos
+            llegan por correo.
+          </p>
+          <p class="body-text mt-4">
+            Las guías gratuitas tienen su propio formulario, que funciona en
+            <a href="https://funnel-ventas.vercel.app/" class="text-[#4F7D22] underline underline-offset-2">funnel-ventas.vercel.app</a>
+            y está alojado en Vercel. Ahí pedimos tu nombre y apellido, un correo o un WhatsApp y
+            los temas que te interesan, y registramos desde qué página llegaste. Con eso te damos
+            acceso a las guías y te enviamos novedades de INSOLVA por correo o por WhatsApp. Podés
+            pedirnos que dejemos de escribirte cuando quieras.
+          </p>
+          <p class="body-text mt-4">
+            Usamos estos datos para responderte, coordinar tu proyecto y enviarte lo que pediste.
           </p>
         </section>
 
         <section>
-          <h2 class="heading-card text-[#0A0A0A] mb-3">3. Cookies</h2>
+          <h2 class="heading-card text-[#11140F] mb-3">3. Cookies</h2>
           <p class="body-text">
             Usamos una cookie técnica propia (almacenada en tu navegador mediante <em>localStorage</em>)
             para recordar tu preferencia sobre el aviso de cookies y no volver a mostrártelo. No
@@ -50,25 +62,27 @@ const updated = '10 de julio de 2026';
         </section>
 
         <section>
-          <h2 class="heading-card text-[#0A0A0A] mb-3">4. Servicios de terceros</h2>
+          <h2 class="heading-card text-[#11140F] mb-3">4. Servicios de terceros</h2>
           <p class="body-text">
-            Los botones de contacto abren WhatsApp e Instagram, que se rigen por sus propias
-            políticas de privacidad. Al usarlos, salís de este sitio y quedás sujeto a los términos
-            de esas plataformas.
+            Los botones de contacto abren WhatsApp, Instagram y YouTube, que se rigen por sus
+            propias políticas de privacidad. Al usarlos, salís de este sitio y quedás sujeto a los
+            términos de esas plataformas. Los videos de YouTube se cargan recién cuando tocás
+            reproducir, y en modo sin cookies de seguimiento. El formulario de guías se aloja en
+            Vercel.
           </p>
         </section>
 
         <section>
-          <h2 class="heading-card text-[#0A0A0A] mb-3">5. Tus derechos</h2>
+          <h2 class="heading-card text-[#11140F] mb-3">5. Tus derechos</h2>
           <p class="body-text">
             Podés solicitar el acceso, la rectificación o la eliminación de los datos de contacto
             que nos hayas compartido escribiéndonos a
-            <a href={`mailto:${BRAND.email}`} class="text-[#6AA03A] underline underline-offset-2">{BRAND.email}</a>.
+            <a href={`mailto:${BRAND.email}`} class="text-[#4F7D22] underline underline-offset-2">{BRAND.email}</a>.
           </p>
         </section>
 
         <section>
-          <h2 class="heading-card text-[#0A0A0A] mb-3">6. Cambios en esta política</h2>
+          <h2 class="heading-card text-[#11140F] mb-3">6. Cambios en esta política</h2>
           <p class="body-text">
             Podemos actualizar esta política para reflejar cambios en nuestros servicios o en la
             normativa aplicable. Publicaremos siempre la versión vigente en esta misma página.

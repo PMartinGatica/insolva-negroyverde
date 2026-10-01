@@ -1,0 +1,103 @@
+---
+import VideoShort from '../ui/VideoShort.astro';
+import { CANAL_URL, type Video } from '../../lib/videos';
+
+/*
+  Tira de videos de YouTube. Vive solo en /trabajos/: los videos no se repiten
+  en las páginas de servicio, porque el canal ya los tiene todos. La tira cierra
+  con una celda que lleva al canal, así la persona que quiere más sabe adónde ir.
+*/
+interface Props {
+  videos: Video[];
+  titulo?: string;
+  bajada?: string;
+}
+
+const {
+  videos,
+  titulo = 'Mirá cómo trabajamos.',
+  bajada = 'Videos cortos grabados durante el trabajo, con el celular.',
+} = Astro.props;
+---
+
+{videos.length > 0 && (
+  <section id="videos" class="section section-dark on-dark">
+    <div class="wrap">
+
+      <div class="reveal max-w-2xl mb-12">
+        <p class="eyebrow mb-4">EN VIDEO</p>
+        <h2 class="heading-section text-white">{titulo}</h2>
+        <p class="body-text mt-5">{bajada}</p>
+      </div>
+
+      <!--
+        Seis celdas: los videos más la celda del canal. Con 5 videos la grilla
+        cierra completa en 2 columnas (3 filas), en 3 (2 filas) y en 6 (1 fila),
+        sin dejar ninguno colgando.
+      -->
+      <div class="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-6">
+        {videos.map((video, i) => (
+          <div class={`reveal reveal-delay-${(i % 3) + 1}`}>
+            <VideoShort video={video} eager={i === 0} />
+          </div>
+        ))}
+
+        <div class="reveal reveal-delay-2">
+          <a
+            href={CANAL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="vs-mas"
+            aria-label="Ver todos los videos en el canal de YouTube de INSOLVA"
+          >
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.52A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.13c1.88.52 9.38.52 9.38.52s7.5 0 9.38-.52a3 3 0 0 0 2.12-2.13A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z" />
+            </svg>
+            <span class="vs-mas-texto">Ver más en YouTube</span>
+            <span class="vs-mas-canal">@insolva <span aria-hidden="true">→</span></span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+)}
+
+<style>
+  /* Misma proporción y radio que los videos, para que se lea como una celda más. */
+  .vs-mas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    aspect-ratio: 9 / 16;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid var(--line-on-dark);
+    background: var(--carbon);
+    color: var(--green);
+    text-decoration: none;
+    transition: border-color 0.25s var(--ease-out-quart), background-color 0.25s var(--ease-out-quart);
+  }
+  .vs-mas:hover { border-color: var(--green); background: var(--carbon-2); }
+
+  .vs-mas-texto {
+    font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    color: var(--text-on-dark);
+  }
+
+  .vs-mas-canal {
+    font-family: 'enma', 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+</style>

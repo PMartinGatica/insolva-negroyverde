@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import PageHero from '../components/layout/PageHero.astro';
+import Ushuaia from '../components/sections/Ushuaia.astro';
+import Foto from '../components/ui/Foto.astro';
+import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
+import { whatsappLink } from '../lib/whatsapp';
+import { breadcrumbSchema } from '../lib/seo';
+
+const path = '/nosotros';
+const wa = whatsappLink({ source: 'contacto' });
+
+const comoTrabajamos = [
+  {
+    titulo: 'Relevamos antes de cotizar',
+    texto:
+      'Vamos al lugar y miramos qué hace falta. Así el presupuesto sale de tu casa o tu local, y no de un paquete de cuatro cámaras que se vende igual en todos lados.',
+  },
+  {
+    titulo: 'Un solo sistema, no cinco instalaciones',
+    texto:
+      'Seguridad, electricidad, automatización y redes las hacemos nosotros. Cuando las hace gente distinta, cada uno resuelve lo suyo y después nadie se hace cargo de que funcionen juntas.',
+  },
+  {
+    titulo: 'Equipos con repuesto',
+    texto:
+      'Hikvision, Dahua, HiLook, EZVIZ, TP-Link y Starlink. Marcas que en dos años todavía se consiguen y se pueden reemplazar.',
+  },
+  {
+    titulo: 'Seguimos estando después',
+    texto:
+      'Terminada la instalación te queda nuestro WhatsApp. Si algo falla o querés sumar un punto, no arrancás de cero con otra empresa.',
+  },
+];
+---
+
+<Layout
+  title="Quiénes Somos | Empresa de Seguridad Electrónica en Ushuaia | INSOLVA Group"
+  description="INSOLVA Group es una empresa de seguridad electrónica, automatización, redes e instalaciones eléctricas de Ushuaia, Tierra del Fuego. Trabajamos en Ushuaia, Río Grande y Tolhuin."
+  path={path}
+  keywords="INSOLVA Group Ushuaia, empresa de seguridad electrónica Tierra del Fuego, quiénes somos INSOLVA, instaladores Ushuaia"
+  ogImage="/img/quienes-somos-equipo.webp"
+  schemas={[breadcrumbSchema([{ name: 'Nosotros', path }])]}
+>
+  <Header heroOscuro />
+
+  <main>
+    <PageHero
+      eyebrow="QUIÉNES SOMOS"
+      titulo="De Ushuaia,"
+      destacado="hecho a tu medida."
+      lead="Somos una empresa de seguridad electrónica y automatización de Tierra del Fuego. Instalamos cámaras, alarmas, cerraduras digitales, redes, domótica e instalaciones eléctricas en casas, comercios, industrias y obras."
+      trail={[{ name: 'Nosotros', path }]}
+      foto="/img/quienes-somos-equipo.webp"
+    />
+
+    <!-- ── LA EMPRESA ───────────────────────────────────────── -->
+    <section class="section section-light">
+      <div class="wrap grid gap-12 lg:grid-cols-2 lg:gap-20 lg:items-center">
+
+        <div class="reveal">
+          <p class="eyebrow mb-5">LA EMPRESA</p>
+          <h2 class="heading-section text-[#11140F]">
+            Una obra, un plano,<br />un sistema entero.
+          </h2>
+          <hr class="rule-accent my-8" />
+          <p class="body-text max-w-xl">
+            INSOLVA nació para resolver una cosa puntual: que la parte técnica de
+            una casa o un comercio quede pensada junta. Las cámaras dependen de la
+            red, la red depende del cableado y el cableado depende de que alguien
+            lo haya previsto antes de cerrar la pared.
+          </p>
+          <p class="body-text max-w-xl mt-5">
+            Por eso hacemos las cuatro cosas nosotros. Analizamos la necesidad,
+            diseñamos la solución, instalamos y te dejamos el sistema andando en
+            el celular.
+          </p>
+        </div>
+
+        <Foto
+          src="/img/servicios/camaras-domo-complejo.webp"
+          alt="Técnico de INSOLVA Group instalando una cámara en un complejo de Ushuaia"
+          ratio="aspect-[4/3]"
+          width={1200}
+          height={900}
+          class="reveal reveal-delay-1 photo-zoom"
+        />
+
+      </div>
+    </section>
+
+    <!-- ── CÓMO TRABAJAMOS ──────────────────────────────────── -->
+    <section class="section section-dark on-dark">
+      <div class="wrap">
+        <div class="reveal max-w-2xl mb-14">
+          <p class="eyebrow mb-4">POR QUÉ NOSOTROS</p>
+          <h2 class="heading-section text-white">Cuatro cosas que<br />hacemos distinto.</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-x-14">
+          {comoTrabajamos.map((item, i) => (
+            <article class={`reveal reveal-delay-${(i % 3) + 1} border-t border-white/12 py-8`}>
+              <span class="num-index mb-5" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-card text-white mb-3">{item.titulo}</h3>
+              <p class="body-text">{item.texto}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Ushuaia />
+
+    <!-- ── CTA ──────────────────────────────────────────────── -->
+    <section class="section section-void on-dark">
+      <div class="wrap max-w-3xl">
+        <div class="reveal">
+          <h2 class="heading-display text-white">¿Charlamos<br />tu proyecto?</h2>
+          <p class="body-lead mt-6">
+            Contanos qué tenés en mente. Si conviene hacerlo por etapas, te lo
+            decimos.
+          </p>
+          <div class="mt-9 flex flex-wrap items-center gap-4">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              Hablar con INSOLVA
+            </a>
+            <a href="/trabajos/" class="btn btn-ghost">Ver trabajos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <WhatsAppFloat />
+  <CookieBanner />
+</Layout>

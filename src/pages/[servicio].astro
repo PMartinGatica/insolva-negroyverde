@@ -1,0 +1,287 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import Foto from '../components/ui/Foto.astro';
+import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
+import { SERVICIOS, getRelacionados, type Servicio } from '../lib/servicios';
+import { whatsappLink } from '../lib/whatsapp';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '../lib/seo';
+
+// Una página estática por servicio, generada en build time. Las rutas estáticas
+// (/servicios, /politica-de-privacidad) tienen prioridad sobre esta dinámica.
+export function getStaticPaths() {
+  return SERVICIOS.map((servicio) => ({
+    params: { servicio: servicio.slug },
+    props: { servicio },
+  }));
+}
+
+interface Props { servicio: Servicio }
+const { servicio } = Astro.props;
+
+const path = `/${servicio.slug}`;
+const wa = whatsappLink({ message: servicio.waMessage });
+const relacionados = getRelacionados(servicio);
+
+const schemas = [
+  serviceSchema({
+    nombre: servicio.nombre,
+    descripcion: servicio.description,
+    path,
+    tipo: servicio.tipoSchema,
+    incluye: servicio.incluye.map((i) => i.titulo),
+  }),
+  faqSchema(servicio.faqs),
+  breadcrumbSchema([
+    { name: 'Servicios', path: '/servicios' },
+    { name: servicio.nav, path },
+  ]),
+];
+---
+
+<Layout
+  title={servicio.title}
+  description={servicio.description}
+  path={path}
+  keywords={servicio.keywords}
+  ogImage={servicio.hero.src}
+  schemas={schemas}
+>
+  <Header heroOscuro />
+
+  <main>
+    <!-- ── HERO ─────────────────────────────────────────────── -->
+    <section class="relative bg-[#11140F] text-white overflow-hidden">
+      <!-- La foto ocupa el lado derecho en desktop. Antes iba a todo el ancho y
+           bajo un velo casi opaco: la portada no se veía, y cuando el motivo
+           quedaba al centro (la central de alarma) caía justo detrás del título. -->
+      <div class="absolute inset-y-0 right-0 w-full md:w-[62%]" aria-hidden="true">
+        <img
+          src={servicio.hero.src}
+          alt=""
+          class="w-full h-full object-cover opacity-30 md:opacity-75"
+          style={`object-position: ${servicio.hero.pos ?? '50% 50%'};`}
+          width="1200"
+          height="800"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <!-- Velos: la foto real no se toca, solo se oscurece donde va el texto. En
+           mobile el texto ocupa todo el ancho, así que el velo es parejo. -->
+      <div class="absolute inset-0 bg-[#090B07]/65 md:hidden" aria-hidden="true"></div>
+      <div
+        class="absolute inset-0 hidden md:block bg-gradient-to-r from-[#090B07] from-36% via-[#090B07]/65 via-58% to-[#090B07]/5"
+        aria-hidden="true"
+      ></div>
+
+      <div class="wrap relative pt-32 pb-20 md:pt-44 md:pb-28 on-dark">
+        <div class="mb-8">
+          <Breadcrumbs claro trail={[{ name: 'Servicios', path: '/servicios' }, { name: servicio.nav, path }]} />
+        </div>
+
+        <p class="eyebrow mb-5">{servicio.eyebrow}</p>
+        <h1 class="heading-hero max-w-4xl">
+          {servicio.h1}<br /><span class="text-[#98C665]">{servicio.h1Destacado}</span>
+        </h1>
+
+        <p class="body-lead mt-8 max-w-2xl">{servicio.lead}</p>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Pedir presupuesto
+          </a>
+          <a href="#incluye" class="btn btn-ghost">Qué incluye</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EL PROBLEMA ──────────────────────────────────────── -->
+    <section class="section section-light">
+      <div class="wrap grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+        <div class="reveal">
+          <h2 class="heading-section text-[#11140F]">{servicio.problema.titulo}</h2>
+          <p class="body-text mt-6 max-w-xl">{servicio.problema.texto}</p>
+        </div>
+        <ul class="reveal reveal-delay-1 self-end">
+          {servicio.problema.puntos.map((punto) => (
+            <li class="flex gap-4 py-4 border-t border-[#11140F]/10 last:border-b">
+              <span class="text-[#98C665] shrink-0 mt-1" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+              <span class="body-text">{punto}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── QUÉ INCLUYE ──────────────────────────────────────── -->
+    <section id="incluye" class="section section-dark on-dark">
+      <div class="wrap">
+        <div class="reveal max-w-2xl mb-14">
+          <p class="eyebrow mb-4">QUÉ INCLUYE</p>
+          <h2 class="heading-section text-white">Qué entra en el<br />precio del trabajo.</h2>
+        </div>
+
+        <!-- Lista editorial con hairlines en vez de seis tarjetas iguales. -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3">
+          {servicio.incluye.map((item, i) => (
+            <article class={`reveal reveal-delay-${(i % 3) + 1} border-t border-white/12 py-8 pr-8`}>
+              <span class="num-index mb-5" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-card text-white mb-3">{item.titulo}</h3>
+              <p class="body-text">{item.texto}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BLOQUES (zigzag) ─────────────────────────────────── -->
+    {servicio.bloques.map((bloque, i) => (
+      <section class={`section ${i % 2 === 0 ? 'section-light' : 'section-paper'}`}>
+        <div class="wrap">
+          <div class={`grid gap-10 lg:gap-20 items-center ${bloque.foto ? 'lg:grid-cols-2' : ''}`}>
+            <div class={`reveal ${bloque.foto && i % 2 === 1 ? 'lg:order-2' : ''}`}>
+              <span class="num-index mb-6" aria-hidden="true">{bloque.numero}</span>
+              <h2 class="heading-sub text-[#11140F] max-w-lg">{bloque.titulo}</h2>
+              <hr class="rule-accent my-6" />
+              <p class="body-text max-w-xl">{bloque.texto}</p>
+            </div>
+
+            {bloque.foto && (
+              <Foto
+                src={bloque.foto.src}
+                alt={bloque.foto.alt}
+                ratio="aspect-[4/3]"
+                width={1200}
+                height={900}
+                class={`reveal reveal-delay-1 photo-zoom ${i % 2 === 1 ? 'lg:order-1' : ''}`}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <!-- ── PARA QUIÉN ───────────────────────────────────────── -->
+    <section class="section section-dark on-dark">
+      <div class="wrap">
+        <div class="reveal max-w-2xl mb-14">
+          <p class="eyebrow mb-4">PARA QUIÉN</p>
+          <h2 class="heading-section text-white">Dónde lo instalamos.</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-x-10">
+          {servicio.paraQuien.map((p, i) => (
+            <div class={`reveal reveal-delay-${i + 1} border-t border-white/12 pt-8 pb-4`}>
+              <h3 class="heading-card text-[#98C665] mb-4">{p.titulo}</h3>
+              <p class="body-text">{p.texto}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── GALERÍA (se oculta si el servicio no tiene fotos propias) ──── -->
+    {servicio.galeria.length > 0 && (<section class="section section-light">
+      <div class="wrap">
+        <div class="reveal max-w-2xl mb-12">
+          <p class="eyebrow mb-4">TRABAJOS REALES</p>
+          <h2 class="heading-section text-[#11140F]">Instalaciones que<br />hicimos nosotros.</h2>
+        </div>
+        <div class={`grid gap-3 md:gap-4 ${servicio.galeria.length === 1 ? 'max-w-xl' : 'grid-cols-2 lg:grid-cols-3'}`}>
+          {servicio.galeria.map((foto, i) => (
+            <Foto
+              src={foto.src}
+              alt={foto.alt}
+              class={`reveal reveal-delay-${(i % 3) + 1} photo-zoom`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+    )}
+
+
+    <!-- ── FAQ ──────────────────────────────────────────────── -->
+    <section class="section section-paper">
+      <div class="wrap grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <div class="reveal">
+          <p class="eyebrow mb-4">PREGUNTAS FRECUENTES</p>
+          <h2 class="heading-section text-[#11140F]">Lo que más<br />nos preguntan.</h2>
+        </div>
+
+        <div class="reveal reveal-delay-1">
+          {servicio.faqs.map((faq) => (
+            <details class="group border-t border-[#11140F]/10 last:border-b">
+              <summary class="flex items-start justify-between gap-6 py-6 cursor-pointer list-none">
+                <h3 class="text-[#11140F] text-lg leading-snug" style="font-family:'Space Grotesk',sans-serif; font-weight:500;">
+                  {faq.pregunta}
+                </h3>
+                <span class="text-[#98C665] shrink-0 mt-1 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </span>
+              </summary>
+              <p class="body-text pb-6 pr-10 max-w-2xl">{faq.respuesta}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SERVICIOS RELACIONADOS ───────────────────────────── -->
+    <section class="section section-light">
+      <div class="wrap">
+        <div class="reveal mb-10">
+          <p class="eyebrow mb-4">TAMBIÉN HACEMOS</p>
+          <h2 class="heading-section text-[#11140F]">Suele ir junto con esto.</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-x-10">
+          {relacionados.map((rel, i) => (
+            <a
+              href={`/${rel.slug}/`}
+              class={`reveal reveal-delay-${i + 1} group block border-t border-[#11140F]/12 pt-8 pb-6 hover:border-[#98C665] transition-colors`}
+            >
+              <h3 class="heading-card text-[#11140F] mb-3 group-hover:text-[#4F7D22] transition-colors">{rel.nav}</h3>
+              <p class="body-text mb-5">{rel.resumen}</p>
+              <span class="link-arrow">Ver más <span aria-hidden="true">→</span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA FINAL ────────────────────────────────────────── -->
+    <section class="section section-void on-dark">
+      <div class="wrap max-w-3xl">
+        <div class="reveal">
+          <h2 class="heading-display text-white">
+            ¿Lo hablamos?
+          </h2>
+          <p class="body-lead mt-6">
+            Contanos dónde es y qué necesitás. Coordinamos un relevamiento y te
+            pasamos un presupuesto hecho para tu lugar, no un paquete cerrado.
+          </p>
+          <div class="mt-9 flex flex-wrap items-center gap-4">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              Escribinos por WhatsApp
+            </a>
+            <a href="/servicios/" class="btn btn-ghost">Ver todos los servicios</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+  <WhatsAppFloat />
+  <CookieBanner />
+</Layout>

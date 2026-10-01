@@ -5,7 +5,7 @@ import { whatsappLink } from '../../lib/whatsapp';
 const waHref = whatsappLink({ source: 'contacto' });
 ---
 
-<section id="contacto" class="py-24 md:py-32 bg-[#0A0A0A] relative overflow-hidden">
+<section id="contacto" class="on-dark py-24 md:py-32 bg-[#11140F] relative overflow-hidden">
 
   <!-- Grid decorativo fondo -->
   <div
@@ -28,7 +28,7 @@ const waHref = whatsappLink({ source: 'contacto' });
         para tu casa, negocio<br />
         u obra en Ushuaia.
       </h2>
-      <p class="text-[#C2C1C1] mt-4" style="font-family:'Space Grotesk',sans-serif; font-size:1rem;">
+      <p class="text-[#AFB2AD] mt-4" style="font-family:'Space Grotesk',sans-serif; font-size:1rem;">
         Te respondemos en el día. Presupuesto sin cargo y sin compromiso.
       </p>
     </div>
@@ -41,7 +41,7 @@ const waHref = whatsappLink({ source: 'contacto' });
         rel="noopener noreferrer"
         class="
           inline-flex items-center gap-3 px-8 py-5
-          bg-[#98C665] text-white
+          bg-[#98C665] text-[#11140F]
           font-['Barlow_Condensed'] font-bold uppercase tracking-wider text-lg
           hover:bg-[#6AA03A] transition-colors duration-200 rounded-sm
           shadow-lg shadow-[#98C665]/20
@@ -54,14 +54,14 @@ const waHref = whatsappLink({ source: 'contacto' });
         Pedí tu presupuesto por WhatsApp
       </a>
 
-      <p class="mt-3 text-[#C2C1C1] font-['Barlow'] text-sm">{BRAND.whatsapp.replace('549', '+54 9 ').replace(/(\d{4})(\d{2})(\d{4})$/, '$1 $2-$3')}</p>
+      <p class="mt-3 text-[#AFB2AD] font-['Barlow'] text-sm">{BRAND.whatsapp.replace('549', '+54 9 ').replace(/(\d{4})(\d{2})(\d{4})$/, '$1 $2-$3')}</p>
     </div>
 
     <!-- Info secundaria -->
     <div class="reveal reveal-delay-2 mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-3xl mx-auto border-t border-white/10 pt-12">
       <a
         href={`tel:+${BRAND.whatsapp}`}
-        class="flex flex-col items-center gap-2 text-[#C2C1C1] hover:text-[#98C665] transition-colors duration-200 group"
+        class="flex flex-col items-center gap-2 text-[#AFB2AD] hover:text-[#98C665] transition-colors duration-200 group"
         aria-label="Llamar por teléfono a INSOLVA"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#98C665]" aria-hidden="true">
@@ -72,7 +72,7 @@ const waHref = whatsappLink({ source: 'contacto' });
 
       <a
         href={`mailto:${BRAND.email}`}
-        class="flex flex-col items-center gap-2 text-[#C2C1C1] hover:text-[#98C665] transition-colors duration-200 group"
+        class="flex flex-col items-center gap-2 text-[#AFB2AD] hover:text-[#98C665] transition-colors duration-200 group"
         aria-label={`Enviar email a ${BRAND.email}`}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#98C665]" aria-hidden="true">
@@ -86,7 +86,7 @@ const waHref = whatsappLink({ source: 'contacto' });
         href={BRAND.instagramUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="flex flex-col items-center gap-2 text-[#C2C1C1] hover:text-[#98C665] transition-colors duration-200"
+        class="flex flex-col items-center gap-2 text-[#AFB2AD] hover:text-[#98C665] transition-colors duration-200"
         aria-label={`INSOLVA en Instagram ${BRAND.instagram}`}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#98C665]" aria-hidden="true">
@@ -97,7 +97,7 @@ const waHref = whatsappLink({ source: 'contacto' });
         <span class="font-['Barlow'] text-sm">{BRAND.instagram}</span>
       </a>
 
-      <div class="flex flex-col items-center gap-2 text-[#C2C1C1]">
+      <div class="flex flex-col items-center gap-2 text-[#AFB2AD]">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#98C665]" aria-hidden="true">
           <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
           <circle cx="12" cy="10" r="3"/>

@@ -1,0 +1,42 @@
+---
+import Foto from '../ui/Foto.astro';
+
+/**
+ * Sección 11 de multiseccion.md: el territorio. Sin clichés turísticos y sin
+ * inventar normativas ni requisitos técnicos.
+ */
+---
+
+<section id="ushuaia" class="section section-light">
+  <div class="wrap">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-20 lg:items-center">
+
+      <div class="reveal">
+        <p class="eyebrow mb-5">USHUAIA · TIERRA DEL FUEGO</p>
+        <h2 class="heading-section text-[#11140F]">
+          Hecho para<br />trabajar en el sur.
+        </h2>
+        <hr class="rule-accent my-8" />
+        <p class="body-text max-w-xl">
+          Somos de acá. Conocemos el viento, la nieve y la amplitud térmica que
+          tienen que aguantar los equipos, y sabemos cómo son las casas y los
+          comercios de la isla por dentro.
+        </p>
+        <p class="body-text max-w-xl mt-5">
+          Damos servicio en Ushuaia, Río Grande y Tolhuin. Cuando algo falla, no
+          hay que esperar a que venga alguien del continente.
+        </p>
+      </div>
+
+      <Foto
+        src="/img/servicios/obra-camara-poste.webp"
+        alt="Instalación de cámaras de INSOLVA Group con el canal Beagle y la montaña nevada de fondo, en Ushuaia"
+        ratio="aspect-[4/3]"
+        width={1200}
+        height={900}
+        class="reveal reveal-delay-1 photo-zoom"
+      />
+
+    </div>
+  </div>
+</section>

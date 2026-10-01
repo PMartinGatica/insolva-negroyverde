@@ -70,12 +70,12 @@ async function notificarPorEmail(row: {
     .join('');
 
   const html = `<div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:0 auto;">
-    <div style="background:#0A0A0A;padding:20px 24px;border-radius:6px 6px 0 0;">
+    <div style="background:#11140F;padding:20px 24px;border-radius:6px 6px 0 0;">
       <p style="margin:0;color:#98C665;font-size:12px;letter-spacing:2px;text-transform:uppercase;">INSOLVA · Nuevo lead del embudo</p>
       <h1 style="margin:6px 0 0;color:#fff;font-size:22px;">${escapeHtml(row.nombre)} quiere un presupuesto</h1>
     </div>
     <table style="width:100%;border-collapse:collapse;background:#f7f7f7;border-radius:0 0 6px 6px;">${rowsHtml}</table>
-    <p style="color:#9ca3af;font-size:12px;margin:14px 2px 0;">Lead guardado en Supabase (insolvaweb_leads). Origen: embudo-web.</p>
+    <p style="color:#AFB2AD;font-size:12px;margin:14px 2px 0;">Lead guardado en Supabase (insolvaweb_leads). Origen: embudo-web.</p>
   </div>`;
 
   const text =
