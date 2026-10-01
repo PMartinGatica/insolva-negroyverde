@@ -161,6 +161,12 @@ const HITOS = [
     white-space: pre;
   }
 
+  /* En celular la sección no se muestra ni descarga frames: pesaba, tardaba en
+     cargar y el scroll con frames no se sentía bien en pantalla chica. */
+  @media (max-width: 768px) {
+    .cs-section { display: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cs-hito { transition: none; }
   }
@@ -171,6 +177,7 @@ const HITOS = [
   function init() {
     var section = document.getElementById('construccion');
     if (!section) return;
+    if (window.innerWidth <= 768) return; // celular: sección oculta, no se cargan frames
     var canvas = document.getElementById('cs-canvas');
     var fallback = document.getElementById('cs-fallback');
     var hud = document.getElementById('cs-hud');

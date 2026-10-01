@@ -19,6 +19,12 @@ interface Props {
   class?: string;
   /** La primera foto visible de la página no debe ir en lazy. */
   eager?: boolean;
+  /**
+   * Prioridad de descarga. Todo lo que está abajo del pliegue va en `low` para
+   * no robarle ancho de banda a la imagen del LCP; la única que pelea por el
+   * primer pintado va en `high`.
+   */
+  prioridad?: 'high' | 'low' | 'auto';
 }
 
 const {
@@ -29,6 +35,7 @@ const {
   height = 600,
   class: clase = '',
   eager = false,
+  prioridad = 'low',
 } = Astro.props;
 ---
 
@@ -39,6 +46,7 @@ const {
     aria-hidden="true"
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"
+    fetchpriority={prioridad}
     class="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-55"
   />
   <img
@@ -46,6 +54,7 @@ const {
     alt={alt}
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"
+    fetchpriority={prioridad}
     width={width}
     height={height}
     class="relative w-full h-full object-contain"

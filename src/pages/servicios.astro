@@ -60,7 +60,7 @@ const schemas = [listaSchema, breadcrumbSchema([{ name: 'Servicios', path }])];
                 <article class="grid gap-6 py-10 md:grid-cols-[auto_1.4fr_1fr] md:items-center md:gap-10">
 
                   <a href={`/${serv.slug}/`} class="block w-full md:w-52 shrink-0" tabindex="-1" aria-hidden="true">
-                    <Foto src={serv.hero.src} alt="" width={400} height={300} class="photo-zoom" />
+                    <Foto src={serv.hero.src} alt="" width={400} height={300} class="photo-zoom" eager={i === 0} prioridad={i === 0 ? 'high' : 'low'} />
                   </a>
 
                   <div>

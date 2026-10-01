@@ -15,7 +15,13 @@ const SRC = 'assets/source/fotos-originales';
 const OUT = 'public/img/servicios';
 // Presupuesto: ninguna foto por encima de ~180 KB. Son fotos verticales de
 // celular; a 1200px de ancho ya se ven nítidas en pantalla retina.
+//
+// El tope de ALTO es el que hace cumplir ese presupuesto: limitar solo el ancho
+// dejaba pasar verticales de 1200x2133 (2,56 MP) que pesaban 290-390 KB, muy por
+// encima del presupuesto. Con `fit: 'inside'` la foto se reduce hasta entrar en
+// la caja, sin recortar nada.
 const ANCHO_MAX = 1200;
+const ALTO_MAX = 1600;
 const CALIDAD = 72;
 
 // origen → nombre de salida. Las claves se resuelven contra el listado real
@@ -97,7 +103,7 @@ for (const [origen, destino, opciones = {}] of MAPA) {
   }
 
   const info = await sharp(entrada)
-    .resize({ width: ANCHO_MAX, withoutEnlargement: true })
+    .resize({ width: ANCHO_MAX, height: ALTO_MAX, fit: 'inside', withoutEnlargement: true })
     .webp({ quality: opciones.calidad ?? CALIDAD })
     .toFile(salida);
   console.log(`  ${destino}.webp  ${info.width}x${info.height}  ${(info.size / 1024).toFixed(0)} KB`);
