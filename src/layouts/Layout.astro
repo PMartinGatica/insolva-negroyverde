@@ -85,8 +85,15 @@ const todosLosSchemas = [organizationSchema(), ...schemas];
       crossorigin
     />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/isotipo-verde.svg" />
+    <!-- Favicon. Google pide un cuadrado de tamaño múltiplo de 48 (48/96/144): el
+         isotipo SVG mide 888x1075, o sea vertical, así que no le servía y mostraba
+         su marcador genérico. Los PNG y el .ico salen de scripts/build-favicons.mjs. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144.png" />
+    <!-- El SVG queda último, para que lo prefieran los navegadores que lo soportan. -->
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/isotipo-verde.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Schema.org -->
