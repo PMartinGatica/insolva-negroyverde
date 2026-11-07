@@ -78,6 +78,14 @@ const MAPA = [
   ['electricidad-caja-cables-steelframe.jpg',   'electricidad-caja-cables', { calidad: 58 }],
   ['cerradura-conexion-cable.jpg',              'cerraduras-conexion-cable'],
   ['cerradura-puerta-4-terminada.jpg',          'cerraduras-puerta-terminada'],
+
+  // Tanda 2026-10-29: red Omada con nodos mesh y tablero con control ESP32.
+  ['electricidad-tablero-esp32.jpg',            'electricidad-tablero-esp32'],
+  ['redes-rack-instalacion.jpg',                'redes-rack-instalacion'],
+  ['redes-ap-mesh-living.jpg',                  'redes-ap-mesh-living'],
+  ['redes-rack-detalle.jpg',                    'redes-rack-detalle'],
+  ['redes-rack-terminado.jpg',                  'redes-rack-terminado'],
+  ['redes-equipos-omada.png',                   'redes-equipos-omada'],
 ];
 
 const existentes = new Set(await readdir(SRC));

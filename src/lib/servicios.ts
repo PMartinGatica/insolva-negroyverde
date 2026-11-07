@@ -652,7 +652,7 @@ export const SERVICIOS: Servicio[] = [
     description:
       'Instalación de redes WiFi, cableado estructurado y antenas Starlink en Ushuaia, Río Grande y Tolhuin. Cobertura pareja para casas, comercios y obradores sin fibra.',
     keywords:
-      'redes WiFi Ushuaia, instalación de redes Ushuaia, Starlink Ushuaia, Starlink Tierra del Fuego, cableado estructurado Ushuaia, WiFi para comercio Ushuaia, internet en obra Tierra del Fuego, access point Ushuaia',
+      'redes WiFi Ushuaia, WiFi mesh Ushuaia, nodos mesh, Omada Ushuaia, instalación de redes Ushuaia, Starlink Ushuaia, Starlink Tierra del Fuego, cableado estructurado Ushuaia, WiFi para comercio Ushuaia, internet en obra Tierra del Fuego, access point Ushuaia',
     eyebrow: 'REDES E INFRAESTRUCTURA · TIERRA DEL FUEGO',
     h1: 'Redes WiFi, cableado y Starlink',
     h1Destacado: 'en Tierra del Fuego.',
@@ -680,9 +680,9 @@ export const SERVICIOS: Servicio[] = [
           'Medimos dónde llega la señal y dónde se cae antes de proponerte equipos. Así sabemos si hace falta un access point más o alcanza con mover lo que ya tenés.',
       },
       {
-        titulo: 'Access points y WiFi en malla',
+        titulo: 'Access points y nodos mesh',
         texto:
-          'Cobertura pareja en toda la casa o el local, con un solo nombre de red y sin tener que andar cambiando de red al pasar de ambiente.',
+          'Nodos de pared, de techo y de exterior repartidos por la casa o el local, todos administrados como una sola red. Un solo nombre de red y sin cortes al pasar de un ambiente a otro.',
       },
       {
         titulo: 'Cableado estructurado',
@@ -714,6 +714,16 @@ export const SERVICIOS: Servicio[] = [
       },
       {
         numero: '02',
+        titulo: 'Una red gestionada, con nodos mesh y rack propio',
+        texto:
+          'En las casas grandes armamos la red sobre equipos TP-Link Omada: gateway, controlador y switch PoE+ en un rack de pared, y access points repartidos por los ambientes. Se administra todo desde un panel, con el mapa de la red a la vista, y cada nodo se alimenta por el mismo cable de red.',
+        foto: {
+          src: '/img/servicios/redes-rack-terminado.webp',
+          alt: 'Rack de pared de INSOLVA con gateway y controlador Omada y un switch PoE+ de 8 puertos, con el cableado ordenado',
+        },
+      },
+      {
+        numero: '03',
         titulo: 'Starlink donde no llega la fibra',
         texto:
           'Para obradores, cabañas y zonas sin conexión fija, instalamos y dejamos funcionando antenas Starlink. Es lo que permite tener internet y cámaras en un lugar donde antes no había nada.',
@@ -723,7 +733,7 @@ export const SERVICIOS: Servicio[] = [
         },
       },
       {
-        numero: '03',
+        numero: '04',
         titulo: 'Cableado hoy, para no romper mañana',
         texto:
           'Si estás en obra, este es el momento de dejar las bocas de red donde van a hacer falta. Pasar un cable antes de cerrar la pared cuesta una fracción de lo que cuesta después.',
@@ -751,6 +761,10 @@ export const SERVICIOS: Servicio[] = [
       },
     ],
     galeria: [
+      { src: '/img/servicios/redes-rack-instalacion.webp', alt: 'Técnico de INSOLVA Group conectando los equipos de red en un rack de pared' },
+      { src: '/img/servicios/redes-rack-detalle.webp', alt: 'Detalle del rack: controlador y gateway Omada sobre un switch PoE+ TL-SG1008MP' },
+      { src: '/img/servicios/redes-ap-mesh-living.webp', alt: 'Access point blanco instalado en el living de una casa de Tierra del Fuego' },
+      { src: '/img/servicios/redes-equipos-omada.webp', alt: 'Equipos Omada listos para instalar: gateway, controlador, access points de pared y de exterior, y switch PoE+' },
       { src: '/img/servicios/redes-starlink-instalacion.webp', alt: 'Montaje de una antena Starlink en el frente de una vivienda de Tierra del Fuego' },
       { src: '/img/servicios/obra-starlink-camara.webp', alt: 'Antena Starlink dando conectividad a una obra frente al canal Beagle' },
       { src: '/img/servicios/obra-cableado-steelframe.webp', alt: 'Cableado y canalizaciones pasados dentro de un tabique de steel frame, antes de cerrar la pared' },
@@ -761,6 +775,11 @@ export const SERVICIOS: Servicio[] = [
         pregunta: 'Tengo buena velocidad contratada pero el WiFi anda mal. ¿Por qué?',
         respuesta:
           'Casi siempre es un problema de cobertura, no de velocidad. Un solo router tiene que atravesar paredes y losas para llegar a todos lados, y no llega. Se resuelve sumando access points en los puntos correctos, no contratando más megas.',
+      },
+      {
+        pregunta: '¿Qué es una red con nodos mesh y cuándo conviene?',
+        respuesta:
+          'Es una red donde varios access points trabajan juntos como si fueran uno solo. Conviene en casas grandes, de dos plantas o con paredes gruesas, donde un solo router no llega. Con los nodos bien ubicados el celular pasa de un ambiente a otro sin cortarse ni cambiar de red.',
       },
       {
         pregunta: '¿Instalan Starlink?',
@@ -875,6 +894,16 @@ export const SERVICIOS: Servicio[] = [
       },
       {
         numero: '03',
+        titulo: 'Tableros con IoT: una hidrolavadora que se paga desde el celular',
+        texto:
+          'Un tablero eléctrico puede hacer más que proteger: puede ser parte de un negocio. En la foto, el tablero de una hidrolavadora con protecciones y contactores para los motores, y una placa con ESP32 y relés que la enciende desde el celular una vez que el usuario paga por Mercado Pago. Electricidad e IoT diseñados juntos, en un solo tablero.',
+        foto: {
+          src: '/img/servicios/electricidad-tablero-esp32.webp',
+          alt: 'Tablero eléctrico de una hidrolavadora con térmicas, contactores y una placa ESP32 con relés que la activa desde el celular tras el pago por Mercado Pago',
+        },
+      },
+      {
+        numero: '04',
         titulo: 'Preparada para lo que venga después',
         texto:
           'Dejamos previstos los puntos de alimentación y las canalizaciones para sumar cámaras, red o automatización más adelante, aunque hoy no los instales. Es la diferencia entre agregar algo en una tarde o tener que rehacer media instalación.',
@@ -902,6 +931,7 @@ export const SERVICIOS: Servicio[] = [
       },
     ],
     galeria: [
+      { src: '/img/servicios/electricidad-tablero-esp32.webp', alt: 'Tablero de hidrolavadora con control IoT (ESP32 y relés), accionada desde el celular con pago por Mercado Pago' },
       { src: '/img/servicios/electricidad-cableado-rollos.webp', alt: 'Cable unipolar de distintos colores desenrollado en una obra, listo para pasar por las canalizaciones' },
       { src: '/img/servicios/obra-steelframe-montaje.webp', alt: 'Técnico de INSOLVA Group montando la estructura de un tabique antes de pasar la instalación' },
       { src: '/img/servicios/electricidad-casa-01.webp', alt: 'Instalación eléctrica domiciliaria en Ushuaia' },

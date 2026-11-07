@@ -14,6 +14,8 @@
  * Tipos:
  *   'fondo-blanco'  el brillo define la opacidad (lo oscuro queda, el blanco se va)
  *   'transparente'  ya trae canal alfa; se usa tal cual
+ *   'letras-claras' letras blancas sobre un bloque de color (YPF): el bloque se va y
+ *                   quedan las letras como tinta, igual que el resto de los logos
  * `recortarIzq` descarta esa cantidad de píxeles de la izquierda (p. ej. el panel
  * con el gallo de Chez Manu, que es un fondo gris semitransparente y no se puede
  * pasar a una tinta sin que quede un bloque sólido).
@@ -40,6 +42,10 @@ async function mono(archivo, salida, { tipo, ancho = 560, recortarIzq = 0 }) {
     if (tipo === 'fondo-blanco') {
       const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
       alpha = Math.max(0, Math.min(255, Math.round((255 - lum) * 1.25))); // 1.25: aprieta el contraste
+    } else if (tipo === 'letras-claras') {
+      const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      const base = 67; // brillo del azul de YPF: por debajo es fondo, por encima son las letras
+      alpha = Math.max(0, Math.min(255, Math.round(((lum - base) * 255) / (255 - base))));
     } else {
       alpha = a;
     }
@@ -57,3 +63,4 @@ await mono('PRISMATICA.JPG', 'prismatica', { tipo: 'fondo-blanco', ancho: 520 })
 await mono('logo-chez-manu.JPG', 'chez-manu', { tipo: 'transparente', ancho: 520, recortarIzq: 46 });
 await mono('logo.png', 'biorn', { tipo: 'fondo-blanco', ancho: 420 });
 await mono('logo-k.jpg', 'k', { tipo: 'fondo-blanco', ancho: 420 });
+await mono('Logo_de_YPF.svg.webp', 'ypf', { tipo: 'letras-claras', ancho: 520 });
