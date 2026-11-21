@@ -1,17 +1,17 @@
 /**
- * Funnel de guías gratis.
+ * Funnel de guías gratis (app aparte, Next.js en Vercel).
  *
- * Es una app aparte (Next.js en Vercel) que cambia guías, un curso y fichas
- * técnicas por los datos de contacto de la persona. Este sitio solo la enlaza.
+ * Desde noviembre 2026 las guías se publican abiertas en /guias/ de este sitio
+ * (para SEO/GEO/AEO). El funnel queda como captación: desde cada guía se lo
+ * enlaza con "Sumarme al grupo", y ahí la persona deja sus datos y entra al
+ * grupo de WhatsApp de beneficios.
  *
  * POR QUÉ UN ENLACE Y NO UN FORMULARIO PROPIO: el funnel guarda los leads en su
  * propio `/api/lead`, y ese endpoint no manda cabeceras CORS. Un formulario de
  * este sitio (estático, en Hostinger) no podría enviarle datos desde el
  * navegador. Para hacerlo habría que habilitar CORS en la app del funnel.
  *
- * PARA CAMBIAR LA DIRECCIÓN: basta con editar `FUNNEL_URL`. Lo recomendable es
- * pasarlo a un subdominio propio (p. ej. guias.insolvagroup.com) apuntado a
- * Vercel: queda bajo la marca y no depende de un `.vercel.app`.
+ * PARA CAMBIAR LA DIRECCIÓN: basta con editar `FUNNEL_URL`.
  */
 export const FUNNEL_URL = 'https://funnel-ventas.vercel.app/';
 

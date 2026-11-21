@@ -159,3 +159,74 @@ export function serviceSchema(opts: {
     },
   };
 }
+
+/**
+ * Una guía publicada. `about` ata la guía al servicio relacionado y `author` y
+ * `publisher` a la empresa: le dicen a Google y a los buscadores con IA que el
+ * contenido es de un prestador local de ese rubro (E-E-A-T).
+ */
+export function articleSchema(opts: {
+  titulo: string;
+  descripcion: string;
+  path: string;
+  imagen?: string;
+  publicado: string;
+  actualizado: string;
+  palabras: number;
+  seccion: string;
+  temas: string[];
+  servicios: string[];
+}) {
+  const url = absoluteUrl(opts.path);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${url}#guia`,
+    headline: opts.titulo,
+    description: opts.descripcion,
+    url,
+    mainEntityOfPage: url,
+    ...(opts.imagen ? { image: [absoluteUrl(opts.imagen)] } : {}),
+    datePublished: opts.publicado,
+    dateModified: opts.actualizado,
+    inLanguage: 'es-AR',
+    wordCount: opts.palabras,
+    articleSection: opts.seccion,
+    keywords: opts.temas.join(', '),
+    isAccessibleForFree: true,
+    author: { '@id': ORG_ID },
+    publisher: { '@id': ORG_ID },
+    about: opts.servicios.map((slug) => ({ '@id': `${absoluteUrl(`/${slug}`)}#servicio` })),
+    spatialCoverage: { '@type': 'AdministrativeArea', name: 'Tierra del Fuego, Argentina' },
+  };
+}
+
+/** Índice de guías: una colección con la lista ordenada de artículos. */
+export function collectionSchema(opts: {
+  nombre: string;
+  descripcion: string;
+  path: string;
+  items: { nombre: string; path: string }[];
+}) {
+  const url = absoluteUrl(opts.path);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${url}#coleccion`,
+    name: opts.nombre,
+    description: opts.descripcion,
+    url,
+    inLanguage: 'es-AR',
+    publisher: { '@id': ORG_ID },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: opts.items.length,
+      itemListElement: opts.items.map((it, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: it.nombre,
+        url: absoluteUrl(it.path),
+      })),
+    },
+  };
+}

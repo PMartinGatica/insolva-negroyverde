@@ -1,18 +1,16 @@
 ---
-import { funnelLink } from '../../lib/funnel';
 
 /*
-  Puerta al funnel de guías gratis. Los cuatro ítems son los que el funnel
-  promete hoy en su propia página; si allá cambia el contenido, se actualiza
-  acá (no se agrega nada que el funnel no entregue).
+  Puerta a /guias/. Los cuatro ítems resumen lo que hay publicado en
+  src/lib/guias.ts; si cambia el contenido, se actualiza acá.
 */
-const href = funnelLink('home');
+const href = '/guias/';
 
 const incluye = [
   '5 guías para elegir cámaras, alarmas, WiFi y cerraduras',
   'Un curso de domótica desde cero, en 5 lecciones',
   'Fichas técnicas de 3 cerraduras digitales, para comparar',
-  'El grupo de WhatsApp con las promos de instalación',
+  'Checklists para la obra y la instalación eléctrica',
 ];
 ---
 
@@ -30,11 +28,11 @@ const incluye = [
         qué pedir en un presupuesto.
       </p>
       <p class="body-text mt-4 max-w-xl">
-        Dejás tus datos y se abre todo. Es gratis y te lleva dos minutos.
+        Es gratis y se lee sin registrarte.
       </p>
       <div class="mt-9">
-        <a href={href} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
-          Quiero las guías gratis
+        <a href={href} class="btn btn-ghost">
+          Ver las guías gratis
         </a>
       </div>
     </div>

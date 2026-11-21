@@ -2,7 +2,6 @@
 import { BRAND } from '../../lib/constants';
 import { SERVICIOS } from '../../lib/servicios';
 import { CANAL_URL } from '../../lib/videos';
-import { funnelLink } from '../../lib/funnel';
 
 // El footer enlaza las seis páginas de servicio desde TODAS las páginas del
 // sitio. Es la forma más barata de que Google las descubra y de repartirles
@@ -76,7 +75,7 @@ const anio = new Date().getFullYear();
             </a>
           </li>
           <li>
-            <a href={funnelLink('footer')} target="_blank" rel="noopener noreferrer" class="text-sm text-[#AFB2AD] hover:text-[#98C665] transition-colors" style="font-family:'Space Grotesk',sans-serif;">
+            <a href="/guias/" class="text-sm text-[#AFB2AD] hover:text-[#98C665] transition-colors" style="font-family:'Space Grotesk',sans-serif;">
               Guías gratis
             </a>
           </li>

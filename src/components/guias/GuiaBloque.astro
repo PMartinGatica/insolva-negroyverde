@@ -1,0 +1,133 @@
+---
+import type { Bloque } from '../../lib/guias';
+
+/**
+ * Un bloque de contenido de una guía. Mismo set de tipos que el embudo
+ * (p, h, leccion, lista, check, pasos, nota, specs, comparativa), dibujado con
+ * las clases del sitio. Los títulos de bloque son h2/h3 reales: es la
+ * estructura que leen Google y los buscadores con IA.
+ */
+interface Props {
+  bloque: Bloque;
+  /** Número de lección vigente (solo cuenta para los bloques "leccion"). */
+  numero: number;
+}
+
+const { bloque: b, numero } = Astro.props;
+const dos = (n: number) => String(n).padStart(2, '0');
+---
+
+{b.tipo === 'p' && <p class="guia-p">{b.texto}</p>}
+
+{b.tipo === 'h' && <h2 class="heading-card text-[#11140F] mt-6">{b.texto}</h2>}
+
+{b.tipo === 'leccion' && (
+  <div id={`leccion-${numero}`} class="mt-10 scroll-mt-28 border-t-2 border-[#11140F] pt-5 first:mt-0">
+    <p class="eyebrow">Lección {dos(numero)}</p>
+    <h2 class="heading-sub text-[#11140F] mt-2">{b.titulo}</h2>
+  </div>
+)}
+
+{b.tipo === 'lista' && (
+  <ul class="flex flex-col gap-3">
+    {b.items.map((it) => (
+      <li class="grid grid-cols-[1.25rem_1fr] gap-2 guia-li">
+        <span aria-hidden="true" class="mt-[0.8em] h-0.5 w-3 bg-[var(--green-text)]"></span>
+        <span>{it}</span>
+      </li>
+    ))}
+  </ul>
+)}
+
+{b.tipo === 'check' && (
+  <div class="mt-2 border border-[#11140F]/12 bg-white p-5 sm:p-7">
+    {b.titulo && <h2 class="heading-card text-[#11140F] mb-5 !text-[1.2rem]">{b.titulo}</h2>}
+    <ul class="flex flex-col gap-3.5">
+      {b.items.map((it) => (
+        <li class="grid grid-cols-[1.5rem_1fr] gap-3 text-[1.02rem] leading-[1.6] text-[#11140F]">
+          <svg class="mt-0.5 size-5 text-[var(--green-text)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" /></svg>
+          <span>{it}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+{b.tipo === 'pasos' && (
+  <ol class="flex flex-col border-t border-[#11140F]/12">
+    {b.items.map((it, i) => (
+      <li class="grid grid-cols-[3rem_1fr] gap-4 border-b border-[#11140F]/12 py-6 sm:grid-cols-[4rem_1fr]">
+        <span aria-hidden="true" class="num-index !text-[2rem]">{dos(i + 1)}</span>
+        <div class="flex flex-col gap-2">
+          <h3 class="text-lg font-semibold text-[#11140F]">{it.titulo}</h3>
+          <p class="guia-li">{it.texto}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+)}
+
+{b.tipo === 'nota' && (
+  <aside class="my-2 border-l-2 border-[var(--green-text)] bg-[#98C665]/12 px-5 py-4">
+    <p class="font-semibold text-[#11140F]">{b.titulo}</p>
+    <p class="mt-1.5 guia-li">{b.texto}</p>
+  </aside>
+)}
+
+{b.tipo === 'specs' && (
+  <div class="border border-[#11140F]/12 bg-white">
+    {b.titulo && (
+      <h2 class="eyebrow !text-[#4E514A] border-b border-[#11140F]/12 bg-[#F4F7F1] px-5 py-3">{b.titulo}</h2>
+    )}
+    <dl class="divide-y divide-[#11140F]/12">
+      {b.filas.map(([k, v]) => (
+        <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-[12rem_1fr] sm:gap-4">
+          <dt class="text-sm text-[#72766F]">{k}</dt>
+          <dd class="font-medium text-[#11140F]">{v}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+)}
+
+{b.tipo === 'comparativa' && (
+  <div class="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+    <table class="w-full min-w-[32rem] border-collapse text-left text-[0.95rem]">
+      <thead>
+        <tr>
+          {b.columnas.map((c) => (
+            <th scope="col" class="border-b-2 border-[#11140F] pb-3 pr-4 align-bottom heading-card !text-base text-[#11140F]">
+              {c || <span class="sr-only">Característica</span>}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {b.filas.map((fila) => (
+          <tr class="border-b border-[#11140F]/12">
+            {fila.map((celda, i) =>
+              b.columnas[0] === '' && i === 0 ? (
+                <th scope="row" class="py-3.5 pr-4 align-top text-sm font-semibold text-[#11140F]">{celda}</th>
+              ) : (
+                <td class="py-3.5 pr-4 align-top text-[#4E514A]">{celda}</td>
+              )
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+
+<style>
+  .guia-p {
+    font-size: 1.075rem;
+    line-height: 1.75;
+    color: var(--text-on-light-2);
+  }
+  .guia-li {
+    font-size: 1.03rem;
+    line-height: 1.7;
+    color: var(--text-on-light-2);
+  }
+</style>

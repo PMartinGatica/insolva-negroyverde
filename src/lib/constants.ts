@@ -228,6 +228,7 @@ export const SERVICIOS_SEGURIDAD = [
 export const NAV_LINKS = [
   { label: "Servicios", href: "/servicios/" },
   { label: "Trabajos", href: "/trabajos/" },
+  { label: "Guías", href: "/guias/" },
   { label: "Nosotros", href: "/nosotros/" },
   { label: "Contacto", href: "/contacto/" },
   // Tienda fuera del menú hasta que el WooCommerce esté listo (pedido del

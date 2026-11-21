@@ -10,7 +10,6 @@ import CookieBanner from '../components/ui/CookieBanner.astro';
 import { BRAND } from '../lib/constants';
 import { CANAL_URL } from '../lib/videos';
 import { whatsappLink } from '../lib/whatsapp';
-import { funnelLink } from '../lib/funnel';
 import { breadcrumbSchema } from '../lib/seo';
 
 const path = '/contacto';
@@ -143,10 +142,10 @@ const schemas = [breadcrumbSchema([{ name: 'Contacto', path }])];
             <h3 class="heading-card text-[#11140F] mb-3">Guías gratis</h3>
             <p class="body-text">
               Guías para elegir, un curso de domótica y fichas técnicas de
-              cerraduras. Dejás tus datos y se abre todo.
+              cerraduras, gratis y sin registrarte.
             </p>
-            <a href={funnelLink('contacto')} target="_blank" rel="noopener noreferrer" class="link-arrow mt-4">
-              Quiero las guías <span aria-hidden="true">→</span>
+            <a href="/guias/" class="link-arrow mt-4">
+              Ver las guías <span aria-hidden="true">→</span>
             </a>
           </div>
 

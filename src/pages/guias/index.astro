@@ -1,0 +1,117 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import WhatsAppFloat from '../../components/ui/WhatsAppFloat.astro';
+import CookieBanner from '../../components/ui/CookieBanner.astro';
+import { FORMATOS, FORMATO_PLURAL, GUIAS, interesDe, leccionesDe, tituloDe } from '../../lib/guias';
+import { breadcrumbSchema, collectionSchema } from '../../lib/seo';
+import { funnelLink } from '../../lib/funnel';
+import { whatsappLink } from '../../lib/whatsapp';
+
+const path = '/guias';
+const titulo = 'Guías gratis para elegir cámaras, alarmas, WiFi y cerraduras | INSOLVA Group';
+const descripcion =
+  'Guías para elegir cámaras de seguridad, alarmas, cerraduras digitales y WiFi, un curso de domótica, fichas técnicas y checklists de obra. Escritas por instaladores de Ushuaia, Tierra del Fuego.';
+
+// Secciones por formato, en el orden de FORMATOS, salteando las vacías.
+const secciones = FORMATOS.map((formato) => ({
+  formato,
+  titulo: FORMATO_PLURAL[formato],
+  guias: GUIAS.filter((g) => g.formato === formato),
+})).filter((s) => s.guias.length > 0);
+
+const grupo = funnelLink('guias-indice');
+const wa = whatsappLink({
+  message: 'Hola INSOLVA, estuve leyendo las guías y quiero pedir un presupuesto.',
+});
+---
+
+<Layout
+  title={titulo}
+  description={descripcion}
+  path={path}
+  keywords="cómo elegir cámaras de seguridad, qué alarma comprar, cerradura digital cuál conviene, WiFi en toda la casa, curso de domótica, checklist de obra, guías seguridad electrónica Ushuaia, Tierra del Fuego"
+  schemas={[
+    breadcrumbSchema([{ name: 'Guías', path }]),
+    collectionSchema({
+      nombre: 'Guías de INSOLVA Group',
+      descripcion,
+      path,
+      items: GUIAS.map((g) => ({ nombre: tituloDe(g), path: `/guias/${g.slug}` })),
+    }),
+  ]}
+>
+  <Header heroOscuro />
+
+  <main>
+    <PageHero
+      eyebrow="GUÍAS GRATIS"
+      titulo="Antes de gastar,"
+      destacado="leé esto."
+      lead="Guías para elegir, un curso de domótica, fichas técnicas y checklists. Las escribimos con lo que vemos instalando en Ushuaia, Río Grande y Tolhuin, para que sepas qué equipo conviene y qué pedir en un presupuesto."
+      trail={[{ name: 'Guías', path }]}
+      foto="/img/guias/camaras-instalando-alero.webp"
+    />
+
+    {secciones.map((s, si) => (
+      <section class={`section ${si % 2 === 0 ? 'section-light' : 'section-paper'}`} aria-labelledby={`sec-${si}`}>
+        <div class="wrap grid gap-10 lg:grid-cols-[18rem_1fr] lg:gap-16">
+          <div class="reveal">
+            <span class="num-index mb-4" aria-hidden="true">{String(si + 1).padStart(2, '0')}</span>
+            <h2 id={`sec-${si}`} class="heading-sub text-[#11140F]">{s.titulo}</h2>
+          </div>
+
+          <ul class="reveal reveal-delay-1 border-t border-[#11140F]/12">
+            {s.guias.map((g) => {
+              const lecciones = leccionesDe(g).length;
+              return (
+                <li class="border-b border-[#11140F]/12">
+                  <a href={`/guias/${g.slug}/`} class="group grid gap-2 py-6 sm:grid-cols-[1fr_auto] sm:gap-8 sm:items-start">
+                    <div>
+                      <h3 class="heading-card text-[#11140F] group-hover:text-[var(--green-text)] transition-colors">
+                        {tituloDe(g)}
+                      </h3>
+                      <p class="body-text mt-2 max-w-2xl">{g.bajada}</p>
+                      <p class="mt-3 text-xs text-[#72766F]" style="font-family:'Space Grotesk',sans-serif;">
+                        {g.intereses.slice(0, 3).map((i) => `#${interesDe(i).tag}`).join('  ')}
+                      </p>
+                    </div>
+                    <span class="link-arrow whitespace-nowrap sm:pt-1">
+                      {lecciones > 0 ? `${lecciones} lecciones · ` : ''}{g.minutos} min
+                      <span aria-hidden="true">→</span>
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    ))}
+
+    <!-- ── CAPTACIÓN ─────────────────────────────────────────── -->
+    <section class="section section-void on-dark">
+      <div class="wrap grid gap-12 lg:grid-cols-2 lg:gap-20 lg:items-end">
+        <div class="reveal">
+          <p class="eyebrow mb-5">GRUPO DE BENEFICIOS</p>
+          <h2 class="heading-display text-white">Las guías nuevas<br />y las promos, primero.</h2>
+          <p class="body-lead mt-6">
+            Sumate al grupo de WhatsApp de INSOLVA: te avisamos cuando sale una guía
+            y las promos de instalación salen ahí antes que en ningún lado. Es de
+            avisos, salís cuando quieras.
+          </p>
+        </div>
+        <div class="reveal reveal-delay-1 flex flex-wrap gap-4 lg:justify-end">
+          <a href={grupo} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Sumarme al grupo</a>
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Pedir presupuesto</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <WhatsAppFloat />
+  <CookieBanner />
+</Layout>
