@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { BRAND } from '../lib/constants';
-import { absoluteUrl, organizationSchema } from '../lib/seo';
+import { absoluteUrl, organizationSchema, websiteSchema } from '../lib/seo';
 
 interface Props {
   title?: string;
@@ -33,7 +33,7 @@ const ogImageType = /\.jpe?g$/i.test(ogImage) ? 'image/jpeg' : 'image/png';
 
 // La ficha de empresa va en todas las páginas con el mismo @id; los schemas de
 // la página se cuelgan de ella.
-const todosLosSchemas = [organizationSchema(), ...schemas];
+const todosLosSchemas = [organizationSchema(), websiteSchema(), ...schemas];
 ---
 
 <!doctype html>

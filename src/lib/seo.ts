@@ -32,7 +32,25 @@ export function organizationSchema() {
     '@type': 'ProfessionalService',
     '@id': ORG_ID,
     name: BRAND.name,
+    alternateName: ['INSOLVA', 'Insolva Ushuaia'],
     url: SITE_URL,
+    // knowsAbout: los temas en los que la empresa es referente. Los buscadores
+    // con IA lo usan para decidir a quién citar cuando alguien pregunta por
+    // estos temas en Tierra del Fuego.
+    knowsAbout: [
+      'Integración tecnológica',
+      'Cámaras de seguridad',
+      'CCTV y cámaras IP',
+      'Alarmas',
+      'Cerraduras digitales',
+      'Control de acceso',
+      'Domótica',
+      'Redes WiFi',
+      'Starlink',
+      'Cableado estructurado',
+      'Instalaciones eléctricas',
+      'Automatización',
+    ],
     logo: `${SITE_URL}/logo.png`,
     image: `${SITE_URL}/og-image.png`,
     description: BRAND.description,
@@ -69,6 +87,23 @@ export function organizationSchema() {
     // sameAs consolida la entidad: le dice a Google que el sitio, el Instagram
     // y el canal de YouTube son el mismo negocio.
     sameAs: [BRAND.instagramUrl, CANAL_URL],
+  };
+}
+
+/**
+ * El sitio como tal. Le da a Google el nombre que muestra arriba de cada
+ * resultado ("INSOLVA Group" en vez de la URL) y lo ata a la empresa.
+ */
+export function websiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#sitio`,
+    name: BRAND.name,
+    alternateName: 'INSOLVA',
+    url: `${SITE_URL}/`,
+    inLanguage: 'es-AR',
+    publisher: { '@id': ORG_ID },
   };
 }
 

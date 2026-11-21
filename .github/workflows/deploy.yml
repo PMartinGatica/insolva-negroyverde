@@ -36,3 +36,20 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: deploy
+
+      # Le avisa a Bing (y a Yandex, Seznam, Naver) qué URLs hay, para que las
+      # rastree enseguida. Bing alimenta también a ChatGPT Search, Copilot y
+      # DuckDuckGo. Se espera un poco a que Hostinger tome la rama deploy.
+      # Si falla no frena el deploy.
+      - name: Avisar a IndexNow
+        continue-on-error: true
+        run: |
+          sleep 90
+          KEY=08f27160d4fcf0ae4dab9630ea857c1c
+          URLS=$(grep -ho '<loc>[^<]*</loc>' dist/sitemap-*.xml | sed 's/<[^>]*>//g' | grep -v 'sitemap' | jq -R . | jq -s -c .)
+          jq -n --arg key "$KEY" --argjson urls "$URLS" \
+            '{host: "insolvagroup.com", key: $key, keyLocation: ("https://insolvagroup.com/" + $key + ".txt"), urlList: $urls}' > indexnow.json
+          curl -sS -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data @indexnow.json \
+            -w 'IndexNow HTTP %{http_code}\n'
