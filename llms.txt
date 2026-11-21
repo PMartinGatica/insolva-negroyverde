@@ -17,6 +17,25 @@ El canal de contacto y presupuesto es WhatsApp: +54 9 2901 64-1452.
 - [Redes WiFi, cableado y Starlink](https://insolvagroup.com/redes-wifi-tierra-del-fuego): access points y WiFi en malla, cableado estructurado, switches PoE e instalación de antenas Starlink donde no llega la fibra.
 - [Instalaciones eléctricas](https://insolvagroup.com/electricidad-tierra-del-fuego): obra nueva, reformas, tableros, puesta a tierra y canalizaciones para casas, comercios, industrias y obras.
 
+## Guías
+
+Guías gratuitas y abiertas para elegir equipos antes de comprar, escritas por el equipo técnico de INSOLVA.
+
+- [Todas las guías](https://insolvagroup.com/guias/): índice de guías, curso, fichas técnicas, comparativas y checklists.
+- [Cómo elegir cámaras sin pagar de más](https://insolvagroup.com/guias/como-elegir-camaras/): Megapíxeles, lentes, visión nocturna y dónde queda guardado lo que graban. Qué conviene mirar y qué casi no cambia nada.
+- [8 preguntas antes de aceptar un presupuesto de cámaras](https://insolvagroup.com/guias/preguntas-presupuesto-camaras/): Dos presupuestos con la misma cantidad de cámaras pueden ser sistemas muy distintos. Qué preguntar para comparar de igual a igual.
+- [¿Cámaras, alarma o las dos?](https://insolvagroup.com/guias/camaras-o-alarma/): Hacen cosas distintas: una te muestra lo que pasó y la otra te avisa mientras pasa. Cómo decidir según tu casa o tu negocio.
+- [Cómo elegir una cerradura digital: 6 cosas para mirar](https://insolvagroup.com/guias/como-elegir-cerradura-digital/): Huella, código, tarjeta o app. Qué conviene según tu puerta, cómo se alimenta y qué pasa si se queda sin pilas.
+- [WiFi en toda la casa: qué solución elegir](https://insolvagroup.com/guias/wifi-en-toda-la-casa/): Paredes, aislaciones con foil, un router en un rincón. Por qué se corta la señal y qué soluciones existen, de la más simple a la más prolija.
+- [Seguridad para tu comercio: qué elegir para caja, empleados y fuera de horario](https://insolvagroup.com/guias/seguridad-para-comercios/): Qué mirar con cámaras, cómo cuidar el local cuando está cerrado y qué dice la ley sobre filmar un lugar de trabajo.
+- [Domótica desde cero](https://insolvagroup.com/guias/curso-domotica-desde-cero/): Qué es, cómo se comunican los equipos, qué app elegir, qué conviene automatizar primero y cómo planificarla sin llenarte de aparatos que no se hablan entre sí.
+- [¿Qué cerradura digital te conviene? Las tres, lado a lado](https://insolvagroup.com/guias/comparativa-cerraduras-digitales/): Huella y clave, WiFi con app o portón con control remoto. En qué se diferencian y para qué puerta va cada una.
+- [Cerradura digital con huella dactilar y clave](https://insolvagroup.com/guias/ficha-cerradura-huella-y-clave/): Cerradura biométrica para puerta principal: abrís con huella, clave numérica o tarjeta.
+- [Cerradura inteligente WiFi con app, Alexa y Google Home](https://insolvagroup.com/guias/ficha-cerradura-wifi-app/): Se maneja desde el celular: abrís a distancia, ves quién entró y creás claves temporales.
+- [Cerradura digital para portón con control remoto](https://insolvagroup.com/guias/ficha-cerradura-porton-control-remoto/): Cerradura robusta para portones y garajes, para intemperie, con control remoto de largo alcance.
+- [Checklist de obra: lo que tiene que quedar previsto antes de cerrar paredes](https://insolvagroup.com/guias/checklist-de-obra/): Un caño vacío hoy cuesta poco. Romper una pared terminada para pasar un cable cuesta mucho más. Qué pedirle a tu constructor.
+- [Instalación eléctrica: 7 señales de que conviene revisarla](https://insolvagroup.com/guias/senales-instalacion-electrica/): Térmicas que saltan, enchufes calientes, zapatillas encadenadas. Lo que te está avisando tu instalación y cuándo llamar a un profesional.
+
 ## Otras páginas
 
 - [Todos los servicios](https://insolvagroup.com/servicios): índice de servicios con contacto directo por WhatsApp.
