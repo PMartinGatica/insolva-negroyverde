@@ -7,6 +7,11 @@ import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
 import CookieBanner from '../components/ui/CookieBanner.astro';
 import { whatsappLink } from '../lib/whatsapp';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '../lib/seo';
+import { existsSync } from 'node:fs';
+
+// Una foto solo se muestra si el archivo está en public/ (las de herramientas
+// Lean se suman a mano: ver CREDITOS_LEAN más abajo).
+const hayFoto = (src: string) => existsSync(new URL(`../../public${src}`, import.meta.url));
 
 /*
   INGENIERÍA DE PROCESOS + INTEGRACIÓN TECNOLÓGICA (para empresas).
@@ -77,15 +82,52 @@ const metodo = [
   },
 ];
 
+/*
+  Fotos de herramientas: Wikimedia Commons, licencia CC BY-SA (exige citar
+  autor y licencia; va en el pie de cada foto). Se bajan de los links de
+  `fuente`, se pasan a .webp y se guardan en public/img/empresas/lean/ con el
+  nombre de `foto`. Mientras no estén, la pestaña se ve sin foto.
+*/
+const LEAN = '/img/empresas/lean';
+const SCANFIL = { autor: 'Adrian Grycuk', licencia: 'CC BY-SA 3.0 PL', licenciaUrl: 'https://creativecommons.org/licenses/by-sa/3.0/pl/deed.es' };
+
 const herramientas = [
-  { nombre: '5S', que: 'Cinco pasos para ordenar un lugar de trabajo: clasificar, ordenar, limpiar, estandarizar y sostener.', sirve: 'Encontrar todo en segundos y que el orden dure.' },
-  { nombre: 'Kaizen', que: 'Mejora continua: cambios chicos y frecuentes, propuestos por la misma gente que hace el trabajo.', sirve: 'Mejorar todas las semanas sin grandes inversiones.' },
-  { nombre: 'Gemba', que: 'Ir al lugar donde se hace el trabajo para entender el problema antes de proponer una solución.', sirve: 'Decidir con lo que pasa de verdad, no con lo que se supone.' },
-  { nombre: 'Estandarización', que: 'Escribir la mejor forma conocida de hacer cada tarea, para que todos la hagan igual.', sirve: 'Menos errores y capacitar más rápido a la gente nueva.' },
-  { nombre: 'Gestión visual', que: 'Tableros, colores y señales que muestran de un vistazo cómo viene el trabajo.', sirve: 'Ver los desvíos en el momento, sin pedir un informe.' },
-  { nombre: 'Kanban', que: 'Tarjetas o señales que avisan cuándo reponer o producir, según lo que se consume.', sirve: 'Menos faltantes y menos stock parado.' },
-  { nombre: 'TPM', que: 'Mantenimiento productivo total: cuidar las máquinas entre todos para que no se rompan.', sirve: 'Menos paradas imprevistas y equipos que duran más.' },
-];
+  {
+    nombre: '5S', que: 'Cinco pasos para ordenar un lugar de trabajo: clasificar, ordenar, limpiar, estandarizar y sostener.', sirve: 'Encontrar todo en segundos y que el orden dure.',
+    foto: `${LEAN}/5s.webp`, alt: 'Tableros de 5S en una planta de producción', ...SCANFIL,
+    fuente: 'https://commons.wikimedia.org/wiki/File:Kaizen_5S_boards_Scanfil_Sieradz.jpg',
+  },
+  {
+    nombre: 'Kaizen', que: 'Mejora continua: cambios chicos y frecuentes, propuestos por la misma gente que hace el trabajo.', sirve: 'Mejorar todas las semanas sin grandes inversiones.',
+    foto: `${LEAN}/kaizen.webp`, alt: 'Tableros del programa de sugerencias de mejora del personal', ...SCANFIL,
+    fuente: 'https://commons.wikimedia.org/wiki/File:Kaizen_employee_sugestion_program_boards_Scanfil_Sieradz.jpg',
+  },
+  {
+    nombre: 'Gemba', que: 'Ir al lugar donde se hace el trabajo para entender el problema antes de proponer una solución.', sirve: 'Decidir con lo que pasa de verdad, no con lo que se supone.',
+    foto: `${LEAN}/gemba.webp`, alt: 'Depósito de una planta, el lugar donde pasa el trabajo', ...SCANFIL,
+    fuente: 'https://commons.wikimedia.org/wiki/File:Warehouse_Scanfil_Sieradz.jpg',
+  },
+  {
+    nombre: 'Estandarización', que: 'Escribir la mejor forma conocida de hacer cada tarea, para que todos la hagan igual.', sirve: 'Menos errores y capacitar más rápido a la gente nueva.',
+    foto: `${LEAN}/estandarizacion.webp`, alt: 'Panel de herramientas con la silueta de cada una marcada', autor: 'Maxschiraldi', licencia: 'CC BY-SA 4.0', licenciaUrl: 'https://creativecommons.org/licenses/by-sa/4.0/deed.es',
+    fuente: 'https://commons.wikimedia.org/wiki/File:Shadowboard-mmschiraldi.jpg',
+  },
+  {
+    nombre: 'Gestión visual', que: 'Tableros, colores y señales que muestran de un vistazo cómo viene el trabajo.', sirve: 'Ver los desvíos en el momento, sin pedir un informe.',
+    foto: `${LEAN}/gestion-visual.webp`, alt: 'Tableros de indicadores en una planta', ...SCANFIL,
+    fuente: 'https://commons.wikimedia.org/wiki/File:KPI_boards_Scanfil_Sieradz.jpg',
+  },
+  {
+    nombre: 'Kanban', que: 'Tarjetas o señales que avisan cuándo reponer o producir, según lo que se consume.', sirve: 'Menos faltantes y menos stock parado.',
+    foto: `${LEAN}/kanban.webp`, alt: 'Contenedores chicos ordenados en estanterías de depósito', ...SCANFIL,
+    fuente: 'https://commons.wikimedia.org/wiki/File:Warehouse_small_containers_Scanfil_Sieradz.jpg',
+  },
+  {
+    nombre: 'TPM', que: 'Mantenimiento productivo total: cuidar las máquinas entre todos para que no se rompan.', sirve: 'Menos paradas imprevistas y equipos que duran más.',
+    foto: `${LEAN}/tpm.webp`, alt: 'Puesto de limpieza y cuidado de equipos en una planta', ...SCANFIL,
+    fuente: 'https://commons.wikimedia.org/wiki/File:Cleanliness_point_5S_Scanfil_Sieradz.jpg',
+  },
+].map((h) => ({ ...h, conFoto: hayFoto(h.foto) }));
 
 const camaras = [
   {
@@ -94,6 +136,7 @@ const camaras = [
     para: 'Mapas de calor en salones, tiendas y restaurantes',
     texto: 'Una sola cámara en el centro del techo cubre todo el ambiente. Corrige la imagen curva en vistas normales y arma el mapa de calor: qué góndolas o mesas tienen más movimiento y dónde la gente se queda más tiempo.',
     modelos: 'Por ejemplo: Hikvision DS-2CD6365G1-IVS (6 MP) o DS-2CD63C5G0-IVS (12 MP).',
+    escena: { src: '/img/empresas/hik-ojo-de-pez.webp', alt: 'Cámara ojo de pez Hikvision en el techo de un supermercado', w: 560, h: 315 },
   },
   {
     zona: 'Puerta',
@@ -101,6 +144,8 @@ const camaras = [
     para: 'Conteo de entradas y salidas',
     texto: 'Va justo arriba del acceso. Con dos lentes ve en tres dimensiones, mide la altura de lo que pasa por debajo y cuenta personas con mucha precisión, sin confundirse con carritos, cochecitos, sombras o mascotas.',
     modelos: 'Por ejemplo: Hikvision DS-2CD6825G0/C-IVS.',
+    escena: { src: '/img/empresas/hik-conteo-puerta.webp', alt: 'Cámara de doble lente contando personas en la entrada de un local', w: 643, h: 366 },
+    producto: { src: '/img/empresas/hik-doble-lente.webp', alt: 'Cámara Hikvision de doble lente para conteo de personas', w: 800, h: 531 },
   },
   {
     zona: 'Filas y playa',
@@ -108,14 +153,16 @@ const camaras = [
     para: 'Filas de caja, estacionamientos y estaciones de servicio',
     texto: 'Distingue autos, camiones, motos y peatones, mide cuánto tiempo queda cada vehículo en cada isla y detecta cuando la fila de cobro se demora. Puede sumar lectura de patentes.',
     modelos: 'Por ejemplo: serie Hikvision iDS-2CD7A46G0, o cámaras con lectura de patentes (LPR).',
+    escena: { src: '/img/empresas/hik-filas-caja.webp', alt: 'Analítica de filas en las cajas de un comercio, con el tiempo de espera de cada zona', w: 1200, h: 675 },
+    producto: { src: '/img/empresas/hik-bullet.webp', alt: 'Cámara bullet Hikvision DeepinView', w: 800, h: 800 },
   },
 ];
 
 const metricas = [
-  { nombre: 'Flujo de personas', mide: 'Cuántas personas o vehículos entran, salen o pasan por el frente.', uso: 'Cruzado con las ventas, da la conversión: cuántos entran y cuántos compran.' },
-  { nombre: 'Mapa de calor', mide: 'Las zonas con más tránsito y más permanencia, de azul a rojo.', uso: 'Encontrar las zonas frías y mover productos, promociones o mesas.' },
-  { nombre: 'Filas', mide: 'Cuánta gente espera en una zona y cuánto tiempo.', uso: 'Avisar al encargado para abrir otra caja cuando la espera pasa un límite.' },
-  { nombre: 'Aforo', mide: 'Cuánta gente hay adentro en cada momento.', uso: 'Conocer los horarios pico, armar los turnos del personal y respetar la capacidad.' },
+  { nombre: 'Flujo de personas', mide: 'Cuántas personas o vehículos entran, salen o pasan por el frente.', uso: 'Cruzado con las ventas, da la conversión: cuántos entran y cuántos compran.', foto: '/img/empresas/hik-ingreso.webp', alt: 'Personas entrando a un local por el acceso' },
+  { nombre: 'Mapa de calor', mide: 'Las zonas con más tránsito y más permanencia, de azul a rojo.', uso: 'Encontrar las zonas frías y mover productos, promociones o mesas.', foto: '/img/empresas/hik-mapa-calor.webp', alt: 'Mapa de calor sobre las góndolas de un supermercado' },
+  { nombre: 'Filas', mide: 'Cuánta gente espera en una zona y cuánto tiempo.', uso: 'Avisar al encargado para abrir otra caja cuando la espera pasa un límite.', foto: '/img/empresas/hik-filas.webp', alt: 'Vista desde arriba de clientes esperando en un mostrador' },
+  { nombre: 'Aforo y recorridos', mide: 'Cuánta gente hay adentro en cada momento y hacia dónde se mueve.', uso: 'Conocer los horarios pico, armar los turnos del personal y respetar la capacidad.', foto: '/img/empresas/hik-recorridos.webp', alt: 'Recorridos de los clientes dentro de un local, con el porcentaje de cada dirección' },
 ];
 
 const cadena = [
@@ -289,15 +336,27 @@ const faqs = [
           </div>
           {herramientas.map((h, n) => (
             <div class="it-panel" role="tabpanel" data-panel={n} aria-label={h.nombre}>
-              <h3 class="heading-display text-[#98C665] !text-[clamp(2.4rem,7vw,4.5rem)]">{h.nombre}</h3>
-              <div class="grid gap-6 md:grid-cols-2 mt-6">
+              <div class={`grid gap-8 ${h.conFoto ? 'md:grid-cols-[1.1fr_1fr] md:items-center' : ''}`}>
+                {h.conFoto && (
+                  <figure>
+                    <img src={h.foto} alt={h.alt} class="it-foto aspect-[3/2]" width="960" height="640" loading="lazy" decoding="async" />
+                    <figcaption class="it-credito">
+                      Foto: {h.autor} · <a href={h.fuente} target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href={h.licenciaUrl} target="_blank" rel="noopener noreferrer">{h.licencia}</a>
+                    </figcaption>
+                  </figure>
+                )}
                 <div>
-                  <p class="eyebrow mb-2">Qué es</p>
-                  <p class="it-txt">{h.que}</p>
-                </div>
-                <div>
-                  <p class="eyebrow mb-2">Para qué te sirve</p>
-                  <p class="it-txt text-white">{h.sirve}</p>
+                  <h3 class="heading-display text-[#98C665] !text-[clamp(2.4rem,7vw,4.5rem)]">{h.nombre}</h3>
+                  <div class={`grid gap-6 mt-6 ${h.conFoto ? '' : 'md:grid-cols-2'}`}>
+                    <div>
+                      <p class="eyebrow mb-2">Qué es</p>
+                      <p class="it-txt">{h.que}</p>
+                    </div>
+                    <div>
+                      <p class="eyebrow mb-2">Para qué te sirve</p>
+                      <p class="it-txt text-white">{h.sirve}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -327,28 +386,18 @@ const faqs = [
           </div>
           {camaras.map((c, n) => (
             <div class="it-panel" role="tabpanel" data-panel={n} aria-label={c.zona}>
-              <div class="grid gap-8 md:grid-cols-[1fr_1.3fr] md:items-start">
+              <div class="grid gap-8 md:grid-cols-[1.25fr_1fr] md:items-start">
+                <img src={c.escena.src} alt={c.escena.alt} class="it-foto aspect-video" width={c.escena.w} height={c.escena.h} loading="lazy" decoding="async" />
                 <div>
                   <p class="eyebrow mb-3">{c.para}</p>
                   <h3 class="heading-section text-white !text-[clamp(1.9rem,4.5vw,3rem)]">{c.tipo}</h3>
-                  <div class="it-esquema mt-6" data-zona={n} aria-hidden="true">
-                    {n === 0 && (<>
-                      <span class="it-cal it-cal-1"></span><span class="it-cal it-cal-2"></span><span class="it-cal it-cal-3"></span>
-                      <span class="it-cam-centro"></span>
-                    </>)}
-                    {n === 1 && (<>
-                      <span class="it-puerta"></span><span class="it-cam-puerta"></span>
-                      <span class="it-flecha it-flecha-entra">→ entra</span><span class="it-flecha it-flecha-sale">sale ←</span>
-                    </>)}
-                    {n === 2 && (<>
-                      <span class="it-fila"></span><span class="it-fila"></span><span class="it-fila"></span><span class="it-fila"></span>
-                      <span class="it-caja">caja</span>
-                    </>)}
+                  <p class="it-txt mt-5">{c.texto}</p>
+                  <div class="it-producto mt-6">
+                    {c.producto && (
+                      <img src={c.producto.src} alt={c.producto.alt} width={c.producto.w} height={c.producto.h} loading="lazy" decoding="async" />
+                    )}
+                    <p class="text-sm text-[#4E514A]" style="font-family:'Space Grotesk',sans-serif;">{c.modelos}</p>
                   </div>
-                </div>
-                <div>
-                  <p class="it-txt">{c.texto}</p>
-                  <p class="mt-5 text-sm text-[#AFB2AD]" style="font-family:'Space Grotesk',sans-serif;">{c.modelos}</p>
                 </div>
               </div>
             </div>
@@ -363,10 +412,13 @@ const faqs = [
           </div>
           <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {metricas.map((m, i) => (
-              <article class={`reveal reveal-delay-${(i % 4) + 1} it-card`}>
+              <article class={`reveal reveal-delay-${(i % 4) + 1} it-card !p-0 overflow-hidden`}>
+                <img src={m.foto} alt={m.alt} class="w-full aspect-video object-cover" width="650" height="365" loading="lazy" decoding="async" />
+                <div class="p-6">
                 <p class="heading-card text-[#98C665]">{m.nombre}</p>
                 <p class="body-text mt-3">{m.mide}</p>
                 <p class="mt-4 pt-4 border-t border-white/10 text-white text-[0.95rem] leading-relaxed" style="font-family:'Space Grotesk',sans-serif;">{m.uso}</p>
+                </div>
               </article>
             ))}
           </div>
@@ -394,6 +446,7 @@ const faqs = [
             software HikCentral. Para exterior elegimos modelos IP67, preparados para
             el frío de acá.
           </p>
+          <p class="it-credito mt-6">Imágenes de esta sección: Hikvision, material de producto y soluciones.</p>
         </div>
       </div>
     </section>
@@ -574,41 +627,32 @@ const faqs = [
   :global(.js) .it-panel:not([hidden]) { animation: it-entra 0.45s var(--ease-out-quart); }
   @keyframes it-entra { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
 
-  /* Esquemas de cada zona, dibujados con CSS (sin fotos). */
-  .it-esquema {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    border: 1px solid rgb(255 255 255 / 0.12);
+  /* Fotos */
+  .it-foto {
+    width: 100%;
+    object-fit: cover;
     border-radius: 0.75rem;
-    background:
-      linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px) 0 0 / 24px 24px,
-      linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px) 0 0 / 24px 24px;
-    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.04);
   }
-  .it-cal { position: absolute; border-radius: 999px; filter: blur(18px); animation: it-late 3.2s ease-in-out infinite alternate; }
-  .it-cal-1 { width: 38%; height: 45%; left: 12%; top: 20%; background: rgb(220 70 50 / 0.75); }
-  .it-cal-2 { width: 30%; height: 38%; left: 55%; top: 45%; background: rgb(240 180 40 / 0.6); animation-delay: 0.8s; }
-  .it-cal-3 { width: 26%; height: 30%; left: 60%; top: 8%; background: rgb(60 120 220 / 0.55); animation-delay: 1.6s; }
-  @keyframes it-late { from { opacity: 0.55; transform: scale(0.94); } to { opacity: 1; transform: scale(1.06); } }
-  .it-cam-centro, .it-cam-puerta {
-    position: absolute;
-    width: 18px; height: 18px;
-    border-radius: 999px;
-    background: var(--green);
-    box-shadow: 0 0 0 6px rgb(152 198 101 / 0.2);
+  /* Ficha del producto: fondo claro porque las fotos de cámara vienen sobre blanco. */
+  .it-producto {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #F4F7F1;
+    border-radius: 0.75rem;
+    padding: 0.85rem 1rem;
   }
-  .it-cam-centro { left: calc(50% - 9px); top: calc(50% - 9px); }
-  .it-puerta { position: absolute; left: 42%; width: 16%; top: 0; bottom: 0; border-left: 2px solid rgb(255 255 255 / 0.3); border-right: 2px solid rgb(255 255 255 / 0.3); }
-  .it-cam-puerta { left: calc(50% - 9px); top: 10%; }
-  .it-flecha { position: absolute; font-family: 'enma', 'Space Grotesk', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); }
-  .it-flecha-entra { left: 8%; top: 45%; animation: it-pasa 2.6s linear infinite; }
-  .it-flecha-sale { right: 8%; top: 65%; color: #AFB2AD; animation: it-pasa-inv 2.6s linear infinite; }
-  @keyframes it-pasa { from { transform: translateX(0); opacity: 0.2; } 50% { opacity: 1; } to { transform: translateX(60%); opacity: 0.2; } }
-  @keyframes it-pasa-inv { from { transform: translateX(0); opacity: 0.2; } 50% { opacity: 1; } to { transform: translateX(-60%); opacity: 0.2; } }
-  [data-zona='2'] { display: flex; align-items: center; gap: 6%; padding-left: 8%; }
-  .it-fila { width: 9%; aspect-ratio: 1; border-radius: 999px; background: rgb(255 255 255 / 0.25); }
-  .it-fila:nth-child(1) { background: rgb(240 180 40 / 0.85); }
-  .it-caja { margin-left: auto; margin-right: 8%; font-family: 'enma', 'Space Grotesk', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #11140F; background: var(--green); padding: 0.4rem 0.7rem; border-radius: 0.35rem; }
+  .it-producto img { width: 6.5rem; height: 4.5rem; object-fit: contain; flex-shrink: 0; }
+  .it-credito {
+    margin-top: 0.6rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    color: #8E918B;
+  }
+  .it-credito a { text-decoration: underline; text-underline-offset: 2px; }
+  .it-credito a:hover { color: var(--green); }
 
   /* Cadena de equipos */
   .it-cadena { display: grid; gap: 0.75rem; }
@@ -644,7 +688,6 @@ const faqs = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .it-cal, .it-flecha-entra, .it-flecha-sale { animation: none; }
     :global(.js) .it-panel:not([hidden]) { animation: none; }
   }
 </style>
