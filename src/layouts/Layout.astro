@@ -12,6 +12,8 @@ interface Props {
   ogImage?: string;
   /** JSON-LD extra de la página (Service, FAQPage, BreadcrumbList…). */
   schemas?: object[];
+  /** Página en armado: que no la indexen buscadores ni IAs. */
+  noindex?: boolean;
 }
 
 const {
@@ -21,6 +23,7 @@ const {
   keywords = 'cámaras de seguridad en Ushuaia, instalación de cámaras Ushuaia, empresa de alarmas en Ushuaia, alarmas para casa Ushuaia, empresa de redes en Ushuaia, redes WiFi Ushuaia, domótica en Ushuaia, automatización del hogar Ushuaia, casa inteligente Ushuaia, electricista en Ushuaia, instalaciones eléctricas Ushuaia, cerraduras digitales Ushuaia, seguridad electrónica Tierra del Fuego',
   ogImage = '/og-insolva.png',
   schemas = [],
+  noindex = false,
 } = Astro.props;
 
 // Cada página declara su propio canonical. Antes estaba fijo en la home, lo que
@@ -50,7 +53,7 @@ const todosLosSchemas = [organizationSchema(), websiteSchema(), ...schemas];
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

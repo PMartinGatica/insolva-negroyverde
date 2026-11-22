@@ -1,0 +1,681 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import WhatsAppFloat from '../components/ui/WhatsAppFloat.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
+import { whatsappLink } from '../lib/whatsapp';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '../lib/seo';
+
+/*
+  INGENIERÍA DE PROCESOS + INTEGRACIÓN TECNOLÓGICA (para empresas).
+
+  EN ARMADO (noviembre 2026): la página está oculta. `noindex`, fuera del
+  sitemap (astro.config.mjs) y sin enlaces desde el menú, el footer ni
+  llms.txt. Se ve solo entrando a /integracion-tecnologica/. Para mostrarla:
+  sacar `noindex`, sacar el filtro del sitemap y sumar los enlaces.
+
+  REGLAS DE CONTENIDO
+  - Nada de casos, clientes ni cifras que no existan. La analítica de
+    Hikvision se presenta como algo que INSOLVA puede implementar, con modelos
+    "por ejemplo" que se confirman en cada presupuesto.
+  - Casi sin fotos (todavía no hay de estos trabajos): diagramas y tarjetas.
+  - Voz propia. La idea "primero el proceso, después la tecnología" es
+    compartida con el mundo Lean, pero las frases son nuestras.
+*/
+
+const path = '/integracion-tecnologica';
+const titulo = 'Ingeniería de procesos e integración tecnológica en Tierra del Fuego | INSOLVA Group';
+const descripcion =
+  'Ordenamos la operación con Lean, 5S y Kaizen, la medimos con analítica de video y la automatizamos. Ingeniería de procesos y tecnología para empresas de Ushuaia, Río Grande y Tolhuin.';
+
+const wa = whatsappLink({
+  message: 'Hola INSOLVA, tengo una empresa y quiero ordenar y medir un proceso.',
+});
+
+const sintomas = [
+  {
+    titulo: 'Un sistema nuevo sobre el mismo desorden',
+    texto: 'Se compra un software de stock y el depósito sigue igual. Ahora el desorden está también en la pantalla.',
+  },
+  {
+    titulo: 'Todo depende de una persona',
+    texto: 'Si falta el encargado, nadie sabe dónde está cada cosa ni cómo se hace. El proceso vive en la cabeza de alguien.',
+  },
+  {
+    titulo: 'Se decide a ojo',
+    texto: '¿Cuánta gente entra? ¿A qué hora conviene reforzar la caja? ¿Qué góndola no mira nadie? Sin datos, se adivina.',
+  },
+];
+
+const metodo = [
+  {
+    clave: 'Ir al lugar',
+    titulo: 'Relevamos donde pasa el trabajo',
+    texto: 'Vamos al salón, al depósito o a la planta, miramos cómo se trabaja hoy y escuchamos a la gente que lo hace todos los días. Ahí aparecen los problemas reales.',
+  },
+  {
+    clave: 'Ordenar',
+    titulo: 'Sacamos lo que no suma',
+    texto: 'Con 5S y estandarización dejamos cada cosa en su lugar y cada tarea con una forma clara de hacerse. Es barato y es la base de todo lo que viene.',
+  },
+  {
+    clave: 'Medir',
+    titulo: 'Ponemos números donde había intuición',
+    texto: 'Indicadores simples, tableros visuales y, cuando conviene, cámaras con analítica que cuentan personas, miden filas y muestran por dónde circula la gente.',
+  },
+  {
+    clave: 'Integrar',
+    titulo: 'Recién ahí, la tecnología',
+    texto: 'Automatizamos lo repetitivo, conectamos los sistemas entre sí y dejamos los datos a mano en el celular. Tecnología sobre un proceso que ya funciona.',
+  },
+  {
+    clave: 'Mejorar',
+    titulo: 'Y lo sostenemos en el tiempo',
+    texto: 'Revisamos los resultados con el equipo y ajustamos. La mejora continua (Kaizen) es un hábito, no un proyecto que se termina.',
+  },
+];
+
+const herramientas = [
+  { nombre: '5S', que: 'Cinco pasos para ordenar un lugar de trabajo: clasificar, ordenar, limpiar, estandarizar y sostener.', sirve: 'Encontrar todo en segundos y que el orden dure.' },
+  { nombre: 'Kaizen', que: 'Mejora continua: cambios chicos y frecuentes, propuestos por la misma gente que hace el trabajo.', sirve: 'Mejorar todas las semanas sin grandes inversiones.' },
+  { nombre: 'Gemba', que: 'Ir al lugar donde se hace el trabajo para entender el problema antes de proponer una solución.', sirve: 'Decidir con lo que pasa de verdad, no con lo que se supone.' },
+  { nombre: 'Estandarización', que: 'Escribir la mejor forma conocida de hacer cada tarea, para que todos la hagan igual.', sirve: 'Menos errores y capacitar más rápido a la gente nueva.' },
+  { nombre: 'Gestión visual', que: 'Tableros, colores y señales que muestran de un vistazo cómo viene el trabajo.', sirve: 'Ver los desvíos en el momento, sin pedir un informe.' },
+  { nombre: 'Kanban', que: 'Tarjetas o señales que avisan cuándo reponer o producir, según lo que se consume.', sirve: 'Menos faltantes y menos stock parado.' },
+  { nombre: 'TPM', que: 'Mantenimiento productivo total: cuidar las máquinas entre todos para que no se rompan.', sirve: 'Menos paradas imprevistas y equipos que duran más.' },
+];
+
+const camaras = [
+  {
+    zona: 'Salón',
+    tipo: 'Ojo de pez 360°',
+    para: 'Mapas de calor en salones, tiendas y restaurantes',
+    texto: 'Una sola cámara en el centro del techo cubre todo el ambiente. Corrige la imagen curva en vistas normales y arma el mapa de calor: qué góndolas o mesas tienen más movimiento y dónde la gente se queda más tiempo.',
+    modelos: 'Por ejemplo: Hikvision DS-2CD6365G1-IVS (6 MP) o DS-2CD63C5G0-IVS (12 MP).',
+  },
+  {
+    zona: 'Puerta',
+    tipo: 'Doble lente (3D)',
+    para: 'Conteo de entradas y salidas',
+    texto: 'Va justo arriba del acceso. Con dos lentes ve en tres dimensiones, mide la altura de lo que pasa por debajo y cuenta personas con mucha precisión, sin confundirse con carritos, cochecitos, sombras o mascotas.',
+    modelos: 'Por ejemplo: Hikvision DS-2CD6825G0/C-IVS.',
+  },
+  {
+    zona: 'Filas y playa',
+    tipo: 'Bullet o domo DeepinView',
+    para: 'Filas de caja, estacionamientos y estaciones de servicio',
+    texto: 'Distingue autos, camiones, motos y peatones, mide cuánto tiempo queda cada vehículo en cada isla y detecta cuando la fila de cobro se demora. Puede sumar lectura de patentes.',
+    modelos: 'Por ejemplo: serie Hikvision iDS-2CD7A46G0, o cámaras con lectura de patentes (LPR).',
+  },
+];
+
+const metricas = [
+  { nombre: 'Flujo de personas', mide: 'Cuántas personas o vehículos entran, salen o pasan por el frente.', uso: 'Cruzado con las ventas, da la conversión: cuántos entran y cuántos compran.' },
+  { nombre: 'Mapa de calor', mide: 'Las zonas con más tránsito y más permanencia, de azul a rojo.', uso: 'Encontrar las zonas frías y mover productos, promociones o mesas.' },
+  { nombre: 'Filas', mide: 'Cuánta gente espera en una zona y cuánto tiempo.', uso: 'Avisar al encargado para abrir otra caja cuando la espera pasa un límite.' },
+  { nombre: 'Aforo', mide: 'Cuánta gente hay adentro en cada momento.', uso: 'Conocer los horarios pico, armar los turnos del personal y respetar la capacidad.' },
+];
+
+const cadena = [
+  { nombre: 'Cámaras IP', detalle: 'Analizan la imagen en su propio chip' },
+  { nombre: 'Switch PoE', detalle: 'Un cable lleva datos y energía' },
+  { nombre: 'NVR o HikCentral', detalle: 'Junta las cámaras y guarda los datos' },
+  { nombre: 'Panel y reportes', detalle: 'Gráficos por día, semana o mes, y Excel' },
+  { nombre: 'Tu sistema', detalle: 'Opcional: los datos por API a tu software' },
+];
+
+const equipo = [
+  { area: 'Ingeniería industrial', aporta: 'Procesos, Lean, indicadores' },
+  { area: 'Ingeniería electrónica y automatización', aporta: 'PLC, sensores, tableros' },
+  { area: 'Ingeniería en producto', aporta: 'Diseño de soluciones a medida' },
+  { area: 'Técnica eléctrica', aporta: 'Instalación y puesta en marcha' },
+];
+
+const faqs = [
+  {
+    pregunta: '¿Qué es la ingeniería de procesos?',
+    respuesta: 'Es analizar cómo se hace el trabajo en una empresa, de punta a punta, para sacar los pasos que no suman, ordenar el flujo y medir los resultados. El objetivo es hacer lo mismo con menos tiempo, menos errores y menos costo.',
+  },
+  {
+    pregunta: '¿Por qué ordenar el proceso antes de sumar tecnología?',
+    respuesta: 'Porque la tecnología copia lo que encuentra. Un sistema montado sobre un proceso desordenado solo hace más rápido el desorden. Primero se ordena con herramientas como 5S y estandarización, y después se automatiza lo que ya funciona.',
+  },
+  {
+    pregunta: '¿Qué son las 5S?',
+    respuesta: 'Un método japonés de cinco pasos para ordenar un lugar de trabajo: clasificar (sacar lo que no sirve), ordenar (un lugar para cada cosa), limpiar, estandarizar (que todos lo hagan igual) y sostener (que se vuelva hábito).',
+  },
+  {
+    pregunta: '¿Qué es el conteo de personas con cámaras?',
+    respuesta: 'Son cámaras con inteligencia artificial que cuentan cuánta gente entra y sale de un local, miden las filas y arman mapas de calor del salón. Los datos se ven en gráficos diarios, semanales o mensuales y sirven para calcular la conversión y organizar al personal.',
+  },
+  {
+    pregunta: '¿Se puede usar con las cámaras que ya tengo?',
+    respuesta: 'Depende. La analítica necesita cámaras IP con esa función; una cámara analógica o un grabador básico no alcanza. Relevamos lo que ya está instalado y aprovechamos todo lo que se pueda: el cableado, la red o el grabador.',
+  },
+  {
+    pregunta: '¿Los datos se pueden pasar a mi propio sistema?',
+    respuesta: 'Sí. Se pueden ver en el panel de Hikvision o extraer en tiempo real con su API para integrarlos con tu sistema de ventas, de stock o de turnos. Esa integración la desarrollamos nosotros.',
+  },
+  {
+    pregunta: '¿Funcionan con el frío de Tierra del Fuego?',
+    respuesta: 'Para exterior se eligen modelos con protección IP67 contra agua y polvo y rango de temperatura para frío extremo. El modelo exacto se confirma según dónde va cada cámara.',
+  },
+  {
+    pregunta: '¿Dónde trabajan?',
+    respuesta: 'En Ushuaia, Río Grande y Tolhuin. Vamos a la empresa a relevar antes de proponer nada.',
+  },
+];
+---
+
+<Layout
+  title={titulo}
+  description={descripcion}
+  path={path}
+  noindex
+  keywords="ingeniería de procesos Tierra del Fuego, mejora continua Ushuaia, lean manufacturing, 5S, kaizen, conteo de personas, mapa de calor, analítica de video Hikvision, integración tecnológica Ushuaia, automatización Río Grande"
+  schemas={[
+    breadcrumbSchema([{ name: 'Empresas', path }]),
+    serviceSchema({
+      nombre: 'Ingeniería de procesos e integración tecnológica',
+      descripcion,
+      path,
+      tipo: 'Ingeniería de procesos, mejora continua y analítica de video',
+      incluye: [
+        'Relevamiento de procesos',
+        '5S y estandarización',
+        'Kaizen y mejora continua',
+        'Gestión visual e indicadores',
+        'Conteo de personas y mapas de calor',
+        'Gestión de filas y control de aforo',
+        'Automatización',
+        'Integración de sistemas por API',
+      ],
+    }),
+    faqSchema(faqs),
+  ]}
+>
+  <Header heroOscuro />
+
+  <main class="it">
+    <!-- ── HERO ──────────────────────────────────────────────── -->
+    <section class="relative bg-[#090B07] text-white overflow-hidden on-dark">
+      <div class="it-grilla" aria-hidden="true"></div>
+      <div class="wrap relative pt-32 pb-20 md:pt-44 md:pb-28">
+        <div class="mb-8"><Breadcrumbs claro trail={[{ name: 'Empresas', path }]} /></div>
+        <p class="eyebrow mb-6">PARA EMPRESAS · INGENIERÍA DE PROCESOS + TECNOLOGÍA</p>
+        <h1 class="heading-hero max-w-5xl">
+          Primero el proceso.<br /><span class="text-[#98C665]">Después la tecnología.</span>
+        </h1>
+        <p class="body-lead mt-8 max-w-2xl">
+          Somos integradores tecnológicos de Tierra del Fuego. Ordenamos cómo trabaja
+          tu empresa, lo medimos y recién ahí lo automatizamos. Ingeniería de
+          procesos, analítica y tecnología con un mismo equipo.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Contanos tu proceso</a>
+          <a href="#metodo" class="btn btn-ghost">Cómo trabajamos</a>
+        </div>
+        <ul class="it-chips mt-14" aria-label="Lo que hacemos">
+          {['Lean', '5S', 'Kaizen', 'Conteo de personas', 'Mapas de calor', 'Automatización', 'Integración de sistemas'].map((c) => (
+            <li>{c}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── EL PROBLEMA ───────────────────────────────────────── -->
+    <section class="section section-dark on-dark">
+      <div class="wrap">
+        <div class="reveal max-w-3xl mb-14">
+          <p class="eyebrow mb-4">EL PROBLEMA</p>
+          <h2 class="heading-section text-white">La tecnología no arregla<br /><span class="text-[#98C665]">un problema de gestión.</span></h2>
+          <p class="body-lead mt-6">
+            Comprar otro sistema es fácil. Lo difícil es que sirva. Estas son las tres
+            señales que más vemos cuando una empresa salta directo a la tecnología.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          {sintomas.map((s, i) => (
+            <article class={`reveal reveal-delay-${i + 1} it-card`}>
+              <span class="it-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-card text-white mt-4 mb-3">{s.titulo}</h3>
+              <p class="body-text">{s.texto}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MÉTODO ────────────────────────────────────────────── -->
+    <section id="metodo" class="section section-void on-dark scroll-mt-20">
+      <div class="wrap grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+        <div class="reveal lg:sticky lg:top-28 self-start">
+          <p class="eyebrow mb-4">CÓMO TRABAJAMOS</p>
+          <h2 class="heading-section text-white">Cinco pasos,<br /><span class="text-[#98C665]">en este orden.</span></h2>
+          <p class="body-lead mt-6">
+            El orden importa. Cada paso se apoya en el anterior, y la tecnología
+            llega al final, cuando ya sabemos qué hay que medir y qué conviene automatizar.
+          </p>
+        </div>
+        <ol class="it-metodo" data-metodo>
+          <span class="it-metodo-llena" aria-hidden="true"></span>
+          {metodo.map((m, i) => (
+            <li class="reveal it-paso" data-paso>
+              <span class="it-nodo" aria-hidden="true"></span>
+              <p class="eyebrow">{i + 1} · {m.clave}</p>
+              <h3 class="heading-card text-white mt-2 !text-[clamp(1.35rem,2.6vw,1.9rem)]">{m.titulo}</h3>
+              <p class="body-text mt-3 max-w-xl">{m.texto}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── HERRAMIENTAS ──────────────────────────────────────── -->
+    <section class="section section-dark on-dark">
+      <div class="wrap">
+        <div class="reveal max-w-3xl mb-12">
+          <p class="eyebrow mb-4">INGENIERÍA DE PROCESOS</p>
+          <h2 class="heading-section text-white">Las herramientas<br /><span class="text-[#98C665]">que aplicamos.</span></h2>
+          <p class="body-lead mt-6">Tocá cada una para ver qué es y para qué te sirve.</p>
+        </div>
+        <div class="it-herr" data-tabs>
+          <div class="it-tabs" role="tablist" aria-label="Herramientas">
+            {herramientas.map((h, n) => (
+              <button type="button" role="tab" class="it-tab" data-tab={n} aria-selected={n === 0 ? 'true' : 'false'}>{h.nombre}</button>
+            ))}
+          </div>
+          {herramientas.map((h, n) => (
+            <div class="it-panel" role="tabpanel" data-panel={n} aria-label={h.nombre}>
+              <h3 class="heading-display text-[#98C665] !text-[clamp(2.4rem,7vw,4.5rem)]">{h.nombre}</h3>
+              <div class="grid gap-6 md:grid-cols-2 mt-6">
+                <div>
+                  <p class="eyebrow mb-2">Qué es</p>
+                  <p class="it-txt">{h.que}</p>
+                </div>
+                <div>
+                  <p class="eyebrow mb-2">Para qué te sirve</p>
+                  <p class="it-txt text-white">{h.sirve}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ANALÍTICA ─────────────────────────────────────────── -->
+    <section class="section section-void on-dark">
+      <div class="wrap">
+        <div class="reveal max-w-3xl mb-12">
+          <p class="eyebrow mb-4">MEDIR · ANALÍTICA DE VIDEO</p>
+          <h2 class="heading-section text-white">Cámaras que<br /><span class="text-[#98C665]">cuentan, no solo graban.</span></h2>
+          <p class="body-lead mt-6">
+            Con la línea de inteligencia artificial de Hikvision, una cámara pasa a ser
+            un sensor del negocio: cuenta personas, mide filas y muestra por dónde
+            circula la gente. Elegí la zona que querés medir.
+          </p>
+        </div>
+
+        <div class="it-herr" data-tabs>
+          <div class="it-tabs" role="tablist" aria-label="Zona a medir">
+            {camaras.map((c, n) => (
+              <button type="button" role="tab" class="it-tab" data-tab={n} aria-selected={n === 0 ? 'true' : 'false'}>{c.zona}</button>
+            ))}
+          </div>
+          {camaras.map((c, n) => (
+            <div class="it-panel" role="tabpanel" data-panel={n} aria-label={c.zona}>
+              <div class="grid gap-8 md:grid-cols-[1fr_1.3fr] md:items-start">
+                <div>
+                  <p class="eyebrow mb-3">{c.para}</p>
+                  <h3 class="heading-section text-white !text-[clamp(1.9rem,4.5vw,3rem)]">{c.tipo}</h3>
+                  <div class="it-esquema mt-6" data-zona={n} aria-hidden="true">
+                    {n === 0 && (<>
+                      <span class="it-cal it-cal-1"></span><span class="it-cal it-cal-2"></span><span class="it-cal it-cal-3"></span>
+                      <span class="it-cam-centro"></span>
+                    </>)}
+                    {n === 1 && (<>
+                      <span class="it-puerta"></span><span class="it-cam-puerta"></span>
+                      <span class="it-flecha it-flecha-entra">→ entra</span><span class="it-flecha it-flecha-sale">sale ←</span>
+                    </>)}
+                    {n === 2 && (<>
+                      <span class="it-fila"></span><span class="it-fila"></span><span class="it-fila"></span><span class="it-fila"></span>
+                      <span class="it-caja">caja</span>
+                    </>)}
+                  </div>
+                </div>
+                <div>
+                  <p class="it-txt">{c.texto}</p>
+                  <p class="mt-5 text-sm text-[#AFB2AD]" style="font-family:'Space Grotesk',sans-serif;">{c.modelos}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Métricas -->
+        <div class="mt-20">
+          <div class="reveal mb-8">
+            <p class="eyebrow mb-3">QUÉ TE ENTREGA</p>
+            <h3 class="heading-sub text-white">Cuatro números para decidir mejor</h3>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {metricas.map((m, i) => (
+              <article class={`reveal reveal-delay-${(i % 4) + 1} it-card`}>
+                <p class="heading-card text-[#98C665]">{m.nombre}</p>
+                <p class="body-text mt-3">{m.mide}</p>
+                <p class="mt-4 pt-4 border-t border-white/10 text-white text-[0.95rem] leading-relaxed" style="font-family:'Space Grotesk',sans-serif;">{m.uso}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <!-- Cadena: cómo se conecta -->
+        <div class="mt-20">
+          <div class="reveal mb-8">
+            <p class="eyebrow mb-3">CÓMO SE ARMA</p>
+            <h3 class="heading-sub text-white">De la cámara a tu decisión</h3>
+          </div>
+          <ol class="it-cadena">
+            {cadena.map((c, i) => (
+              <li class={`reveal reveal-delay-${(i % 4) + 1}`}>
+                <span class="it-cadena-n" aria-hidden="true">{i + 1}</span>
+                <p class="text-white font-medium" style="font-family:'Space Grotesk',sans-serif;">{c.nombre}</p>
+                <p class="text-sm text-[#AFB2AD] mt-1" style="font-family:'Space Grotesk',sans-serif;">{c.detalle}</p>
+              </li>
+            ))}
+          </ol>
+          <p class="reveal body-text mt-8 max-w-3xl">
+            No alcanza con una cámara analógica ni con un grabador básico: hacen falta
+            cámaras IP con analítica, alimentadas por PoE. Para juntar varias cámaras o
+            varios locales y exportar reportes se suma un grabador DeepinMind o el
+            software HikCentral. Para exterior elegimos modelos IP67, preparados para
+            el frío de acá.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EQUIPO ────────────────────────────────────────────── -->
+    <section class="section section-dark on-dark">
+      <div class="wrap grid gap-12 lg:grid-cols-2 lg:gap-20 lg:items-center">
+        <div class="reveal">
+          <p class="eyebrow mb-4">EL EQUIPO</p>
+          <h2 class="heading-section text-white">Ingenieros que<br /><span class="text-[#98C665]">también instalan.</span></h2>
+          <p class="body-lead mt-6">
+            Del análisis del proceso al tablero armado, sin pasar por tres empresas
+            distintas. Y con la experiencia de años instalando cámaras, redes y
+            electricidad en Tierra del Fuego.
+          </p>
+        </div>
+        <ul class="grid sm:grid-cols-2 gap-4">
+          {equipo.map((e, i) => (
+            <li class={`reveal reveal-delay-${(i % 4) + 1} it-card`}>
+              <p class="heading-card text-white !text-[1.1rem]">{e.area}</p>
+              <p class="body-text mt-2">{e.aporta}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── FAQ ───────────────────────────────────────────────── -->
+    <section class="section section-void on-dark">
+      <div class="wrap grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <div class="reveal">
+          <p class="eyebrow mb-4">PREGUNTAS FRECUENTES</p>
+          <h2 class="heading-section text-white">Lo que nos<br /><span class="text-[#98C665]">preguntan.</span></h2>
+        </div>
+        <div class="reveal reveal-delay-1">
+          {faqs.map((faq) => (
+            <details class="group border-t border-white/10 last:border-b">
+              <summary class="flex items-start justify-between gap-6 py-6 cursor-pointer list-none">
+                <h3 class="text-white text-lg leading-snug" style="font-family:'Space Grotesk',sans-serif; font-weight:500;">{faq.pregunta}</h3>
+                <span class="text-[#98C665] shrink-0 mt-1 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                </span>
+              </summary>
+              <p class="body-text pb-6 pr-10 max-w-2xl">{faq.respuesta}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ───────────────────────────────────────────────── -->
+    <section class="section section-dark on-dark">
+      <div class="wrap max-w-3xl">
+        <div class="reveal">
+          <h2 class="heading-display text-white">¿Qué proceso<br /><span class="text-[#98C665]">te come el día?</span></h2>
+          <p class="body-lead mt-6">
+            Contanos qué se repite, qué falla o qué depende de una sola persona.
+            Vamos, lo miramos y te decimos por dónde empezar.
+          </p>
+          <div class="mt-9 flex flex-wrap items-center gap-4">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Hablar con INSOLVA</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <WhatsAppFloat />
+  <CookieBanner />
+</Layout>
+
+<style>
+  /* Grilla tenue de fondo en el hero: plano técnico, sin foto. */
+  .it-grilla {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(152 198 101 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(152 198 101 / 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to left, #000 0%, transparent 75%);
+  }
+  .it-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .it-chips li {
+    font-family: 'enma', 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-2);
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: 999px;
+    padding: 0.5rem 0.9rem;
+  }
+
+  .it-card {
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.03);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .it-num {
+    font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+    font-weight: 200;
+    font-size: 2.6rem;
+    line-height: 0.8;
+    color: var(--green);
+  }
+  .it-txt {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    color: var(--text-on-dark-2);
+  }
+
+  /* Método: línea punteada que se llena al bajar, como en las guías. */
+  .it-metodo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding-left: 2.25rem;
+  }
+  .it-metodo::before,
+  .it-metodo-llena {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: 2px;
+  }
+  .it-metodo::before { background: repeating-linear-gradient(to bottom, rgb(152 198 101 / 0.45) 0 4px, transparent 4px 11px); }
+  .it-metodo-llena { background: var(--green); transform: scaleY(var(--avance, 0)); transform-origin: top; }
+  .it-paso { position: relative; }
+  .it-nodo {
+    position: absolute;
+    left: calc(-2.25rem + 7px - 8px);
+    top: 0.1rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--void);
+    border: 2px solid rgb(152 198 101 / 0.6);
+    transition: background 0.35s, border-color 0.35s;
+  }
+  .it-paso.activa .it-nodo { background: var(--green); border-color: var(--green); }
+
+  /* Pestañas */
+  .it-herr {
+    border: 1px solid rgb(255 255 255 / 0.12);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    background: rgb(255 255 255 / 0.03);
+  }
+  @media (min-width: 768px) { .it-herr { padding: 2.25rem; } }
+  .it-tabs { display: none; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  :global(.js) .it-tabs { display: flex; }
+  .it-tab {
+    font-family: 'enma', 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-2);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    min-height: 2.75rem;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .it-tab:hover { border-color: var(--green); color: #fff; }
+  .it-tab[aria-selected='true'] { background: var(--green); border-color: var(--green); color: #11140F; }
+  .it-panel + .it-panel { margin-top: 3rem; padding-top: 3rem; border-top: 1px solid rgb(255 255 255 / 0.1); }
+  :global(.js) .it-panel + .it-panel { margin-top: 0; padding-top: 0; border-top: 0; }
+  :global(.js) .it-panel[hidden] { display: none; }
+  :global(.js) .it-panel:not([hidden]) { animation: it-entra 0.45s var(--ease-out-quart); }
+  @keyframes it-entra { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+
+  /* Esquemas de cada zona, dibujados con CSS (sin fotos). */
+  .it-esquema {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border: 1px solid rgb(255 255 255 / 0.12);
+    border-radius: 0.75rem;
+    background:
+      linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px) 0 0 / 24px 24px;
+    overflow: hidden;
+  }
+  .it-cal { position: absolute; border-radius: 999px; filter: blur(18px); animation: it-late 3.2s ease-in-out infinite alternate; }
+  .it-cal-1 { width: 38%; height: 45%; left: 12%; top: 20%; background: rgb(220 70 50 / 0.75); }
+  .it-cal-2 { width: 30%; height: 38%; left: 55%; top: 45%; background: rgb(240 180 40 / 0.6); animation-delay: 0.8s; }
+  .it-cal-3 { width: 26%; height: 30%; left: 60%; top: 8%; background: rgb(60 120 220 / 0.55); animation-delay: 1.6s; }
+  @keyframes it-late { from { opacity: 0.55; transform: scale(0.94); } to { opacity: 1; transform: scale(1.06); } }
+  .it-cam-centro, .it-cam-puerta {
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 999px;
+    background: var(--green);
+    box-shadow: 0 0 0 6px rgb(152 198 101 / 0.2);
+  }
+  .it-cam-centro { left: calc(50% - 9px); top: calc(50% - 9px); }
+  .it-puerta { position: absolute; left: 42%; width: 16%; top: 0; bottom: 0; border-left: 2px solid rgb(255 255 255 / 0.3); border-right: 2px solid rgb(255 255 255 / 0.3); }
+  .it-cam-puerta { left: calc(50% - 9px); top: 10%; }
+  .it-flecha { position: absolute; font-family: 'enma', 'Space Grotesk', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); }
+  .it-flecha-entra { left: 8%; top: 45%; animation: it-pasa 2.6s linear infinite; }
+  .it-flecha-sale { right: 8%; top: 65%; color: #AFB2AD; animation: it-pasa-inv 2.6s linear infinite; }
+  @keyframes it-pasa { from { transform: translateX(0); opacity: 0.2; } 50% { opacity: 1; } to { transform: translateX(60%); opacity: 0.2; } }
+  @keyframes it-pasa-inv { from { transform: translateX(0); opacity: 0.2; } 50% { opacity: 1; } to { transform: translateX(-60%); opacity: 0.2; } }
+  [data-zona='2'] { display: flex; align-items: center; gap: 6%; padding-left: 8%; }
+  .it-fila { width: 9%; aspect-ratio: 1; border-radius: 999px; background: rgb(255 255 255 / 0.25); }
+  .it-fila:nth-child(1) { background: rgb(240 180 40 / 0.85); }
+  .it-caja { margin-left: auto; margin-right: 8%; font-family: 'enma', 'Space Grotesk', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #11140F; background: var(--green); padding: 0.4rem 0.7rem; border-radius: 0.35rem; }
+
+  /* Cadena de equipos */
+  .it-cadena { display: grid; gap: 0.75rem; }
+  @media (min-width: 900px) { .it-cadena { grid-template-columns: repeat(5, 1fr); } }
+  .it-cadena li {
+    position: relative;
+    border: 1px solid rgb(255 255 255 / 0.12);
+    border-radius: 0.75rem;
+    padding: 1.1rem 1.1rem 1.25rem;
+    background: rgb(255 255 255 / 0.03);
+  }
+  .it-cadena-n {
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem; height: 1.75rem;
+    border-radius: 999px;
+    border: 2px solid var(--green);
+    color: var(--green);
+    font-family: 'BlauerNue', 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  @media (min-width: 900px) {
+    .it-cadena li:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -0.75rem;
+      top: 1.95rem;
+      width: 0.75rem;
+      height: 2px;
+      background: repeating-linear-gradient(to right, var(--green) 0 3px, transparent 3px 6px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .it-cal, .it-flecha-entra, .it-flecha-sale { animation: none; }
+    :global(.js) .it-panel:not([hidden]) { animation: none; }
+  }
+</style>
+
+<script>
+  // Método: la línea se llena al bajar y se prende el paso en el que estás.
+  const metodo = document.querySelector<HTMLElement>('[data-metodo]');
+  const pasos = Array.from(document.querySelectorAll<HTMLElement>('[data-paso]'));
+  let pendiente = false;
+  function medir() {
+    pendiente = false;
+    if (!metodo) return;
+    const vh = window.innerHeight;
+    const r = metodo.getBoundingClientRect();
+    metodo.style.setProperty('--avance', String(Math.min(1, Math.max(0, (vh * 0.6 - r.top) / r.height))));
+    pasos.forEach((p) => p.classList.toggle('activa', p.getBoundingClientRect().top < vh * 0.6));
+  }
+  const pedir = () => { if (!pendiente) { pendiente = true; requestAnimationFrame(medir); } };
+  window.addEventListener('scroll', pedir, { passive: true });
+  window.addEventListener('resize', pedir);
+  medir();
+
+  // Pestañas (herramientas y zonas de analítica).
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((grupo) => {
+    const tabs = Array.from(grupo.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const paneles = Array.from(grupo.querySelectorAll<HTMLElement>('[data-panel]'));
+    const elegir = (n: number) => {
+      tabs.forEach((t, i) => t.setAttribute('aria-selected', String(i === n)));
+      paneles.forEach((p, i) => (p.hidden = i !== n));
+    };
+    tabs.forEach((t, i) => t.addEventListener('click', () => elegir(i)));
+    elegir(0);
+  });
+</script>

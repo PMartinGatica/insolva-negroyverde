@@ -11,7 +11,8 @@ export default defineConfig({
   // sin adapter ni funciones serverless. La captación de leads (embudo, chat,
   // calculadora) vive en una landing aparte que sí corre sobre servidor.
   output: 'static',
-  integrations: [sitemap()],
+  // Páginas en armado: fuera del sitemap hasta que se muestren.
+  integrations: [sitemap({ filter: (page) => !page.includes('/integracion-tecnologica') })],
   vite: {
     plugins: [tailwindcss()]
   }
