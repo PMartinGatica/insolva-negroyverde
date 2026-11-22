@@ -1,12 +1,14 @@
 # INSOLVA Group
 
-> Empresa de seguridad electrónica, automatización, redes e instalaciones
+> Empresa de integración tecnológica: seguridad electrónica, automatización, redes e instalaciones
 > eléctricas con base en Ushuaia, Tierra del Fuego, Argentina. Da servicio en
 > Ushuaia, Río Grande y Tolhuin, para viviendas, comercios, industrias y obras.
 
 INSOLVA releva el lugar, diseña la solución, instala y deja el sistema
 funcionando. Trabaja con Hikvision, Dahua, HiLook, EZVIZ, TP-Link y Starlink.
 El canal de contacto y presupuesto es WhatsApp: +54 9 2901 64-1452.
+
+Contenido completo en texto plano (servicios, preguntas frecuentes y guías): https://insolvagroup.com/llms-full.txt
 
 ## Servicios
 
